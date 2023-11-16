@@ -1,0 +1,32 @@
+# LLview
+
+The public version of LLview can be downloaded from [GitHub](https://github.com/FZJ-JSC/LLview).
+It currently contains a simplified workload including all the necessary
+scripts and adapters for a basic functioning. This version does not include:
+
+- Client (Live view)
+- Adapters other than Slurm
+- Logger (module that collects LLview's access metrics)
+
+These features will be added in future updates.
+
+## Software Structure
+
+As an HPC monitoring tool, LLview needs to (1) collect and (2) process the data from the system, and then (3) present them to the end-user.
+These three components are usually done in three separate places:
+
+- Collection of data: This is done on the HPC system to be monitored, where the user running LLview must have permissions to information of all jobs. This part is called
+[Remote](remote.md) on LLview.
+- Processing of data: Data is processed (and extra metrics may be also collected) every minute for all running jobs. To avoid perturbing the nodes of the HPC system, this is usually
+done in a separate server. This part is called [Server](server.md) on LLview.
+- Presentation of data: The information is presented to the end-user as a web portal.
+Therefore, a separate Web Server is recommended. The portal is based on the Jülich Reporting Interface [JURI](juri.md).
+
+## Installation Instructions
+
+The three components mentioned above need to be installed in that order, as each depends on data from the previous one.
+The installation instructions are then separated for each of the parts:
+
+1. [Remote](remote.md#installation-instructions)
+2. [Server](server.md#installation-instructions)
+3. [JURI](juri.md#installation-instructions)

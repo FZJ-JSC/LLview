@@ -1,0 +1,92 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+######################
+#
+# General
+#
+######################
+
+[General]
+auto_shutdown=1
+shutdown_signal_file=${LLVIEW_SHUTDOWN}
+
+
+######################
+#
+# EXAMPLE SYSTEM 
+#
+######################
+
+# Workflow for Database Update
+[dbupdate]
+active=1
+watchfile=${LLVIEW_SHARED}/remote/datafiles.xml.ready
+execute="${LLVIEW_HOME}/da/LML_da.pl -par -maxprocesses 8 -nostep -conf ${LLVIEW_CONF}/server/workflows/LML_da_dbupdate.conf >> logs/db`date +.%Y.%m.%d`.log 2>> logs/db`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_dbupdate`date +.%Y.%m.%d`.log"
+
+# Workflow for Job Reporting interface
+[jobreport]
+active=1
+watchfile=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/jobreport_start_ready
+execute="${LLVIEW_HOME}/da/LML_da.pl -par -maxprocesses 8 -nostep -conf ${LLVIEW_CONF}/server/workflows/LML_da_jobreport.conf >> logs/jobreport`date +.%Y.%m.%d`.log 2>> logs/jobreport`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_jobreport`date +.%Y.%m.%d`.log"
+
+# Workflow for Job Reporting clean up: perform delayed action on jobreport files (compress)
+[compress]
+active=1
+watchfile=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/tmp/jobreport/tmp/mngtactions/mngt_actions_compress_lastts.dat
+execute="${LLVIEW_HOME}/da/LL_jobreport/LL_jobreport_dataset_mngt_perform_actions.pl --type=compress --journaldir ./tmp/jobreport/tmp/mngtactions --parallel 8 >> logs/compress`date +.%Y.%m.%d`.log 2>> logs/compress`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_compress`date +.%Y.%m.%d`.log"
+
+# Workflow for Job Reporting clean up: perform delayed action on jobreport files (archive)
+[archive]
+active=1
+watchfile=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/tmp/jobreport/tmp/mngtactions/mngt_actions_tar_lastts.dat
+execute="${LLVIEW_HOME}/da/LL_jobreport/LL_jobreport_dataset_mngt_perform_actions.pl -v --type=tar --journaldir ./tmp/jobreport/tmp/mngtactions --parallel 8 >> logs/archive`date +.%Y.%m.%d`.log 2>> logs/archive`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_archive`date +.%Y.%m.%d`.log"
+
+# Example workflow that runs everytime the second reaches 30 ('watchtime')
+[timetest]
+active=0
+watchtime=30
+execute="echo 'test watchtime' >> logs/time`date +.%Y.%m.%d`.log 2>> logs/time`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_time`date +.%Y.%m.%d`.log"
+
+# Example workflow that runs every 300s ('inverval')
+[interval]
+active=0
+interval=300
+execute="echo 'test interval' >> logs/interval`date +.%Y.%m.%d`.log 2>> logs/interval`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_interval`date +.%Y.%m.%d`.log"
+
+# Cleaning the logs every 24h (24*60*60=86400)
+[cleanlogs]
+active=1
+interval=86400
+execute="perl ${LLVIEW_HOME}/da/utils/remove_old_logs.pl ./logs >> logs/cleanlogs`date +.%Y.%m.%d`.log 2>> logs/cleanlogs`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_cleanlogs`date +.%Y.%m.%d`.log"
+
+# Workflow: copying of support list for mapping
+[supportinput]
+active=1
+watchfile=${LLVIEW_SHARED}/../config/support_input.dat
+execute="cp ${LLVIEW_SHARED}/../config/support_input.dat ./"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/wservice
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_supportinput`date +.%Y.%m.%d`.log"
+

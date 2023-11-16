@@ -1,0 +1,99 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+cache:
+  paths:
+    - .cache/pip
+
+include:
+  - local: jureptool/.gitlab-ci.yml
+    rules:
+      - changes:
+        - jureptool/**/*                # all files under folder 'jureptool'
+        - configs/server/jureptool/**/* # all config files under folder 'configs/server/jureptool'
+
+stages:
+  - build
+  - jureptool_test
+  - deploy
+
+before_script:
+  - virtualenv -p `which python3` venv
+  - source venv/bin/activate
+  - python3 -V  # Print out python version for debugging
+  # Dependencies:
+  - pip3 install mkdocs
+  - pip3 install mkdocs-material
+  - pip3 install mkdocs-material-extensions
+  - pip3 install mkdocs-glightbox
+  - pip3 install mkdocs-git-revision-date-localized-plugin
+
+builddocs:
+  stage: build
+  tags:
+    - remote
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - cd docs
+    - rm -rf ./site  2>/dev/null || true
+    - mkdocs build
+  artifacts:
+    paths:
+      - docs/site
+  rules:
+    - changes:
+      - docs/**/* # all files under folder 'docs'
+
+pages:
+  stage: deploy
+  needs: 
+    - builddocs
+  tags:
+    - remote
+  script:
+    - cd docs
+    - rm -rf ../public 2>/dev/null || true
+    - mkdir -p ../public
+    - cp -r site/* ../public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - changes:
+      - docs/**/* # all files under folder 'docs'
+
+pages:production:
+  stage: deploy
+  needs: 
+    - builddocs
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"' # Only on the main branch
+      changes:
+        - docs/**/* # all files under folder 'docs'
+  tags:
+    - remote
+  script:
+    - echo "Deploying to production"
+    - "sshpass -e -P 'passphrase for key' rsync -rlgoDzP --del docs/site/* apps_llview_docu:"
+  when: manual
+  environment:
+    name: production
+    url: https://apps.fz-juelich.de/jsc/llview/docu/

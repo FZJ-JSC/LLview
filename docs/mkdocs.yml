@@ -1,0 +1,144 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+site_name: User Documentation
+site_description: Documentation of LLview monitoring tool
+nav:
+  - About: 
+    - Intro: index.md
+    - Releases: releases/index.md
+  - Live: 
+    - Live View: live/index.md
+    - LLview Client: live/client.md
+  - Queue: queue/index.md
+  - Workflows: workflow/index.md
+  - Job Reporting:
+    - List of Jobs: jobreport/index.md
+    - Detailed Reports: jobreport/detailed_reports.md
+    - List of metrics: jobreport/metrics_list.md
+    - Examples: jobreport/examples.md
+  - Known Issues: known_issues/index.md
+  - Contact: contact/index.md
+  - Access: access/index.md
+  - Installation: 
+    - Home: install/index.md
+    - Remote: install/remote.md
+    - Server: install/server.md
+    - JURI: install/juri.md
+    # - Build: install/build.md
+    # - Common Tasks: install/common_tasks.md
+  # - Description:
+  #   - Home: description/index.md
+  #   - Remote: description/remote.md
+  #   - Server: description/server.md
+  #   - JuRepTool: description/jureptool.md
+  #   - Juri: description/juri.md
+  #   - Logger: description/logger.md
+
+theme:
+  name: material
+  logo: images/LLview_logo_white.png
+  favicon: images/favicon.ico
+  language: en
+  features:
+    # - navigation.instant
+    - navigation.tabs
+    # - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - toc.follow
+    # - toc.integrate
+    # - announce.dismiss
+  font: false
+  
+  palette: 
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/lightbulb-auto
+        name: Switch to dark mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: material/lightbulb
+        name: Switch to system preference  
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+  custom_dir: llview/
+
+extra_css:
+  - stylesheets/extra.css
+  - stylesheets/font-awesome.min.css
+extra_javascript:
+  - javascripts/jquery-3.6.0.min.js
+  - javascripts/extra.js
+  - javascripts/mathjax.js
+  - javascripts/tex-mml-chtml.js
+extra:
+  homepage: https://llview.fz-juelich.de
+  social:
+    - icon: fzj/logo_fzj_jsc
+      link: https://www.fz-juelich.de
+      name: Forschungszentrum Jülich
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+plugins:
+  - glightbox
+  - search
+  - git-revision-date-localized
+copyright: <ul class="links">
+            <li>
+              Copyright &copy; 2022 LLview Developer Team
+            </li>
+            <li>
+                <a href="https://www.fz-juelich.de/en/legal-notice">Legal Notice</a>
+            </li>
+            <li class="bordered">
+                <a href="https://www.fz-juelich.de/en/privacy-policy">Data Protection</a>
+            </li>
+            <li>
+                <a href="https://www.fz-juelich.de/en/declaration-of-accessibility">Accessibility</a>
+            </li>
+          </ul>

@@ -1,0 +1,74 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+
+
+# Full list of attributes
+#jobid ts node gpu_clk gpu_clkr gpu_link gpu_memf gpu_memt
+#gpu_memu gpu_memur gpu_pciw gpu_pfst gpu_pu gpu_rtp_d gpu_rtp_s
+#gpu_rtpd gpu_sclk gpu_temp gpu_pcie_tx gpu_pcie_rx
+#gpu_eadm_d gpu_eadm_s gpu_eaom_d gpu_eaom_s gpu_evdm_d gpu_evdm_s
+#gpu_evom_d gpu_evom_s
+
+- dataset:
+    name:       GPU_node_dat
+    set:        GPU
+    FORALL:     'P,U,J:VAR_project_user_job'
+    filepath:   '$outputdir/projects/$P/$U/GPU_${J}_node.dat'
+    columns:        'jobid,ts,gpuid,gpu_usage,gpu_memu,gpu_pu,gpu_temp,gpu_memur,gpu_sclk,gpu_clk,gpu_clkr,gpu_pfst,gpu_pcie_tx,gpu_pcie_rx,gpu_nvlink_tx,gpu_nvlink_rx'
+    column_convert: 'gpu_memu->Bytes2GiB,gpu_pu->toThousand,gpu_pcie_tx->KiBtoGiB,gpu_pcie_rx->KiBtoGiB,gpu_nvlink_tx->KiBtoGiB,gpu_nvlink_rx->KiBtoGiB'
+    column_filemap: 'J:jobid'
+    column_ts:      'ts'
+    format:         'dat'
+    format_str:      '%-10s %10d %12s %10.3f %7.3f %10.3f %10.3f %10.3f %8d %8d %8d %8d %11.3f %11.3f %11.3f %11.3f'
+    header:          'jobid              ts       nodeid  gpu_usage gpu_memu     gpu_pu   gpu_temp  gpu_memur gpu_sclk  gpu_clk gpu_clkr gpu_pfst gpu_pcie_tx gpu_pcie_rx gpu_nvlink_tx gpu_nvlink_rx'
+    format_header:   '%-10s %10s %12s %10s %7s %10s %10s %10s %8s %8s %8s %8s %11s %11s %11s'
+    column_filemap: 'J:jobid'
+    # renew:          'always'
+    data_database:   gpustate
+    data_table:      gpu_by_jobid_nodeid_gpuid_ts
+    stat_database:   jobreport_stat_gpu
+    stat_table:      datasetstat_node_dat
+    mngt_actions:   'compress_finished_files,archive_jobs_files'
+
+- dataset:
+    name:       GPU_csv
+    set:        GPU
+    FORALL:     'P,U,J:VAR_project_user_job'
+    filepath:   '$outputdir/projects/$P/$U/GPU_${J}.csv'
+    columns:        'ts,gpu_usage_min,gpu_usage_avg,gpu_usage_max, gpu_memu_min,gpu_memu_avg,gpu_memu_max, gpu_pu_min,gpu_pu_avg,gpu_pu_max, gpu_temp_min,gpu_temp_avg,gpu_temp_max'
+    header:         'date,gpuuse,gpumem,gpupow,gputemp'
+    format_str:      '%s,%f;%f;%f,%f;%f;%f,%f;%f;%f,%f;%f;%f'
+    column_convert: 'ts->todate_1'
+    column_filemap: 'J:jobid'
+    column_ts:      'ts'
+    format:         'csv'
+    column_filemap: 'J:jobid'
+    data_database:   gpustate
+    data_table:      gpu_aggr_by_jobid_ts
+    stat_database:   jobreport_stat_gpu
+    stat_table:      datasetstat_csv
+    mngt_actions:   'compress_finished_files,archive_jobs_files'
+
+- dataset:
+    name:       GPU_all_usage_csv
+    set:        GPUall
+    filepath:   '$outputdir/_sysstat/GPU_all.csv'
+    columns:        'ts,gpu_usage_min,gpu_usage_avg,gpu_usage_max, gpu_memu_min,gpu_memu_avg,gpu_memu_max,gpu_pu_min,gpu_pu_avg,gpu_pu_max, gpu_temp_min,gpu_temp_avg,gpu_temp_max,node_cnt_up,dcgm_cnt_up,dcgm_cnt_down'
+    header:         'date,gpuuse,gpumem,gpupow,gputemp,numGPUs,numDCGMup,numDCGMdown'
+    format_str:      '%s,%f;%f;%f,%f;%f;%f,%f;%f;%f,%f;%f;%f,%d,%d,%d'
+    column_convert: 'ts->todate_1'
+    column_ts:      'ts'
+    format:         'csv'
+    renew_daily:     yes
+    data_database:   gpustate
+    data_table:      gpu_aggr_by_ts
+    stat_database:   jobreport_stat_gpu
+    stat_table:      datasetstat_all_csv
+    

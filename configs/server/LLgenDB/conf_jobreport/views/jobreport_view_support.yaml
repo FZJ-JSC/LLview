@@ -1,0 +1,291 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+###############
+# Support Views
+###############
+- view:
+    name:          "support"
+    filepath:      "$outputdir/ll/support.json"
+    # title:         "<strong>$systemname</strong>: Support view"
+    image:         "img/$systemname.jpg"
+    logo:          "img/llview_logo_white.png"
+    home:          "login.php"
+    info:          "data/_info/info.json"
+    search_field:  "jobid"
+    data:
+        system:     "$systemname"
+        permission: "support"
+    pages:
+    #    - page:
+    #        name:    "Live"
+    #        section: "live"
+    #        icon:     "television"
+    #        template: "llview"
+    #        ref: ["llview"]
+    #        data:
+    #          view: "batch"
+    #    - page:
+    #        name: "System"
+    #        section: "system"
+    #        icon: "cog"
+    #        pages:
+    #           - page:
+    #               name: "Usage"
+    #               section: "sysoverview"
+    #               default: false
+    #               graph_page_config: "/data/ll/graphpage_sysoverview.json"
+    #           - page:
+    #               name: "Power"
+    #               section: "syspower"
+    #               default: false
+    #               graph_page_config: "/data/ll/graphpage_syspower.json"
+    #           - page:
+    #               name: "Environment"
+    #               section: "sysenv"
+    #               default: false
+    #               graph_page_config: "/data/ll/graphpage_sysenv.json"
+    #           - page:
+    #               name: "I/O Activity"
+    #               section: "sysio"
+    #               default: false
+    #               graph_page_config: "/data/ll/graphpage_sysio.json"
+    #           - page:
+    #               name: "Interconnect"
+    #               section: "sysinterconnect"
+    #               default: false
+    #               graph_page_config: "/data/ll/graphpage_sysinterconnect.json"
+    #           - page:
+    #               name: "Statistics"
+    #               section: "sysstatistics"
+    #               default: false
+    #               graph_page_config: "/data/ll/graphpage_sysstatistics.json"
+    #           - page:
+    #               name: "Detailed Usage"
+    #               section: "sysstat"
+    #               template: "/data/LLtemplates/sysstat"
+    #               context: "data/_sysstat/sysstat.json"
+    #               default: false
+    #               footer_graph_config: "/data/ll/footer_sysstat.json"
+    #               ref: [ table ]
+    #               data:
+    #                 default_columns: [ sysstat ]
+    #           - page:
+    #               name: "Rack-Power"
+    #               section: "sysrackpwr"
+    #               template: "/data/LLtemplates/sysrackpwr"
+    #               context: "data/_sysstat/sysrackpwr.json"
+    #               default: false
+    #               footer_graph_config: "/data/ll/footer_sysrackpwr.json"
+    #               ref: [ table ]
+    #               data:
+    #                 default_columns: [ sysstat ]
+    #           - page:
+    #               name: "Node-Errors"
+    #               section: "sysnodeerr"
+    #               template: "/data/LLtemplates/nodeerr"
+    #               context: "data/_sysstat/nodeerr.json"
+    #               default: false
+    #               ref: [ table ]
+    #               data:
+    #                 default_columns: [ errmsg ]
+            #   - page:
+            #       name: "System Test"
+            #       section: "systest"
+            #       default: false
+            #       graph_page_config: "/data/ll/graphpage_SYSTEM.json"
+       - page:
+           name: "Queue"
+           section: "queue"
+           icon: "list"
+           pages:
+              - page:
+                  name: "Queue Overview"
+                  section: "queueoverview"
+                  template: "/data/LLtemplates/queuedjobslist"
+                  context: "data/_queued/queued_jobs.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ queued ]
+              - page:
+                  name: "Queue Details (All Jobs)"
+                  section: "queuedetails"
+                  template: "/data/LLtemplates/queueddetails"
+                  context: "data/support/queueddetails.json"
+                  default: false
+                  footer_graph_config: "/data/ll/footer_queuedjobs.json"
+                  ref: [ table ]
+                  data:
+                    default_columns: [ queued ]
+              - page:
+                  name: "Reservations"
+                  section: "reservationoverview"
+                  template: "/data/LLtemplates/reservationlist"
+                  context: "data/_queued/reservations.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ res ]
+       - page:
+           name: "Workflows"
+           section: "workflows"
+           template: "/data/LLtemplates/workflows"
+           icon: "list-alt"
+           context: "data/support/workflows.json"
+           default: "false"
+           ref:
+             - table
+           data:
+             default_columns: [ workflow ]
+       - page:
+            name: "Active jobs"
+            section: "running_jobs"
+            template: "/data/LLtemplates/joblist"
+            icon: "play"
+            context: "data/support/running.json"
+            default: true
+            footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+            ref: [ table ]
+            data:
+              default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+       - page:
+            name: "History"
+            section: "history_three_weeks"
+            template: "/data/LLtemplates/joblist_history"
+            icon: "calendar"
+            context: "data/support/today.json"
+            default: false
+            footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+            ref: [ table ]
+            scripts: [ "joblist_history.js" ]
+            functions: [ "init_dates" ]
+            data:
+              default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+    #    - page:
+    #         name: "All jobs"
+    #         section: "all_jobs"
+    #         template: "/data/LLtemplates/datatable"
+    #         icon: "play"
+    #         context: "data/support/all.json"
+    #         default: false
+    #         # footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+    #         ref: [ datatable ]
+    #         data:
+    #           default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+       - page:
+           name: "Projects&Roles"
+           section: "roles"
+           icon: "user"
+           pages:
+              - page:
+                  name: "Projects"
+                  section: "Projects"
+                  template: "/data/LLtemplates/projectlist"
+                  context: "data/support/projectlist.json"
+                  default: false
+                  footer_graph_config: "/data/ll/footer_projstat.json"
+                  ref: [ table ]
+                  data:
+                    default_columns: [ project ]
+              - page:
+                  name: "Users (Active)"
+                  section: "ActiveUser"
+                  template: "/data/LLtemplates/ActiveUser"
+                  context: "data/support/active_user.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ user ]
+              - page:
+                  name: "Users (All)"
+                  section: "AllUser"
+                  template: "/data/LLtemplates/AllUser"
+                  context: "data/support/all_user.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ user ]
+              - page:
+                  name: "Mentors (All)"
+                  section: "AllMentors"
+                  template: "/data/LLtemplates/AllMentor"
+                  context: "data/support/all_mentors.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ user ]
+              - page:
+                  name: "PIs (All)"
+                  section: "AllPIs"
+                  template: "/data/LLtemplates/AllPI"
+                  context: "data/support/all_PIs.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ user ]
+              - page:
+                  name: "PAs (All)"
+                  section: "AllPAs"
+                  template: "/data/LLtemplates/AllPA"
+                  context: "data/support/all_PAs.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ user ]
+       - page:
+           name: "Internal"
+           section: "internal"
+           icon: "database"
+           pages:
+              - page:
+                  name: "Status Overview"
+                  section: "internalstat"
+                  default: false
+                  graph_page_config: "/data/ll/graphpage_internalstat.json"
+              - page:
+                  name: "DBstat"
+                  section: "DBstat"
+                  template: "/data/LLtemplates/DBstat"
+                  context: "data/_internal/DBstat.json"
+                  default: false
+                  footer_graph_config: "/data/ll/footer_DBstat.json"
+                  ref: [ table ]
+                  data:
+                    default_columns: [ DBstat ]
+              - page:
+                  name: "Steptimings"
+                  section: "steptimings"
+                  template: "/data/LLtemplates/steptimings"
+                  context: "data/_internal/steptimings.json"
+                  default: false
+                  footer_graph_config: "/data/ll/footer_steptimings.json"
+                  ref: [ table ]
+                  data:
+                    default_columns: [ stts, stts_stat ]
+              - page:
+                  name: "Timelines"
+                  section: "steptimelines"
+                  default: false
+                  graph_page_config: "/data/ll/graphpage_steptimelines.json"
+              - page:
+                  name: "Transfer"
+                  section: "internaltransfer"
+                  default: false
+                  graph_page_config: "/data/ll/graphpage_internaltransfer.json"
+       - page:
+           name: "Help"
+           section: "help"
+           icon: "question"
+           href: "https://apps.fz-juelich.de/jsc/llview/docu/"
+
+
+                 

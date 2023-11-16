@@ -1,0 +1,32 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+
+resstate:
+  tables:
+    - table:
+        name: reservations
+        options:
+          update:
+            LML: reservation
+            mode: replace
+          update_trigger:
+        columns: 
+          - { name: resid,           type: resid_t,           LML_from: resid,           LML_default: 'unknown' }
+          - { name: startts,         type: ts_t,              LML_from: startts,         LML_default: -1 }
+          - { name: endts,           type: ts_t,              LML_from: endts,           LML_default: -1, LML_minlastinsert: mintsinserted }
+          - { name: resname,         type: name_t,            LML_from: resname,         LML_default: "-" }
+          - { name: state,           type: jstatus_t,         LML_from: state,           LML_default: 'unknown' }
+          - { name: wall,            type: wall_t,            LML_from: wall,            LML_default: -1 }
+          - { name: numnodes,        type: tasks_t,           LML_from: nodecnt,         LML_default: 0 }
+          - { name: numcores,        type: tasks_t,           LML_from: corecnt,         LML_default: 0 }
+          - { name: nodelist,        type: extralongstr_t,    LML_from: nodelist,        LML_default: "-" }
+          - { name: flags,           type: longstr_t,         LML_from: flags,           LML_default: "-" }
+          - { name: accounts,        type: extralongstr_t,    LML_from: accounts,         LML_default: 0 }
+

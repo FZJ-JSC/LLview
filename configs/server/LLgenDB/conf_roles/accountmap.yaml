@@ -1,0 +1,137 @@
+accountmap:
+  tables:
+    - table:
+        name: usermap
+        options:
+          update:
+            LML: usermap
+            mode: replace
+          update_trigger:
+            - allprojects
+            - alluser
+        columns: 
+          - { name: id,              type: name_t,            LML_from: id,              LML_default: 'unknown' }
+          - { name: u_ts,            type: ts_t,              LML_from: ts,              LML_default: -1        }
+          - { name: project,         type: name_t,            LML_from: project,         LML_default: "-"       }
+          - { name: wsaccount,        type: name_t,            LML_from: wsaccount,       LML_default: 'unknown' }
+
+         
+    - table:
+        name: mentormap
+        options:
+          update:
+            LML: mentormap
+            mode: replace
+          update_trigger:
+            - mentorlist
+        columns: 
+          - { name: id,              type: name_t,            LML_from: id,              LML_default: 'unknown' }
+          - { name: u_ts,            type: ts_t,              LML_from: ts,              LML_default: -1        }
+          - { name: project,         type: name_t,            LML_from: project,         LML_default: "-"       }
+          - { name: wsaccount,        type: name_t,            LML_from: wsaccount,       LML_default: 'unknown' }
+
+    - table:
+        name: pipamap
+        options:
+          update:
+            LML: pipamap
+            mode: replace
+        columns: 
+          - { name: id,              type: name_t,            LML_from: id,              LML_default: 'unknown' }
+          - { name: wsaccount,        type: name_t,            LML_from: wsaccount,       LML_default: 'unknown' }
+          - { name: kind,            type: shortstr_t,        LML_from: kind,            LML_default: 'unknown' }
+          - { name: u_ts,            type: ts_t,              LML_from: ts,              LML_default: -1        }
+          - { name: project,         type: name_t,            LML_from: project,         LML_default: "-"       }
+
+    - table:
+        name: supportmap
+        options:
+          update:
+            LML: supportmap
+            mode: replace
+          update_trigger:
+            - support
+            - rolelist
+        columns: 
+          - { name: id,              type: name_t,            LML_from: id,              LML_default: 'unknown' }
+          - { name: wsaccount,       type: name_t,            LML_from: wsaccount,       LML_default: 'unknown' }
+          - { name: u_ts,            type: ts_t,              LML_from: ts,              LML_default: -1        }
+
+    - table:
+        name: allprojects
+        options:
+          update:
+            sql_update_contents:
+              sql: DELETE FROM allprojects;
+                   INSERT INTO allprojects  SELECT DISTINCT project FROM usermap 
+        columns: 
+          - { name: project,         type: name_t }
+
+    - table:
+        name: alluser
+        options:
+          update:
+            sql_update_contents:
+              sql: DELETE FROM alluser;
+                   INSERT INTO alluser  SELECT GROUP_CONCAT(wsaccount, " ")
+                   FROM (SELECT DISTINCT wsaccount FROM usermap
+                         WHERE wsaccount NOT IN (SELECT wsaccount from supportmap)
+                         UNION ALL
+                         SELECT wsaccount from supportmap) 
+        columns: 
+          - { name: alluser,         type: extralongstr_t }
+
+    - table:
+        name: support
+        options:
+          update:
+            sql_update_contents:
+              sql: DELETE FROM support;
+                   INSERT INTO support  SELECT GROUP_CONCAT(wsaccount, " ") FROM supportmap 
+        columns: 
+          - { name: support,         type: extralongstr_t }
+          
+    - table:
+        name: mentorlist
+        options:
+          update:
+            sql_update_contents:
+              sql: DELETE FROM mentorlist;
+                   INSERT INTO mentorlist (wsaccount,cnt,projects)
+                          SELECT wsaccount, count(project), GROUP_CONCAT(project, ",") FROM mentormap GROUP by wsaccount 
+        columns: 
+          - { name: wsaccount,       type: name_t         }
+          - { name: cnt,             type: count_t        }
+          - { name: projects,        type: extralongstr_t }
+
+    - table:
+        name: rolelist
+        options:
+          update:
+            sql_update_contents:
+              sql: DELETE FROM rolelist;
+                   INSERT INTO rolelist (fid,id,wsaccount,project,u_ts,kind)
+                          SELECT 'U'||id||wsaccount||project,
+                                  id,wsaccount,project,u_ts, 'U'
+                          FROM usermap
+                          UNION ALL
+                          SELECT 'M'||id||wsaccount||project,
+                                 id,wsaccount,project,u_ts, 'M'
+                          FROM mentormap
+                          UNION ALL
+                          SELECT kind||id||wsaccount||project,
+                                 id,wsaccount,project,u_ts,kind
+                          FROM pipamap
+                          UNION ALL
+                          SELECT "S"||id||wsaccount||"-all-",
+                                 id,wsaccount,"-all-",u_ts,"S"
+                          FROM supportmap
+                          
+        columns: 
+          - { name: fid,             type: longstr_t      }
+          - { name: id,              type: name_t         }
+          - { name: wsaccount,       type: name_t         }
+          - { name: project,         type: name_t         }
+          - { name: u_ts,            type: ts_t           }
+          - { name: kind,            type: shortstr_t     }
+          

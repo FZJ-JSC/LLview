@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lml:lgui xmlns:lml="http://eclipse.org/ptp/lml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://eclipse.org/ptp/lml http://eclipse.org/ptp/schemas/v1.1/lgui.xsd"
+    version="1.1">
+<objects>
+</objects>
+<information>
+</information>
+</lml:lgui>

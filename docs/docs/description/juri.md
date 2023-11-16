@@ -1,0 +1,1 @@
+JURI (Jülich Reporting Interface) generates the Web Portal to display tables and graphs for monitoring systems and jobs in High Performance Computing. JURI is used by LLview and Kontview.

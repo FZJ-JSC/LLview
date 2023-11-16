@@ -1,0 +1,84 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+# Using initial template from:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Python.gitlab-ci.yml
+
+# Official language image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/python/tags/
+# image: python:latest
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  CI_TEST_FOLDER: "./jureptool/ci_tests"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+stages:
+  - jureptool_test
+
+.prepare_test: &prepare_test
+  before_script:
+    - python3 -V  # Print out python version for debugging
+    - pip3 install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    # Dependencies:
+    - pip3 install numpy
+    - pip3 install pandas
+    - pip3 install matplotlib
+    - pip3 install pyyaml
+    - pip3 install plotly
+    - pip3 install plotly -U
+    - pip3 install cmcrameri
+    # Installing Liberation fonts
+    - ls ~/.local/share/fonts/Liberation* || exit_status=$?
+    - |
+      if [[ $exit_status ]] ; then 
+        wget https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-2.1.5.tar.gz
+        tar -xf liberation-fonts-ttf-2.1.5.tar.gz 
+        mkdir -p ~/.local/share/fonts && cp liberation-fonts-ttf-2.1.5/*.ttf ~/.local/share/fonts/
+        fc-cache -f
+        rm -fr ~/.cache/matplotlib
+      else
+        echo "Liberation fonts are already installed"
+      fi 
+
+run_tests: 
+  stage: jureptool_test
+  parallel:
+    matrix:
+      - TEST:
+        - coreusage    # Test for core-usage graphs
+        - userdefined  # Test for user-defined section (JuMonC)
+        - errormessage # Test with error messages at the end
+  tags:
+    - linux
+  <<: *prepare_test
+  script:
+    - cd ${CI_TEST_FOLDER}
+    - mkdir results || true
+    - time python3 ../src/main.py ${TEST}/*.json --nprocs 1 --loglevel DEBUG --gzip
+  artifacts:
+    paths:
+      - ${CI_TEST_FOLDER}/*/*.pdf
+      - ${CI_TEST_FOLDER}/*/*.html*
+    expire_in: 1 day
+  resource_group: jureptool

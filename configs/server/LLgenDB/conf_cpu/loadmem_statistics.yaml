@@ -1,0 +1,205 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+
+- table:
+    name: loadmem_aggr_by_ts_avgmem_node_cls
+    options:
+      update:
+        sql_update_contents:
+          sqldebug: 1
+          vars: mintsinserted
+#                                                     # log2 not implemented in older sqlite functions
+#                                                     CASE WHEN ( 1 << cast(log2(numnodes) as int ) ) = numnodes
+#                                                          THEN numnodes
+#                                                          ELSE 1 << cast(log2(numnodes) as int ) + 1
+#                                                     END sizecls,
+#
+          sql: DELETE FROM loadmem_aggr_by_ts_avgmem_node_cls WHERE (ts >= mintsinserted);
+               INSERT INTO loadmem_aggr_by_ts_avgmem_node_cls
+                                 (ts, memcls, sizecls, used_mem_avg, nodes_avg, sum_nodes, sum_jobs)
+                                              SELECT ts,
+                                                     CASE WHEN ( used_mem_avg <= 16384 ) THEN 16
+                                                          WHEN ( used_mem_avg <= 32768 ) THEN 32
+                                                          WHEN ( used_mem_avg <= 65536 ) THEN 64
+                                                          WHEN ( used_mem_avg <= 98304 ) THEN 96
+                                                          WHEN ( used_mem_avg <= 131072 ) THEN 128
+                                                          WHEN ( used_mem_avg <= 262144 ) THEN 256
+                                                          WHEN ( used_mem_avg <= 393216 ) THEN 384
+                                                          WHEN ( used_mem_avg <= 524288 ) THEN 512
+                                                          ELSE 1024
+                                                     END memcls,
+                                                     CASE WHEN ( numnodes <= 1 ) THEN 1
+                                                          WHEN ( numnodes <= 2 ) THEN 2
+                                                          WHEN ( numnodes <= 4 ) THEN 4
+                                                          WHEN ( numnodes <= 8 ) THEN 8
+                                                          WHEN ( numnodes <= 16 ) THEN 16
+                                                          WHEN ( numnodes <= 32 ) THEN 32
+                                                          WHEN ( numnodes <= 64 ) THEN 64
+                                                          WHEN ( numnodes <= 128 ) THEN 128
+                                                          WHEN ( numnodes <= 256 ) THEN 256
+                                                          WHEN ( numnodes <= 512 ) THEN 512
+                                                          WHEN ( numnodes <= 1024 ) THEN 1024
+                                                          WHEN ( numnodes <= 2048 ) THEN 2048
+                                                          WHEN ( numnodes <= 4096 ) THEN 4096
+                                                          WHEN ( numnodes <= 8192 ) THEN 8192
+                                                          ELSE 16384
+                                                     END sizecls,
+                                                     avg(used_mem_avg/1024.0),
+                                                     AVG(1.0*numnodes),
+                                                     SUM(numnodes),
+                                                     COUNT(jobid)
+                                                     FROM loadmem_aggr_by_jobid_ts
+                                                     WHERE (ts >= mintsinserted)
+                                                     GROUP by TS,memcls,numnodes; 
+      archive:
+        limit: max(ts)-72h
+      index: ts,memcls,sizecls
+    columns: 
+      - { name: ts,              type: ts_t }
+      - { name: memcls,          type: count_t }
+      - { name: sizecls,         type: count_t }
+      - { name: used_mem_avg,    type: mem_f_t }
+      - { name: nodes_avg,       type: cores_f_t }
+      - { name: sum_nodes,       type: count_t }
+      - { name: sum_jobs,        type: count_t }
+
+- table:
+    name: loadmem_aggr_by_ts_maxmem_node_cls
+    options:
+      update:
+        sql_update_contents:
+          vars: mintsinserted
+          sql: DELETE FROM loadmem_aggr_by_ts_maxmem_node_cls WHERE (ts >= mintsinserted);
+               INSERT INTO loadmem_aggr_by_ts_maxmem_node_cls
+                                 (ts, memcls, sizecls, used_mem_max, nodes_avg, sum_nodes, sum_jobs)
+                                              SELECT ts,
+                                                     CASE WHEN ( used_mem_max <= 16384 ) THEN 16
+                                                          WHEN ( used_mem_max <= 32768 ) THEN 32
+                                                          WHEN ( used_mem_max <= 65536 ) THEN 64
+                                                          WHEN ( used_mem_max <= 98304 ) THEN 96
+                                                          WHEN ( used_mem_max <= 131072 ) THEN 128
+                                                          WHEN ( used_mem_max <= 262144 ) THEN 256
+                                                          WHEN ( used_mem_max <= 393216 ) THEN 384
+                                                          WHEN ( used_mem_max <= 524288 ) THEN 512
+                                                          ELSE 1024
+                                                     END memcls,
+                                                     CASE WHEN ( numnodes <= 1 ) THEN 1
+                                                          WHEN ( numnodes <= 2 ) THEN 2
+                                                          WHEN ( numnodes <= 4 ) THEN 4
+                                                          WHEN ( numnodes <= 8 ) THEN 8
+                                                          WHEN ( numnodes <= 16 ) THEN 16
+                                                          WHEN ( numnodes <= 32 ) THEN 32
+                                                          WHEN ( numnodes <= 64 ) THEN 64
+                                                          WHEN ( numnodes <= 128 ) THEN 128
+                                                          WHEN ( numnodes <= 256 ) THEN 256
+                                                          WHEN ( numnodes <= 512 ) THEN 512
+                                                          WHEN ( numnodes <= 1024 ) THEN 1024
+                                                          WHEN ( numnodes <= 2048 ) THEN 2048
+                                                          WHEN ( numnodes <= 4096 ) THEN 4096
+                                                          WHEN ( numnodes <= 8192 ) THEN 8192
+                                                          ELSE 16384
+                                                     END sizecls,
+                                                     max(used_mem_max/1024.0),
+                                                     AVG(1.0*numnodes),
+                                                     SUM(numnodes),
+                                                     COUNT(jobid)
+                                                     FROM loadmem_aggr_by_jobid_ts
+                                                     WHERE (ts >= mintsinserted)
+                                                     GROUP by TS,memcls,numnodes; 
+      archive:
+        limit: max(ts)-72h
+      index: ts,memcls,sizecls
+    columns: 
+      - { name: ts,              type: ts_t }
+      - { name: memcls,          type: count_t }
+      - { name: sizecls,         type: count_t }
+      - { name: used_mem_max,    type: mem_f_t }
+      - { name: nodes_avg,       type: cores_f_t }
+      - { name: sum_nodes,       type: count_t }
+      - { name: sum_jobs,        type: count_t }
+      
+- table:
+    name: loadmem_aggr_by_ts_avgmem_cls
+    options:
+      update:
+        sql_update_contents:
+          vars: mintsinserted
+          sql: DELETE FROM loadmem_aggr_by_ts_avgmem_cls WHERE (ts >= mintsinserted);
+               INSERT INTO loadmem_aggr_by_ts_avgmem_cls
+                                 (ts, memcls, used_mem_avg, sum_nodes, sum_jobs)
+                                              SELECT ts, memcls,
+                                                     avg(used_mem_avg),
+                                                     SUM(sum_nodes),
+                                                     AVG(sum_jobs)
+                                                     FROM loadmem_aggr_by_ts_avgmem_node_cls
+                                                     WHERE (ts >= mintsinserted)
+                                                     GROUP BY ts,memcls; 
+      archive:
+        limit: max(ts)-72h
+      index: ts,memcls
+    columns: 
+      - { name: ts,              type: ts_t }
+      - { name: memcls,          type: count_t }
+      - { name: used_mem_avg,    type: mem_f_t }
+      - { name: sum_nodes,       type: count_t }
+      - { name: sum_jobs,        type: count_t }      
+
+- table:
+    name: loadmem_aggr_by_ts_maxmem_cls
+    options:
+      update:
+        sql_update_contents:
+          vars: mintsinserted
+          sql: DELETE FROM loadmem_aggr_by_ts_maxmem_cls WHERE (ts >= mintsinserted);
+               INSERT INTO loadmem_aggr_by_ts_maxmem_cls
+                                 (ts, memcls, used_mem_max, sum_nodes, sum_jobs)
+                                              SELECT ts, memcls,
+                                                     max(used_mem_max),
+                                                     SUM(sum_nodes),
+                                                     AVG(sum_jobs)
+                                                     FROM loadmem_aggr_by_ts_maxmem_node_cls
+                                                     WHERE (ts >= mintsinserted)
+                                                     GROUP BY ts,memcls; 
+      archive:
+        limit: max(ts)-72h
+      index: ts,memcls
+    columns: 
+      - { name: ts,              type: ts_t }
+      - { name: memcls,          type: count_t }
+      - { name: used_mem_max,    type: mem_f_t }
+      - { name: sum_nodes,       type: count_t }
+      - { name: sum_jobs,        type: count_t }      
+      
+- table:
+    name: loadmem_aggr_by_ts_node_cls
+    options:
+      update:
+        sql_update_contents:
+          vars: mintsinserted
+          sql: DELETE FROM loadmem_aggr_by_ts_node_cls WHERE (ts >= mintsinserted);
+               INSERT INTO loadmem_aggr_by_ts_node_cls
+                                 (ts, sizecls, nodes_avg, sum_nodes, sum_jobs)
+                                              SELECT ts, sizecls,
+                                                     avg(nodes_avg),
+                                                     SUM(sum_nodes),
+                                                     AVG(sum_jobs)
+                                                     FROM loadmem_aggr_by_ts_avgmem_node_cls
+                                                     WHERE (ts >= mintsinserted)
+                                                     GROUP BY ts,sizecls; 
+      archive:
+        limit: max(ts)-72h
+      index: ts,sizecls
+    columns: 
+      - { name: ts,              type: ts_t }
+      - { name: sizecls,         type: count_t }
+      - { name: nodes_avg,       type: cores_f_t }
+      - { name: sum_nodes,       type: count_t }
+      - { name: sum_jobs,        type: count_t }      
+      

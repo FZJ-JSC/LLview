@@ -1,0 +1,112 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+###############
+# Project Views
+###############
+- view:
+    name:          "project"
+    filepath:      "$outputdir/ll/project.json"
+    # title:         "<img src='img/llview_logo.png' alt='LLview logo' style='height: 40px'> Job-reports on <strong>$systemname</strong> - Project view"
+    image:         "img/$systemname.jpg"
+    logo:          "img/llview_logo_white.png"
+    home:          "login.php"
+    info:          "data/_info/info.json"
+    search_field:  "jobid"
+    data:
+        system:     "$systemname"
+        permission: "project"
+    pages:
+      #  - page:
+      #      name:    "Live"
+      #      section: "live"
+      #      icon:     "television"
+      #      template: "llview"
+      #      ref: ["llview"]
+      #      data:
+      #        view: "batch"
+       - page:
+           name: "Queue"
+           section: "queue"
+           icon: "list"
+           pages:
+              - page:
+                  name: "Queue Overview"
+                  section: "queueoverview"
+                  template: "/data/LLtemplates/queuedjobslist"
+                  context: "data/_queued/queued_jobs.json"
+                  default: false
+                  ref: [ table ]
+                  data:
+                    default_columns: [ queued ]
+              - page:
+                  name: "Queue Details (Project Jobs)"
+                  section: "queuedetails"
+                  template: "/data/LLtemplates/queueddetails"
+                  context: "data/projects/#project#/queueddetails.json"
+                  default: false
+                  footer_graph_config: "/data/ll/footer_queuedjobs.json"
+                  ref: [ table ]
+                  data:
+                    default_columns: [ queued ]
+       - page:
+           name: "Workflows"
+           section: "workflows"
+           template: "/data/LLtemplates/workflows"
+           icon: "list-alt"
+           context: "data/projects/#project#/workflows.json"
+           default: "false"
+           ref:
+             - table
+           data:
+             default_columns: [ workflow ]
+       - page:
+            name: "Active jobs"
+            section: "running_jobs"
+            template: "/data/LLtemplates/joblist"
+            icon: "play"
+            context: "data/projects/#project#/running.json"
+            default: true
+            footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+            # scripts: [ "joblist_history.js" ]
+            # functions: [ "select_date" ]
+            ref: [ table ]
+            data:
+              default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+       - page:
+            name: "Jobs ended today"
+            section: "jobs_ended_today"
+            template: "../data/LLtemplates/joblist"
+            icon: "calendar-check-o"
+            context: "data/projects/#project#/today.json"
+            default: false
+            footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+            ref: [ table ]
+            data:
+              default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+       - page:
+            name: "Jobs < 3 weeks"
+            section: "jobs_three_weeks"
+            template: "../data/LLtemplates/joblist"
+            icon: "calendar"
+            context: "data/projects/#project#/threeweeks.json"
+            default: false
+            footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+            ref: [ table ]
+            data:
+              default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+       - page:
+           name: "Help"
+           section: "help"
+           icon: "question"
+           href: "https://apps.fz-juelich.de/jsc/llview/docu/"
+
+                 

@@ -1,0 +1,151 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+
+%include "jobreport_datafiles_json_support.yaml"
+%include "jobreport_datafiles_json_mentor.yaml"
+%include "jobreport_datafiles_json_project.yaml"
+%include "jobreport_datafiles_json_user.yaml"
+    
+###############################
+# Info-Files
+###############################
+- dataset:
+    name: all_info
+    set:        json_support
+    filepath:       '$outputdir/_info/info.json'
+    sql_where:      'id=2' 
+    stat_database:   jobreport_json_stat
+    stat_table:      datasetstat_info
+    data_database:   jobreport
+    data_table:     'update_info'
+    format:         'json'
+    json_type:      'single_entry'
+    columns:        'Last_Database_update'
+    
+   
+###############################
+# Queued jobs
+###############################
+- dataset:
+    name:            queuedjoblist_json
+    set:             json_queued
+    filepath:       '$outputdir/_queued/queued_jobs.json.gz'
+    data_database:   jobreport
+    data_table:      queuedjobs
+    table_cache:     queuedjobs
+    selecttimevar:   ts
+    selecttimerange: TS_NOW-120,TS_NOW+1
+    stat_table:      datasetstat_queued
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'jobid, ts, owner, account, mentor, queue, numnodes, state, wall, queuedate, runtime, starttime, endtime, ArrayJobId, ArrayTaskId, resid'
+    column_convert: 'wall->hhmm_short,runtime->hhmm_short'
+    order:          "jobid DESC"
+
+###############################
+# Reservations
+###############################
+- dataset:
+    name:            reservationlist_json
+    set:             json_reservation
+    filepath:       '$outputdir/_queued/reservations.json.gz'
+    data_database:   resstate
+    data_table:      reservations
+    stat_table:      datasetstat_reservations
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'resid, startts, endts, resname, state, wall, numnodes, numcores, nodelist, flags, accounts'
+    column_convert: 'startts->todate_std_hhmm,endts->todate_std_hhmm,wall,nodelist->wrapcsword10,accounts->wrapcsword10'
+    order:          "startts ASC"
+
+###############################
+# System stat
+###############################
+- dataset:
+    name:            sysstat_json
+    set:             json_sysstat
+    filepath:       '$outputdir/_sysstat/sysstat.json.gz'
+    data_database:   loadmemstate
+    data_table:      loadmem_by_ts_feat_status_last
+    stat_table:      datasetstat_sysstat
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'ts, feat, status, substatus, count, load_avg, load_min,
+                     load_max, used_cores_avg, used_cores_min, used_cores_max,
+                     total_cores_avg, used_mem_avg, used_mem_min, used_mem_max,
+                     total_mem_avg'
+    column_convert: 'ts->todate_std_hhmm, used_mem_avg->MiBtoGiB, used_mem_min->MiBtoGiB, used_mem_max->MiBtoGiB,
+                     total_mem_avg->MiBtoGiB'
+
+- dataset:
+    name:            sysrackpwr_json
+    set:             json_sysstat
+    filepath:       '$outputdir/_sysstat/sysrackpwr.json.gz'
+    data_database:   sysstatstate
+    data_table:      rackpwr_last
+    stat_table:      datasetstat_sysstat
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'name, power, ts'
+    column_convert: 'ts->todate_std_hhmm, power->toThousand'
+    order:          "name DESC"
+
+- dataset:
+    name:            nodeerr_json
+    set:             json_nodeerr
+    filepath:       '$outputdir/_sysstat/nodeerr.json.gz'
+    data_database:   nodeerr
+    data_table:      nodeerr_last
+    stat_table:      datasetstat_nodeerr
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'nodeid, nodeerrts, jobid, cmd, pid, msgcls, msg, user, uid, gid'
+    column_convert: 'nodeerrts->todate_std_hhmm'
+    order:          "jobid DESC, nodeid DESC, nodeerrts DESC"
+    
+###############################
+# Internal stat
+###############################
+- dataset:
+    name:            DBstat_json
+    set:             json_dbstat
+    filepath:       '$outputdir/_internal/DBstat.json.gz'
+    data_database:   DBstat
+    data_table:      LMLDBstatcurrent
+    stat_table:      datasetstat_DBstat
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'ts, ts_min, ts_max, ts_dur, db, tab, tabpath, nrows, time_aggr_res'
+    column_convert: 'ts->todate_std_hhmm,ts_min->todate_std_hhmm,ts_max->todate_std_hhmm,ts_dur->hhmm_short'
+
+- dataset:
+    name:            steptimings_json
+    set:             json_steptimings
+    filepath:       '$outputdir/_internal/steptimings.json.gz'
+    data_database:   steptimings
+    data_table:      steptimingscurrent,steptimings_stat
+    data_table_join_col: id 
+    stat_table:      datasetstat_steptimings
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'wf_startts, wf_name, wf_cnt, name, startts, endts, dt, cmplx, nr, groupnr, cnt, ts_min, dt_min, dt_avg, dt_max, cmplx_min, cmplx_avg, cmplx_max'
+    column_convert: 'wf_startts->todate_std_hhmmss,startts->todate_std_hhmmss,endts->todate_std_hhmmss,
+                     ts_min->todate_std_hhmmss,
+                     dt->cut4digits,dt_min->cut4digits,dt_avg->cut4digits,dt_max->cut4digits,
+                     cmplx_min->cut1digits,cmplx_avg->cut1digits,cmplx_max->cut1digits'
+    
+    
+# Remarks:
+#   ts_end is -1 for running jobs
+#   jobreporting database will be filled from other databases, depending on update state of these data bases
+#   job entries could have missing values, which have to be skippd if these are used column_filemap 
+
+# mapping data to files:
+#   column_filemap: maps table columns to FORALL variables 

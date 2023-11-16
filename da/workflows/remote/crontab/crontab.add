@@ -1,0 +1,1 @@
+* * * * * . ~/.llview_remote_rc ; perl "$LLVIEW_HOME/da/workflows/remote/crontab/remoteAll.pl"
