@@ -127,6 +127,13 @@ sub write_steptimings_lml {
   printf(OUT "	version=\"0.7\"\>\n");
   printf(OUT "<objects>\n");
   $count=0;
+  foreach $step (keys(%{$steprefs})) {
+    if (!defined($steprefs->{$step}->{start})) {
+      print STDERR "[LL_analyse_jobreports.pl] $step does not include 'start'. Skipping... \n";
+      delete ($steprefs->{$step});
+    }
+  }
+
   foreach $step (sort {$steprefs->{$a}->{start} <=> $steprefs->{$b}->{start}} (keys(%{$steprefs}))) {
     $count++;$stepnr{$step}=$count;
     printf(OUT "<object id=\"fb%06d\" name=\"%s\" type=\"steptime\"/>\n",$count,$step);

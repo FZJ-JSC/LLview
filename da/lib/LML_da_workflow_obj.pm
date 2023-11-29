@@ -59,7 +59,7 @@ sub read_xml_fast {
   # light-weight self written xml parser, only working for simple XML files  
   $xmlin=~s/\n/ /gs;
   $xmlin=~s/\s\s+/ /gs;
-  my ($tag,$tagname,$rest,$ctag,$nrc);
+  my ($tag,$tagname,$rest,$ctag,$nrc,@list);
   foreach $tag (split(/\>\s*/,$xmlin)) {
     $ctag.=$tag;
     $nrc=($ctag=~ tr/\"/\"/);
@@ -70,25 +70,27 @@ sub read_xml_fast {
       next;
     }
     
-    # print "TAG: '$tag'\n";
+    # print STDERR "TAG: '$tag'\n";
     if($tag=~/^<[\/\?](.*[^\s\>])/) { # end of a tag
       $tagname=$1;
       # print "TAGE: '$tagname'\n";
       $self->xml_end($self->{DATA},$tagname,());
     } elsif($tag=~/<([^\s]+)\s*$/) { # start of simple tag
       $tagname=$1;
-      # print "TAG0: '$tagname'\n";
+      # print STDERR "TAG0: '$tagname'\n";
       $self->xml_start($self->{DATA},$tagname,());
     } elsif($tag=~/<([^\s]+)(\s(.*)[^\/])$/) { # start of tag with options
       $tagname=$1;
       $rest=$2;$rest=~s/^\s*//gs;$rest=~s/\s*$//gs;$rest=~s/\=\s+\"/\=\"/gs;
-      # print "TAG1: '$tagname' rest='$rest'\n";
-      $self->xml_start($self->{DATA},$tagname,split(/=?\"\s*/,$rest));
+      # print STDERR "TAG1: '$tagname' rest='$rest'\n";
+      @list = $rest =~ /([^\s]+?)="(.*?)"/g;
+      $self->xml_start($self->{DATA},$tagname,@list);
     } elsif($tag=~/<([^\s]+)(\s(.*)\s?)\/$/) { # closed tag (that closes by itself, <.../>) with options
       $tagname=$1;
       $rest=$2;$rest=~s/^\s*//gs;$rest=~s/\s*$//gs;$rest=~s/\=\s+\"/\=\"/gs;
-      # print "TAG2: '$tagname' rest='$rest' closed\n";
-      $self->xml_start($self->{DATA},$tagname,split(/=?\"\s*/,$rest));
+      # print STDERR "TAG2: '$tagname' rest='$rest' closed\n";
+      @list = $rest =~ /([^\s]+?)="(.*?)"/g;
+      $self->xml_start($self->{DATA},$tagname,@list);
       $self->xml_end($self->{DATA},$tagname,());
     }
   }

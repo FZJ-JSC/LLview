@@ -47,7 +47,6 @@
       - { name: restart,         type: restart_t,         LLDB_from: jobstate/queuedjobs,    LL_default: 0 }
       - { name: account,         type: account_t,         LLDB_from: jobstate/queuedjobs,    LL_default: 0 }
       - { name: runtime,         type: time_t,            LLDB_from: jobstate/queuedjobs,    LL_default: 0 }
-      - { name: starttime,       type: date_t,            LLDB_from: jobstate/queuedjobs,    LL_default: "" }
       - { name: endtime,         type: date_t,            LLDB_from: jobstate/queuedjobs,    LL_default: "" }
       - { name: numnodes,        type: tasks_t,           LLDB_from: jobstate/queuedjobs,    LL_default: 0 }
       - { name: reason,          type: comment_t,         LLDB_from: jobstate/queuedjobs,    LL_default: "" }

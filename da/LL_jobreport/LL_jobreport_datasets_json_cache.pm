@@ -413,7 +413,7 @@ sub write_data_to_file_json_cache {
       # convert data
       while ( my ($col, $func) = each(%{$col_convert_by_col}) ) {
         if(!exists($ref->{$col})) {
-          print STDERR "TMPDEB: column $col not exists\n";
+          print STDERR "TMPDEB: column $col does not exist\n";
           next;
         }
         if(!defined($ref->{$col})) {

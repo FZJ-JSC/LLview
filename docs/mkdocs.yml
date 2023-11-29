@@ -13,7 +13,8 @@ site_description: Documentation of LLview monitoring tool
 nav:
   - About: 
     - Intro: index.md
-    - Releases: releases/index.md
+    - Internal Releases: releases/index.md
+    - Public Releases: releases/public.md
   - Live: 
     - Live View: live/index.md
     - LLview Client: live/client.md

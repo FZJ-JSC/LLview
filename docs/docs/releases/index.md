@@ -1,6 +1,32 @@
-# Releases
+# LLview Internal Releases
 
-## Version 2.1
+
+### 2.2.0 (November 13, 2023)
+
+A simplified package of this version was also released Open Source on GitHub. [See more](public.md)
+
+<h4> Added </h4>
+
+- Annotations and gray area to indicate NUMA domains and direct GPU connections
+- Support for Workflow Manager (WFM) (DEEP only)
+- Updated IOI-adapter for v5 (DEEP only)
+- Added [JuMonC](https://pypi.org/project/jumonc/) adapter so users can define custom graphs in reports
+- HetJobs are now shown as workflows, connecting different jobIDs
+- New Projects page (Support View only)
+- Time aggregation automatic tables (replacing `_hourly` and `_daily` tables)
+
+<h4> Changed </h4>
+
+- New adapter for GPU metrics from Prometheus (not yet active)
+- JuRepTool: Liberation Fonts are now primarily used in reports
+
+<h4> Fixed </h4>
+
+- Link to documentation (Help tab) is now shown on all views
+- Moved map jobid-to-day file to folder where all users have access (such filtering suggestions work in all views)
+
+
+### 2.1.0 (August 4, 2023)
 
 LLview got constant updates in the last months. Apart from the general improvements, an important recent adition was the inclusion of new [core usage metrics](../jobreport/metrics_list.md). New values are added to the tables of active and finished jobs, graphs were added to the footer when a job is selected (including a new footer tab `Cores`), and new graphs were added to the PDF and HTML reports. 
 
@@ -8,7 +34,7 @@ The new metrics can help users, admins and support staff to find wrong configura
 
 Full Changelog:
 
-* Added IOI information (DEEP-only)
+* Added IOI information (DEEP only)
 * Increased max_entries per table to 5000
 * Fixed wrong 1M factor on Open/Close operations
 * Improved display of "wait time" and "walltime" to hh:mm
@@ -24,23 +50,23 @@ Full Changelog:
 * Added Core usage metrics, including new columns and footer graphs on Job Reporting portal, and new graphs on PDF and HTML reports
 * Improved table column names and descriptions
 * Total score use now CPU Usage instead of CPU Load
-* Added Workflow Manager information (DEEP-only)
-* Added GPU information from DCDB (DEEP-only)
+* Added Workflow Manager information (DEEP only)
+* Added GPU information from DCDB (DEEP only)
 * `CANCELLED by <id>` is now shown as `CANCELLED by <username>`
 * Internal fixes and improvements
 
-## Version 2.0
+### 2.0.0 (December 22, 2022)
 
 The new version of LLview, released in the end of 2022, has many new features.
 Besides a major internal restructure - the kernel of LLview was completely re-written - and a redesign of the page, here are some of the new features:
 
-### General
+<h4> General </h4>
 
 * Easier to configure, generalise and add new and aggregated metrics
 * More stable updates, with less missing points
 * Improved values for `Interconnect` metrics
 
-### Web portal
+<h4> Web portal </h4>
 
 * Workflow tab, currently containing information about SLURM workflows (chains and arrays)
 * Improved bottom graphs when selecting a job
@@ -50,7 +76,7 @@ Besides a major internal restructure - the kernel of LLview was completely re-wr
 * Internal monitoring of LLview database and timings `(available for support and admins)`
 * Searching for a job ID will search all running and history `(available for support and admins)`
 
-### Detailed reports
+<h4> Detailed reports </h4>
 
 * Option to change the colorscale (colors and limits) on interactive reports
 * Timeline on the detailed reports (both interactive and PDF)

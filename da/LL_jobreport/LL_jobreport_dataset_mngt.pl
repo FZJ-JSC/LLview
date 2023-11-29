@@ -75,7 +75,7 @@ usage($0) if( ! GetOptions(
 
 
 if(! -f $opt_config) {
-  print STDERR "$instname Config-file $opt_config does not exist... Leaving\n";
+  print STDERR "$instname Config-file $opt_config does not exist, leaving...\n";
   usage($0);
   exit;
 }

@@ -91,38 +91,50 @@ The collection and processing of data is done via actions (the first workflow le
 It is recommended to activate actions and steps inside actions one by one, and follow the `errlog` files, to find eventual issues and solve them one by one.
 
 - Edit action file `$LLVIEW_CONF/server/workflows/actions.inp` to the relevant actions to be used. It is recommended to start with `active=0` for all actions and activate them one by one.
-- Edit the configuration options for each action (e.g. `$LLVIEW_CONF/server/workflows/LML_da_dbupdate.conf`), when needed. It is recommended to start all steps with `active="0"` and activate them little by little. (**Note**: a step may have dependencies and must be activated before or together with others.)
-- The `dbupdate` action mainly performs the collection of metrics into SQLite databases (plus other tasks such as archiving). The configuration of the different databases and their columns, types and values are done via the YAML files inside the `$LLVIEW_CONF/server/LLgenDB` folder.
-- The `jobreport` action maily creates the data to be presented to the user and copies them to the Web Server. Its configuration is also done via the YAML files inside the `$LLVIEW_CONF/server/LLgenDB` folder.
+- Edit the configuration options for each action (e.g. `$LLVIEW_CONF/server/workflows/LML_da_dbupdate.conf`), when needed. It is recommended to start all steps with `active="0"` and activate them little by little. (**Note**: a step may have dependencies that must be activated before or together with it.)
 - Important reminders:
-    - <a name="checkDB"></a> Before activating the `LMLDBupdate.pl` step of the `dbupdate` workflow, the corresponding databases must be created. This can done via a `checkDB` command:
+    - <a name="checkDB"></a> After making changes on the configurations that afect the databases (i.e., adding or removing tables), they must be updated. To avoid corrupting the databases or losing data, this step must be done manually. To update the databases according to the new configurations, the following `checkDB` command should be run:
         ```
         . ~/.llview_server_rc; cd $LLVIEW_DATA/$LLVIEW_SYSTEMNAME;
         $LLVIEW_HOME/da/LLmonDB/LLmonDB_mngt.pl -config=$LLVIEW_CONF/server/LLgenDB/LLgenDB.yaml --force checkDB > logs/checkDBv1.`date +%Y.%m.%d`.log 2>&1
         ```
-    The file ```logs/checkDBv1.`date +%Y.%m.%d`.log``` can then be checked for errors.
-    This command should be run every time the database is changed in the YAML configuration files (new tables are added or removed, etc.). It updates the database to be used by LLview.
-    - <a name="transferreports"></a> The `transferreports` step inside the `jobreport` action is used to transfer data securely from the LLview Server to the Web Server. To use this step as it is by default, it is necessary to create an ssh-key pair:
-        ```
-        cd $LLVIEW_DATA/$SYSTEMNAME/perm/
-        mkdir keys
-        cd keys
-        ssh-keygen -a 100 -t ed25519 -C ‘LLview job report transport from LLview-Server’ -f www_llview_system_jobreport
-        ```
-    This must be created without any passphrase.
-    Then, on the Web Server, the public part of the key must be added in `~/.ssh/authorized_keys` as:
-        ```
-        from="<ip of LLview server>",command="<path to rrsync>/rrsync.pl -wo <folder where data will be copied into>",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding <complete public part of the ssh-key>
-        ```
-    **Note:** the line above must be adapted to include the correct IP where the LLview Server part is running, the path to `rrsync.pl` on the web server (this tool is packed with JURI in the folder `$JURI_HOME/utils`), and the public part of the key created above.
-    Finally, the command itself must be updated with the correct values for:
-        ```            
-        -sshkey $permdir/keys/www_llview_system_jobreport
-        -login <login on the web server>
-        -port <port used>
-        -desthost <webserver address>
-        ```
-    **Note:** An initial login may be needed to accept the authenticity of the host (`ssh <login>@<webserver address>` and then `yes` is enough, even if you get "Permission denied" afterwards)
+    The file ```$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDBv1.`date +%Y.%m.%d`.log``` can then be checked for errors. There is no problem running this command when the change in the configuration does not affect the databases, so it is recommended to run it after changes in the YAML files.
+
+#### `dbupdate`
+
+The `dbupdate` action mainly performs the collection of metrics into SQLite databases (plus other tasks such as archiving). The configuration of the different databases and their columns, types and values are done via the YAML files inside the `$LLVIEW_CONF/server/LLgenDB` folder.
+
+#### `jobreport`
+
+The `jobreport` action maily creates the data to be presented to the user and copies them to the Web Server. Its configuration is also done via the YAML files inside the `$LLVIEW_CONF/server/LLgenDB` folder.
+
+##### `transferreports`
+
+The `transferreports` step inside the `jobreport` action is used to transfer data securely from the LLview Server to the Web Server. To use this step as it is by default, it is necessary to create an ssh-key pair:
+    ```
+    cd $LLVIEW_DATA/$SYSTEMNAME/perm/
+    mkdir keys
+    cd keys
+    ssh-keygen -a 100 -t ed25519 -C ‘LLview job report transport from LLview-Server’ -f www_llview_system_jobreport
+    ```
+This must be created without any passphrase.
+Then, on the Web Server, the public part of the key must be added in `~/.ssh/authorized_keys` as:
+    ```
+    from="<ip of LLview server>",command="<path to rrsync>/rrsync.pl -wo <folder where data will be copied into>",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding <complete public part of the ssh-key>
+    ```
+**Note:** the line above must be adapted to include the correct IP where the LLview Server part is running, the path to `rrsync.pl` on the web server (this tool is packed with JURI in the folder `$JURI_HOME/utils`), and the public part of the key created above.
+Finally, the command itself must be updated with the correct values for:
+    ```            
+    -sshkey $permdir/keys/www_llview_system_jobreport
+    -login <login on the web server>
+    -port <port used>
+    -desthost <webserver address>
+    ```
+**Note:** An initial login may be needed to accept the authenticity of the host (`ssh <login>@<webserver address>` and then `yes` is enough, even if you get "Permission denied" afterwards)
+
+#### `compress` and `archive`
+
+The actions `compress` and `archive` perform actions that are created on the previous steps on the folder `${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/tmp/jobreport/tmp/mngtactions`. They are important to keep the `${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/tmp/jobreport/data` folder clean.
 
 ### JuRepTool
 

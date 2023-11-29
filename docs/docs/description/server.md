@@ -147,7 +147,7 @@ logfile=/home/llstat/.data/monitor/monitor_juwels_booster_p2checkmk.log
 # Workflow part 3 of Juwels-Booster: rest of workflow, incl. transfer to web server
 [action_jwb3]
 active=1
-watchfile=/home/llstat/.data/juwels_booster/perm/lmlstat_start_ready
+watchfile=/home/llstat/.data/juwels_booster/perm/lmlstat_start.ready
 execute=/home/llstat/llview/da/workflows/juwels_booster/server/runLMLDA_part3
 execdir=/home/llstat/.data/juwels_booster
 logfile=/home/llstat/.data/monitor/monitor_juwels_booster_p3.log
@@ -163,7 +163,7 @@ logfile=/home/llstat/.data/monitor/monitor_juwels_booster_p3jufocp.log
 # Workflow part 4 of Juwels-Booster: jobreport
 [action_jwb4]
 active=1
-watchfile=/home/llstat/.data/juwels_booster/perm/jobreport_start_ready
+watchfile=/home/llstat/.data/juwels_booster/perm/jobreport_start.ready
 execute=/home/llstat/llview/da/workflows/juwels_booster/server/runLMLDA_part4
 execdir=/home/llstat/.data/juwels_booster
 logfile=/home/llstat/.data/monitor/monitor_juwels_booster_p4.log

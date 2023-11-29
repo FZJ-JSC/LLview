@@ -103,7 +103,7 @@ sub archive_data {
       if(exists($tableref->{options})) {
         $optref=$tableref->{options};
         if( exists($optref->{archive}) ) {
-          # 'non_existent: ntable/ncol' --> archive all entries which do not exists in ntable in column ncol
+          # 'non_existent: ntable/ncol' --> archive all entries which do not exist in ntable in column ncol
           if(exists($optref->{archive}->{non_existent})) {
             my $what=$optref->{archive}->{non_existent};
             if($what=~/^\s*(.*)\/(.*)\s*$/) {

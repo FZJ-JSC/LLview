@@ -73,7 +73,7 @@ sub process_dirlist {
     my $do_chk_mkdir=0;
     if(exists($self->{DIRSTAT}->{$createpath})) {
       # directory already known 
-      if($self->{DIRSTAT}->{$createpath}->{"status"} != 1) {  # but does not exists?
+      if($self->{DIRSTAT}->{$createpath}->{"status"} != 1) {  # but does not exist?
         $do_chk_mkdir=1;
       } else {
         # do check again if caller signalled that config has changed
