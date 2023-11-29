@@ -5,9 +5,12 @@ message: >-
   this file.
 license: GPLv3
 contact:
-  - email: llview.jsc@fz-juelich.de
-doi: 
+  - email: llview.jsc@fz-juelich.de 
 type: software
+identifiers:
+  - description: "The concept DOI of this software"
+    type: doi
+    value: 10.5281/zenodo.10221407
 repository-code: 'https://github.com/FZJ-JSC/LLview'
 url: 'https://llview.fz-juelich.de'
 authors:

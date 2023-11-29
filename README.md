@@ -1,5 +1,7 @@
 # LLview
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10221407.svg)](https://doi.org/10.5281/zenodo.10221407)
+
 LLview is a set of software components to monitor clusters that are controlled by a resource manager and a scheduler system. Within its Job Reporting module, it provides detailed information of all the individual jobs running on the system. To achieve this, LLview connects to different sources in the system and collects data to present to the user via a web portal. For example, the resource manager provides information about the jobs, while additional daemons may be used to acquire extra information from the compute nodes, keeping the overhead at a minimum, as the metrics are obtained in the range of minutes apart. The LLview portal establishes a link between performance metrics and individual jobs to provide a comprehensive job reporting interface.
 
 ## Installation
