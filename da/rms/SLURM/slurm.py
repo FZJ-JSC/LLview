@@ -653,7 +653,8 @@ class SlurmInfo:
           if key.startswith('__'): continue
           if (value):
           # if (value) and (value != "0"):
-            file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"'+str(key)+'\"',value))
+            # Replacing double quotes with single quotes to avoid problems importing the values
+            file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"'+str(key)+'\"',value.replace('"', "'") if isinstance(value, str) else value))
         # if ts:
         #   file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"ts\"',ts))
 

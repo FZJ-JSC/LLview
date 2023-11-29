@@ -37,7 +37,7 @@ logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_dbupdate`date +.%Y.
 # Workflow for Job Reporting interface
 [jobreport]
 active=1
-watchfile=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/jobreport_start_ready
+watchfile=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/jobreport_start.ready
 execute="${LLVIEW_HOME}/da/LML_da.pl -par -maxprocesses 8 -nostep -conf ${LLVIEW_CONF}/server/workflows/LML_da_jobreport.conf >> logs/jobreport`date +.%Y.%m.%d`.log 2>> logs/jobreport`date +.%Y.%m.%d`.errlog;"
 execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
 logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_jobreport`date +.%Y.%m.%d`.log"

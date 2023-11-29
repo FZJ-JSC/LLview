@@ -33,8 +33,6 @@ Please, try to follow these guidelines for your code contributions:
 
 ### LLview Contributor License Agreement
 
-LLview, JSC Forschungszentrum Juelich CLA Version: alpha
-
 Thank you for your interest in contributing to Forschungszentrum Jülich GmbH – Jülich Supercomputing Centre: JSC’s LLview (“We” or “Us”).
 
 The purpose of this contributor agreement is to clarify and document the rights granted by contributors to Us. To make this document effective, please follow the instructions below.

@@ -1,0 +1,230 @@
+# annotations:
+#     - x: 2.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA0'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+#     - x: 8.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA1-GPU1'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+#     - x: 14.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA2'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+#     - x: 20.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA3-GPU0'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+#     - x: 26.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA4'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+#     - x: 32.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA5-GPU3'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+#     - x: 38.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA6'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+#     - x: 44.5
+#       y: 0
+#       xref: 'x'
+#       yref: 'paper'
+#       text: 'NUMA7-GPU2'
+#       showarrow: false
+#       font: 
+#         size: 10
+#         color: 'rgb(70, 70, 70)'
+#       align: 'center'
+#       bordercolor: 'rgb(70, 70, 70)'
+#       borderwidth: 1
+#       bgcolor: '#ffffff'
+#       xanchor: 'center'
+#       yanchor: 'top'
+#       yshift: -5
+#       show_pattern: 
+#         Queue: "booster"
+# shapes:
+#     - type: 'rect'
+#       xref: 'x'
+#       yref: "paper"
+#       x0: 5.5
+#       y0: -0.5
+#       x1: 11.5
+#       y1: 1
+#       layer: 'below'
+#       # label:
+#       #   text: "NUMA1->GPU1"
+#       #   textposition: "bottom center"
+#       #   font:
+#       #     color: 'rgb(0, 0, 0)'
+#       #   yanchor: top
+#       line:
+#         color: 'rgb(170, 170, 170)'
+#         width: 1
+#       fillcolor: 'rgb(170, 170, 170)'
+#       # opacity: 0.3
+#       show_pattern: 
+#         Queue: "booster"
+#     - type: 'rect'
+#       xref: 'x'
+#       yref: "paper"
+#       x0: 17.5
+#       y0: -0.5
+#       x1: 23.5
+#       y1: 1
+#       layer: 'below'
+#       # label:
+#       #   text: "NUMA3->GPU0"
+#       #   textposition: "bottom center"
+#       #   font:
+#       #     color: 'rgb(0, 0, 0)'
+#       #   yanchor: top
+#       line:
+#         color: 'rgb(170, 170, 170)'
+#         width: 1
+#       fillcolor: 'rgb(170, 170, 170)'
+#       # opacity: 0.2
+#       show_pattern: 
+#         Queue: "booster"
+#     - type: 'rect'
+#       xref: 'x'
+#       yref: "paper"
+#       x0: 29.5
+#       y0: -0.5
+#       x1: 35.5
+#       y1: 1.0
+#       layer: 'below'
+#       # label:
+#       #   text: "NUMA5->GPU3"
+#       #   textposition: "middle center"
+#       #   font:
+#       #     color: 'rgb(0, 0, 0)'
+#       #   yanchor: top
+#       line:
+#         color: 'rgb(170, 170, 170)'
+#         width: 1
+#       fillcolor: 'rgb(170, 170, 170)'
+#       # opacity: 0.2
+#       show_pattern: 
+#         Queue: "booster"
+#     - type: 'rect'
+#       xref: 'x'
+#       yref: "paper"
+#       x0: 41.5
+#       y0: -0.5
+#       x1: 47.5
+#       y1: 1
+#       layer: 'below'
+#       # label:
+#       #   text: "NUMA7->GPU2"
+#       #   textposition: "bottom center"
+#       #   font:
+#       #     color: 'rgb(0, 0, 0)'
+#       #   yanchor: top
+#       line:
+#         color: 'rgb(170, 170, 170)'
+#         width: 1
+#       fillcolor: 'rgb(170, 170, 170)'
+#       # opacity: 0.4
+#       show_pattern: 
+#         Queue: "booster"

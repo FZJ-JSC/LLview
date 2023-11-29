@@ -58,19 +58,19 @@ usage($0) if( ! GetOptions(
 my $operation=$ARGV[0];
 
 if(!$operation) {
-  print "please specify an operation ..., leaving\n";
+  print "please specify an operation, leaving...\n";
   usage($0);
   exit;
 }
 
 if(!$opt_config) {
-  print "please specify config-file (-config=<file>.yaml) ..., leaving\n";
+  print "please specify config-file (-config=<file>.yaml), leaving...\n";
   usage($0);
   exit;
 }
 
 if(! -f $opt_config) {
-  print "config-file $opt_config does not exist ..., leaving\n";
+  print "config-file $opt_config does not exist, leaving...\n";
   usage($0);
   exit;
 }

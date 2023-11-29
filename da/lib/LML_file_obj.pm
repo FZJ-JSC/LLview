@@ -303,7 +303,7 @@ sub read_lml_fast {
   # light-weight self written xml parser, only working for simple XML files  
   $xmlin=~s/\n/ /gs;
   $xmlin=~s/\s\s+/ /gs;
-  my ($tag,$tagname,$rest,$ctag,$nrc);
+  my ($tag,$tagname,$rest,$ctag,$nrc,@list);
   foreach $tag (split(/\>\s*/,$xmlin)) {
     $ctag.=$tag;
     $nrc=($ctag=~ tr/\"/\"/);
@@ -318,33 +318,36 @@ sub read_lml_fast {
     # comment
     next if($tag =~ /\!\-\-/);
 
-    # print "TAG: '$tag'\n";
+    # print STDERR "TAG: '$tag'\n";
     if($tag=~/^<[\/\?](.*[^\s\>])/) {
       $tagname=$1;
-      # print "TAGE: '$tagname'\n";
+      # print STDERR "TAGE: '$tagname'\n";
       $self->lml_end($self->{DATA},$tagname,());
     } elsif($tag=~/<([^\s\/]+)\s*$/) {
       $tagname=$1;
-      # print "TAG0: '$tagname'\n";
+      # print STDERR "TAG0: '$tagname'\n";
       $self->lml_start($self->{DATA},$tagname,());
     } elsif($tag=~/<([^\s]+)(\s(.*)[^\/])$/) {
       $tagname=$1;
       $rest=$2;$rest=~s/^\s*//gs;$rest=~s/\s*$//gs;$rest=~s/\=\s+\"/\=\"/gs;$rest=~s/\s+\=\"/\=\"/gs;$rest=~s/""/"-LML-"/gs;
       $rest=&LML_da_util::escape_special_characters($rest) if($tagname=~/(select)/);
-      # print "TAG1: '$tagname' rest='$rest'\n";
-      $self->lml_start($self->{DATA},$tagname,split(/=?\"\s*/,$rest));
+      # print STDERR "TAG1: '$tagname' rest='$rest'\n";
+      @list = $rest =~ /([^\s]+?)="(.*?)"/g;
+      $self->lml_start($self->{DATA},$tagname,@list);
     } elsif($tag=~/<([^\s\/]+)(\s(.*)\s?)\/$/) {
       $tagname=$1;
       $rest=$2;$rest=~s/^\s*//gs;$rest=~s/\s*$//gs;$rest=~s/\=\s+\"/\=\"/gs;$rest=~s/\s+\=\"/\=\"/gs;$rest=~s/""/"-LML-"/gs;
-      # print "TAG2: '$tagname' rest='$rest' closed\n";
+      # print STDERR "TAG2: '$tagname' rest='$rest' closed\n";
       $rest=&LML_da_util::escape_special_characters($rest) if($tagname=~/(select)/);
-      $self->lml_start($self->{DATA},$tagname,split(/=?\"\s*/,$rest));
+      @list = $rest =~ /([^\s]+?)="(.*?)"/g;
+      $self->lml_start($self->{DATA},$tagname,@list);
       $self->lml_end($self->{DATA},$tagname,());
     } elsif($tag=~/<([^\s\/]+)\/$/) {
       $tagname=$1;
       $rest="";
-      # print "TAG2e: '$tagname' rest='$rest' closed\n";
-      $self->lml_start($self->{DATA},$tagname,split(/=?\"\s*/,$rest));
+      # print STDERR "TAG2e: '$tagname' rest='$rest' closed\n";
+      @list = $rest =~ /([^\s]+?)="(.*?)"/g;
+      $self->lml_start($self->{DATA},$tagname,@list);
       $self->lml_end($self->{DATA},$tagname,());
     }
   }

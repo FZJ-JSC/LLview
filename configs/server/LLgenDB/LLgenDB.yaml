@@ -80,23 +80,23 @@ databases:
   #  DB for jobreporting
   %include "conf_jobreport/jobreport_databases.yaml"
 
-#   #  DB for LMLstat
-#   %include "conf_lmlstat/lmlstat_databases.yaml"
+  #  DB for LMLstat
+  %include "conf_lmlstat/lmlstat_databases.yaml"
 
   # #  DB for JuMonC
-  # %include "conf_jumonc/jumonc_databases.yaml"
+  %include "conf_jumonc/jumonc_databases.yaml"
 
 
-# # config options for jobreporting
+# config options for jobreporting
 jobreport:
   paths:
     tmpdir: './tmp'
     outputdir: './tmp/jobreport/data'
   %include "conf_jobreport/jobreport_main.yaml"
 
-# # config options for lmlstat (system status file in Client-LML format)
-# lmlstat:
-#   %include "conf_lmlstat/lmlstat_main.yaml"
+# config options for lmlstat (system status file in Client-LML format)
+lmlstat:
+  %include "conf_lmlstat/lmlstat_main.yaml"
   
 
 

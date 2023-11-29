@@ -153,7 +153,7 @@ sub DBstat {
         } else {
           $ldata->{$db}->{$ltable}->{ts_max}=-1;
           $ldata->{$db}->{$ltable}->{ts_min}=-1;
-          $ldata->{$db}->{$ltable}->{ts_dur}=-1;
+          $ldata->{$db}->{$ltable}->{ts_dur}=0;
         }
       }
     }
