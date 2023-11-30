@@ -1,29 +1,29 @@
 cff-version: 1.2.0
-title: "LLview"
+title: LLview
 message: >-
-  If you use this software, please cite it using the metadata from
-  this file.
-license: GPLv3
-contact:
-  - email: llview.jsc@fz-juelich.de 
+  If you use this software, please cite it using the
+  metadata from this file.
 type: software
+authors:
+  - family-names: Müller
+    given-names: Yannik
+    orcid: 'https://orcid.org/0009-0001-5696-6512'
+  - family-names: Souza Mendes Guimarães
+    given-names: Filipe
+    orcid: 'https://orcid.org/0000-0002-5618-6727'
+  - family-names: Karbach
+    given-names: Carsten
+    orcid: 'https://orcid.org/0000-0002-1652-5296'
+  - family-names: Frings
+    given-names: Wolfgang
+    orcid: 'https://orcid.org/0000-0002-9463-9264'
 identifiers:
-  - description: "The concept DOI of this software"
-    type: doi
+  - type: doi
     value: 10.5281/zenodo.10221407
+    description: The concept DOI of this software
 repository-code: 'https://github.com/FZJ-JSC/LLview'
 url: 'https://llview.fz-juelich.de'
-authors:
-  - family-names: "Müller"
-    given-names: "Yannik"
-    orcid: "https://orcid.org/0009-0001-5696-6512"
-  - family-names: "Souza Mendes Guimarães"
-    given-names: "Filipe"
-    orcid: "https://orcid.org/0000-0002-5618-6727"
-  - family-names: "Karbach"
-    given-names: "Carsten"
-    orcid: "https://orcid.org/0000-0002-1652-5296"
-  - family-names: "Frings"
-    given-names: "Wolfgang"
-    orcid: "https://orcid.org/0000-0002-9463-9264"
-
+keywords:
+  - monitoring
+  - hpc
+license: GPL-3.0
