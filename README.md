@@ -8,6 +8,8 @@ LLview is a set of software components to monitor clusters that are controlled b
 
 Installation instructions can be found on LLview's [documentation page](https://apps.fz-juelich.de/jsc/llview/docu/install/).
 
+LLview presents its gathered data in a Web Portal created by [JURI](https://github.com/FZJ-JSC/JURI).
+
 ## Further Information
 
 For further information please see: http://www.fz-juelich.de/jsc/llview

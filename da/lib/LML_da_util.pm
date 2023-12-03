@@ -482,26 +482,28 @@ sub get_time {
   return($date);
 }
 
-# This subroutine removes logs older than $logdays
-# from $folder. Uses $logfile to log messages
+# This subroutine checks all log and errlog files in a giving folder
+# and removes files older than $logdays. Uses $logfile to log messages
 sub remove_old_logs {
   my ($folder,$logdays,$logfile)=@_;
-  # Looping over all days until there are no more files
-  while (1) {
-    $logdays++;
-    my $olddate = &get_date($logdays);
+  # Getting last date to keep files (older than this, it should be deleted)
+  my $olddate = &get_date($logdays);
+  my $filedate;
+  # Looping over logs and error files
+  for my $type ("log", "errlog") {
     # Getting all logs and errlog files from $folder
-    my @oldlogfiles = <"$folder/*$olddate.log">;
-    my @errlogfiles = <"$folder/*$olddate.errlog">;
-    # Exit when there are not more files
-    last if (!@oldlogfiles && !@errlogfiles);
-    foreach my $filename (@oldlogfiles) {
-      logmsg("Removing older log file: $filename\n",$logfile);
-      unlink $filename;
-    }
-    foreach my $filename (@errlogfiles) {
-      logmsg("Removing older err file: $filename\n",$logfile);
-      unlink $filename;
+    my @files = <"$folder/*.$type">;
+    # Looping over all the files
+    foreach my $filename (@files) {
+      # Getting date of file
+      if ($filename =~ /.([0-9]{4}.[0-9]{2}.[0-9]{2}).$type/) {
+        $filedate = $1;
+        # If filename is older than last date to keep files, delete it
+        if ($filedate lt $olddate) {
+          logmsg("Date $filedate is older than $olddate, removing older log file: $filename\n",$logfile);
+          unlink $filename;
+        }
+      };
     }
   }
   return;
