@@ -111,6 +111,7 @@ sub process {
     # add depend steps to queue 
     if($continue) {
       foreach my $nstep (@{$dep_graph->{graph}->{$step}->{nxt}}) {
+        next if(!defined($nstep));
         # skip already queued or executed steps
         $msg=sprintf("[$PRIMARKER] Adding to queue: $nstep\n"); logmsg($msg);
         next if($steprefs->{$nstep}->{state}=~/(inqueue|done|failed)/);
@@ -204,7 +205,7 @@ sub enum_chain {
     $stepsref->{$step}->{chainid}=$$depnrref;
   } 
   foreach my $nstep (@{$dep_graph->{graph}->{$step}->{nxt}}) {
-    &enum_chain($nstep,$depnrref,$dep_graph,$stepsref);
+    &enum_chain($nstep,$depnrref,$dep_graph,$stepsref) if(defined($nstep));
   }
 }
 
@@ -219,12 +220,14 @@ sub analyse_step_chains {
     $sref=$stepsref->{$step};
     $sref->{chainid}="-";
     # need to be improved, multiple dependencies possible
-    if(defined($sref->{exec_after})) {
+    if(defined($sref->{exec_after}) && ($sref->{exec_after}!~/^\s*$/ ) ) {
       # need to be improved, multiple dependencies possible
       foreach $depstep (split(/\s*,\s*/,$sref->{exec_after})) {
         push(@{$dep_graph->{graph}->{$depstep}->{nxt}},$step);
         push(@{$dep_graph->{graph}->{$step}->{prev}},$depstep);
       }
+    } else {
+      push(@{$dep_graph->{graph}->{$step}->{nxt}},undef);
     }
   }
 
@@ -239,6 +242,7 @@ sub analyse_step_chains {
       $entrystep=$step;
     }
   }
+
   if(defined($entrystep)) {
     $depnr=0;
     &enum_chain($entrystep,\$depnr,$dep_graph,$stepsref);
