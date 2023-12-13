@@ -77,6 +77,7 @@ sub parprocess {
                             # add depend steps to queue 
                             foreach my $nstep (@{$dep_graph->{graph}->{$ident}->{nxt}}) {
                               # skip already queued or executed steps
+                              next if(!defined($nstep));
                               $msg=$self->{VERBOSE} ? sprintf("[$PRIMARKER] Added to queue: $nstep\n") : ""; logmsg($msg);
                               next if($steprefs->{$nstep}->{state}=~/(inqueue|done|failed)/);
                               push(@steplist,$nstep);
