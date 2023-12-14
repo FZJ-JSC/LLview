@@ -4,37 +4,29 @@
 
 ```
 .
-├── actions.inp
 ├── monitor_file.pl
 ├── README.md
 ├── RESTARTNOW_monitor
-├── SHUTDOWNNOW_monitor
-└── start_monitor
+└── SHUTDOWNNOW_monitor
 ```
 
 ---
 
-This directory stores the main scripts and associated files used 
-to effectively executing the monitoring tasks. The main script 
-that is called from the cronjob is `start_monitor`, which by itself
-runs the script file `monitor_file.pl` using the configuration
-file called `actions.inp` located in `$LLVIEW_CONF`.
-This file describes, in an internal DA syntax, what actions must
-be taken in its monitoring work.
+The script `monitor_file.pl` uses a configuration file (f.ex. `actions.inp`) in ini format (https://metacpan.org/pod/Config::IniFiles).
+The monitor can run commands (actions) defined in the configuration based on triggers such as time intervals and file changes.
+It also restarts itself if the configuration file changes.
 
 ```
 perl monitor_file.pl --config "$LLVIEW_CONFIG/actions.inp"
 ```
 
-The file `actions.inp` contains a set of actions that can be performed
-by the script as an a reference. The basic syntax of the input file
-defines a **general** section, where signals are established to make the
-script aware of the current system status. This signals are themselves
-files, named
+The file `actions.inp` contains a set of actions. The action **general** defines the
+behaviour of the monitor itself. Comonly we define files that act as signals such as
 
 * `RESTARTNOW_monitor`
 * `SHUTDOWNNOW_monitor`
 
+Touching these files will trigger the associated actions (aka shutdown, start, restart).
 The next sections are **actions**, which can be meaningfully named to
 allow better workflow controlling by the one defining the actions.
 The keywords inside the **actions** sections are
