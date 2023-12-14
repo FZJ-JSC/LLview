@@ -36,7 +36,6 @@ my ($filename);
 my $opt_verbose=0;
 my $opt_dryrun=1;
 my $opt_force=0;
-my $opt_deletecols=0;
 my $opt_config=undef;
 my $opt_dbdir=undef;
 my $opt_pdepth=undef;
@@ -48,7 +47,6 @@ my $opt_outfile="stdout";
 usage($0) if( ! GetOptions( 
                 'verbose'          => \$opt_verbose,
                 'force'            => \$opt_force,
-                'deletecols'       => \$opt_deletecols,
                 'dbdir=s'          => \$opt_dbdir,
                 'config=s'         => \$opt_config,
                 'outfile=s'        => \$opt_outfile,
@@ -187,6 +185,7 @@ sub mysystem {
 sub usage {
     die "Usage: $_[0] <options> <operation> 
                 --config <conffile>       : LLmonDB config file in YAML format
+                --dbdir <path_to_db>      : overwrites the data base path from conffile
                 --outfile <outfile>       : file parameter used in printconfig and dumpconfig
                 --pdepth <level>          : limit for depth when dumping configfile
                 --force                   : force modifications to data base
