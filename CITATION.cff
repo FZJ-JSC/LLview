@@ -2,7 +2,7 @@ cff-version: 1.2.0
 title: LLview
 message: >-
   If you use this software, please cite it using the
-  metadata from this file.
+  metadata from the CITATION.cff file.
 type: software
 authors:
   - family-names: Müller
@@ -26,4 +26,4 @@ url: 'https://llview.fz-juelich.de'
 keywords:
   - monitoring
   - hpc
-license: GPL-3.0
+license: GPL-3.0-or-later

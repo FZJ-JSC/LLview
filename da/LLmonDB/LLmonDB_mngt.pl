@@ -177,9 +177,15 @@ if($operation=~/checkDB/i) {
 sub mysystem {
   my($call)=@_;
 
-  printf(STDERR "  --> exec: %s\n",$call) if($opt_verbose>=1);
+  printf("  --> exec: %s\n",$call) if($opt_verbose>=1);
   system($call);
-  printf(STDERR "           rc=%d\n",$?) if($opt_verbose>=2);
+  my $rc = $?;
+  if ($rc) {
+    printf(STDERR "  ERROR --> exec: %s\n",$call);
+    printf(STDERR "  ERROR --> rc=%d\n",$rc);
+  } else {
+    printf("           rc=%d\n",$rc) if($opt_verbose>=2);
+  }
 }
 
 sub usage {

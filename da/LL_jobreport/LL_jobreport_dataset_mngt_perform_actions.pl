@@ -171,9 +171,15 @@ foreach my $file (sort(keys(%{$filestatus}))) {
 sub mysystem {
   my($call)=@_;
 
-  printf(STDERR "  --> exec: %s\n",$call) if($opt_verbose);
+  printf("  --> exec: %s\n",$call) if($opt_verbose);
   system($call);
-  printf(STDERR "           rc=%d\n",$?) if($opt_verbose);
+  my $rc = $?;
+  if ($rc) {
+    printf(STDERR "  ERROR --> exec: %s\n",$call);
+    printf(STDERR "  ERROR --> rc=%d\n",$rc);
+  } else {
+    printf("           rc=%d\n",$rc) if($opt_verbose);
+  }
   return($?)
 }
 

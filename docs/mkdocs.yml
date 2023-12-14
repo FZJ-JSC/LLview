@@ -33,6 +33,7 @@ nav:
     - Remote: install/remote.md
     - Server: install/server.md
     - JURI: install/juri.md
+    - Troubleshooting: install/troubleshooting.md
     # - Build: install/build.md
     # - Common Tasks: install/common_tasks.md
   # - Description:
