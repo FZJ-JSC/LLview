@@ -421,7 +421,7 @@ class SlurmInfo:
     if("scontrol" in cmd):
       # If result is empty, return
       if (re.match("No (.*) in the system",rawoutput)):
-        self.log.error(rawoutput.split("\n")[0]+"\n")
+        self.log.warning(rawoutput.split("\n")[0]+"\n")
         return
       # Getting unit to be parsed from first keyword
       unitname = re.match("(\w+)",rawoutput).group(1)
@@ -432,7 +432,7 @@ class SlurmInfo:
     else:
       units = list(csv.DictReader(rawoutput.splitlines(), delimiter='|'))
       if len(units) == 0:
-        self.log.error(f"No output units from command {cmd}\n")
+        self.log.warning(f"No output units from command {cmd}\n")
         return
       # Getting unit to be parsed from first keyword
       unitname = re.match("(\w+)",rawoutput).group(1)
@@ -650,6 +650,10 @@ class SlurmInfo:
         file.write(f'<info oid=\"{item["__id"]}\" type=\"short\">\n')
         # Looping over the quantities obtained in this item
         for key,value in item.items():
+          # The __nelems_{type} is used to indicate to DBupdate the number of elements - important when the file is empty
+          if key.startswith('__nelems'): 
+            file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"'+str(key)+'\"',value))
+            continue
           if key.startswith('__'): continue
           if (value):
           # if (value) and (value != "0"):
@@ -878,18 +882,21 @@ def main():
     log.debug(f"Gathering {key} information took {end_time - start_time:.4f}s\n")
 
     # Add timing key
-    if not slurm_info.empty():
-      timing = {}
-      name = f'get{key}'
-      timing[name] = {}
-      timing[name]['startts'] = start_time
-      timing[name]['datats'] = start_time
-      timing[name]['endts'] = end_time
-      timing[name]['duration'] = end_time - start_time
-      timing[name]['nelems'] = len(slurm_info)
-      timing[name]['__type'] = 'pstat'
-      timing[name]['__id'] = f'pstat_get{key}'
-      slurm_info.add(timing)
+    # if not slurm_info.empty():
+    timing = {}
+    name = f'get{key}'
+    timing[name] = {}
+    timing[name]['startts'] = start_time
+    timing[name]['datats'] = start_time
+    timing[name]['endts'] = end_time
+    timing[name]['duration'] = end_time - start_time
+    timing[name]['nelems'] = len(slurm_info)
+    # The __nelems_{type} is used to indicate to DBupdate the number of elements - important when the file is empty
+    timing[name][f"__nelems_{options['type'] if 'type' in options else 'item'}"] = len(slurm_info)
+    timing[name]['__type'] = 'pstat'
+    timing[name]['__id'] = f'pstat_get{key}'
+    print("FG: ",timing[name]['nelems'])
+    slurm_info.add(timing)
 
     if (not args.singleLML):
       if slurm_info.empty():
