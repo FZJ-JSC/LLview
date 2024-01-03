@@ -292,6 +292,12 @@ sub write_data_to_single_file_csv_dat {
     $dataref->[$colnum]=&{$func}($dataref->[$colnum],$self);
   }
   # write data
+  # for(my $c=0;$c<$#{$dataref};$c++) {
+  #   printf(STDERR "data convert error: undefined data: %s, col=%d (format=%s) (data=%s)\n",
+  #                 $file,$c,$format,join(",",(@{$dataref}))) if(!defined($dataref->[$c]));
+  #   printf(STDERR "data convert error: empty data: %s, col=%d (format=%s) (data=%s)\n",
+  #                 $file,$c,$format,join(",",(@{$dataref}))) if($dataref->[$c] eq "");
+  # }
   $self->{SAVE_LASTFH}->printf($format,@{$dataref}) ; 
   $self->{COUNT_OP_WRITE_LINE}++;
 }

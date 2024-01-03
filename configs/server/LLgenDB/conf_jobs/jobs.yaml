@@ -28,8 +28,8 @@ jobstate:
           - { name: jstatus,         type: jstatus_t,         LML_from: status,          LML_default: 'UNKNOWN' }
           - { name: detailedstatus,  type: detailedstatus_t,  LML_from: detailedstatus,  LML_default: 'UNKNOWN' }
           - { name: state,           type: jstatus_t,         LML_from: state,           LML_default: 'unknown' }
-          - { name: wall,            type: wall_t,            LML_from: wall,            LML_default: -1 }
-          - { name: wallsoft,        type: wall_t,            LML_from: wallsoft,        LML_default: -1 }
+          - { name: wall,            type: wall_t,            LML_from: wall,            LML_default: 0 }
+          - { name: wallsoft,        type: wall_t,            LML_from: wallsoft,        LML_default: 0 }
           - { name: queuedate,       type: date_t,            LML_from: queuedate,       LML_default: "-" }
           - { name: name,            type: name_t,            LML_from: name,            LML_default: "-" }
           - { name: comment,         type: comment_t,         LML_from: comment,         LML_default: "-" }
@@ -56,8 +56,8 @@ jobstate:
           - { name: reason_nr,       type: cnt_t,             LML_from: reason_nr,       LML_default: -1 }
           - { name: ArrayJobId,      type: jobid_t,           LML_from: ArrayJobId,      LML_default: "" }
           - { name: ArrayTaskId,     type: jobid_t,           LML_from: ArrayTaskId,     LML_default: "" }
-          - { name: waittime,        type: hour_t,            LML_from: waittime,        LML_default: "" }
-          - { name: timetostart,     type: hour_t,            LML_from: timetostart,     LML_default: "" }
+          - { name: waittime,        type: hour_t,            LML_from: waittime,        LML_default: 0 }
+          - { name: timetostart,     type: hour_t,            LML_from: timetostart,     LML_default: 0 }
           - { name: posinqueue,      type: pos_t,             LML_from: posinqueue,      LML_default: "" }
           - { name: chainid,         type: chainid_t,         LML_from: chainid,         LML_default: "" }
           - { name: wf_id,           type: jobid_t,           LML_from: wf_id,           LML_default: "" }

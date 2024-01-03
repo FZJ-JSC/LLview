@@ -54,7 +54,15 @@
                              MIN(numnodes),AVG(numnodes),MAX(numnodes),
                              MIN(wall),AVG(wall),MAX(wall),
                              MIN(runtime),AVG(runtime),MAX(runtime),
-                             MIN(1.0*runtime/wall),AVG(1.0*runtime/wall),MAX(1.0*runtime/wall),
+                             CASE WHEN ( wall > 0 ) THEN MIN(100.0*runtime/wall)
+                                  ELSE 0
+                             END wallusage_min,
+                             CASE WHEN ( wall > 0 ) THEN AVG(100.0*runtime/wall)
+                                  ELSE 0
+                             END wallusage_avg,
+                             CASE WHEN ( wall > 0 ) THEN MAX(100.0*runtime/wall)
+                                  ELSE 0
+                             END wallusage_max,
                              MIN(load_min),AVG(load_avg),MAX(load_min),
                              MIN(usage_min),AVG(usage_avg),MAX(usage_max),
                              MIN(used_cores_min),AVG(used_cores_avg),MAX(used_cores_max),

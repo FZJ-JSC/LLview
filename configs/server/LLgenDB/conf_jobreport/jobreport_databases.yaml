@@ -42,7 +42,7 @@ jobreport:
         - { name: detailedstatus,  type: detailedstatus_t,  LLDB_from: jobstate/queuedjobs,    LL_default: 'UNKNOWN' }
         - { name: state,           type: jstatus_t,         LLDB_from: jobstate/queuedjobs,    LLDB_from_filter: "Running",   LL_default: 'unknown' }
         - { name: wall,            type: wall_t,            LLDB_from: jobstate/queuedjobs,    LL_default: -1 }
-        - { name: wallsoft,        type: wall_t,            LLDB_from: jobstate/queuedjobs,    LL_default: -1 }
+        - { name: wallsoft,        type: wall_t,            LLDB_from: jobstate/queuedjobs,    LL_default: 0 }
         - { name: queuedate,       type: date_t,            LLDB_from: jobstate/queuedjobs,    LL_default: "-" }
         - { name: name,            type: name_t,            LLDB_from: jobstate/queuedjobs,    LL_default: "-" }
         - { name: comment,         type: comment_t,         LLDB_from: jobstate/queuedjobs,    LL_default: "-" }
@@ -67,8 +67,8 @@ jobreport:
         - { name: reason,          type: comment_t,         LLDB_from: jobstate/queuedjobs,    LL_default: "" }
         - { name: ArrayJobId,      type: jobid_t,           LLDB_from: jobstate/queuedjobs,    LL_default: "" }
         - { name: ArrayTaskId,     type: jobid_t,           LLDB_from: jobstate/queuedjobs,    LL_default: "" }
-        - { name: waittime,        type: hour_t,            LLDB_from: jobstate/queuedjobs,    LL_default: "" }
-        - { name: timetostart,     type: hour_t,            LLDB_from: jobstate/queuedjobs,    LL_default: "" }
+        - { name: waittime,        type: hour_t,            LLDB_from: jobstate/queuedjobs,    LL_default: 0 }
+        - { name: timetostart,     type: hour_t,            LLDB_from: jobstate/queuedjobs,    LL_default: 0 }
         - { name: posinqueue,      type: pos_t,             LLDB_from: jobstate/queuedjobs,    LL_default: "" }
         - { name: resid,           type: resid_t,           LLDB_from: jobstate/queuedjobs,    LML_default: "" }
         - { name: nodelist,        type: extralongstr_t,    LLDB_from: jobstate/queuedjobs/NODES,    LL_default: "" }
@@ -83,7 +83,7 @@ jobreport:
         - { name: rc_lastts,       type: cnt_t,             LLDB_from: jobstep/jobspec,       LLDB_from_lastts: yes, LL_default: -1 }
         - { name: rc_startts,      type: ts_t,              LLDB_from: jobstep/jobspec,       LL_default: -1 }
         - { name: rc_endts,        type: ts_t,              LLDB_from: jobstep/jobspec,       LL_default: -1 }
-        - { name: rc_wallh,        type: hour_t,            LLDB_from: jobstep/jobspec,       LL_default: -1 }
+        - { name: rc_wallh,        type: hour_t,            LLDB_from: jobstep/jobspec,       LL_default: 0 }
         - { name: rc_rc,           type: cnt_t,             LLDB_from: jobstep/jobspec,       LL_default: -1 }
         - { name: rc_signr,        type: cnt_t,             LLDB_from: jobstep/jobspec,       LL_default: -1 }
         - { name: rc_state,        type: jstatus_t,         LLDB_from: jobstep/jobspec,       LL_default: "-" }
@@ -426,22 +426,22 @@ jobreport:
             non_existent: joblist/jobid
         index: jobid
       columns: 
-          - { name: jobid,       type: jobid_t, LL_default: 'unknown' }
-          - { name: ldscore,     type: score_t, LL_default: 0 }
-          - { name: cpuscore,    type: score_t, LL_default: 0 }
-          - { name: fs_all_w_score,         type: score_t, LL_default: 0 }
-          - { name: fs_all_r_score,         type: score_t, LL_default: 0 }
-          - { name: fs_home_w_score,        type: score_t, LL_default: 0 }
-          - { name: fs_home_r_score,        type: score_t, LL_default: 0 }
-          - { name: fs_project_w_score,     type: score_t, LL_default: 0 }
-          - { name: fs_project_r_score,     type: score_t, LL_default: 0 }
-          - { name: fs_scratch_w_score,     type: score_t, LL_default: 0 }
-          - { name: fs_scratch_r_score,     type: score_t, LL_default: 0 }
-          - { name: fs_fastdata_w_score,    type: score_t, LL_default: 0 }
-          - { name: fs_fastdata_r_score,    type: score_t, LL_default: 0 }
-          - { name: gpu_usage_score,        type: score_t, LL_default: 0 }
-          - { name: total_score,            type: score_t, LL_default: 0 }
-          - { name: rc_state_color,         type: shortstr_t, LL_default: "" }
+          - { name: jobid,                 type: jobid_t,    LL_default: 'unknown' }
+          - { name: ldscore,               type: score_t,    LL_default: 0 }
+          - { name: cpuscore,              type: score_t,    LL_default: 0 }
+          - { name: fs_all_w_score,        type: score_t,    LL_default: 0 }
+          - { name: fs_all_r_score,        type: score_t,    LL_default: 0 }
+          - { name: fs_home_w_score,       type: score_t,    LL_default: 0 }
+          - { name: fs_home_r_score,       type: score_t,    LL_default: 0 }
+          - { name: fs_project_w_score,    type: score_t,    LL_default: 0 }
+          - { name: fs_project_r_score,    type: score_t,    LL_default: 0 }
+          - { name: fs_scratch_w_score,    type: score_t,    LL_default: 0 }
+          - { name: fs_scratch_r_score,    type: score_t,    LL_default: 0 }
+          - { name: fs_fastdata_w_score,   type: score_t,    LL_default: 0 }
+          - { name: fs_fastdata_r_score,   type: score_t,    LL_default: 0 }
+          - { name: gpu_usage_score,       type: score_t,    LL_default: 0 }
+          - { name: total_score,           type: score_t,    LL_default: 0 }
+          - { name: rc_state_color,        type: shortstr_t, LL_default: "" }
  
   - table:
       name: jobmetrics
@@ -454,7 +454,9 @@ jobreport:
                                          runtimeperc)
                       SELECT jobid,
                              mbin_avg+mbout_avg,pckin_avg+pckout_avg,
-                             100.0*runtime/wall
+                             CASE WHEN ( wall > 0 ) THEN 100.0*runtime/wall
+                                  ELSE 0
+                             END runtimeperc
                              FROM joblist
                              WHERE jobid IN (select jobid from updatedjobs);
         archive:
@@ -465,8 +467,7 @@ jobreport:
           - { name: mbinout_avg,   type: mb_t,    LL_default: -1 }
           - { name: pckinout_avg,  type: pck_t,   LL_default: -1 }
           - { name: runtimeperc,   type: perc_t,  LL_default: 0 }
-          
-          
+
   - table:
       name: jobfiles
       options:

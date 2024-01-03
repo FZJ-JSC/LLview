@@ -22,7 +22,7 @@ clsstate:
           - { name: cls_ts,          type: ts_t,              LML_from: ts,              LML_default: -1, LML_minlastinsert: mintsinserted }
           - { name: max_size,        type: tasks_t,           LML_from: max_size,        LML_default: -1 }
           - { name: max_tres_pu,     type: longstr_t,         LML_from: max_tres_pu,     LML_default: "-" }
-          - { name: max_wall,        type: wall_t,            LML_from: max_wall,        LML_default: -1 }
+          - { name: max_wall,        type: wall_t,            LML_from: max_wall,        LML_default: 0 }
           - { name: UsageFactor,     type: rate_t,            LML_from: UsageFactor,     LML_default: -1 }
           - { name: GraceTime,       type: shortstr_t,        LML_from: GraceTime,       LML_default: -1 }
 

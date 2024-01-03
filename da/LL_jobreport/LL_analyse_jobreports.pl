@@ -129,7 +129,7 @@ sub write_steptimings_lml {
   $count=0;
   foreach $step (keys(%{$steprefs})) {
     if (!defined($steprefs->{$step}->{start})) {
-      print STDERR "[LL_analyse_jobreports.pl] $step does not include 'start'. Skipping... \n";
+      print STDERR "[LL_analyse_jobreports.pl] [$step] does not include 'start'. Skipping... \n";
       delete ($steprefs->{$step});
     }
   }

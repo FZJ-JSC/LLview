@@ -17,7 +17,7 @@
     filepath:      "$outputdir/ll/support.json"
     # title:         "<strong>$systemname</strong>: Support view"
     image:         "img/$systemname.jpg"
-    logo:          "img/llview_logo_white.png"
+    logo:          "img/llview_logo_white.svg"
     home:          "login.php"
     info:          "data/_info/info.json"
     search_field:  "jobid"

@@ -23,7 +23,7 @@ resstate:
           - { name: endts,           type: ts_t,              LML_from: endts,           LML_default: -1, LML_minlastinsert: mintsinserted }
           - { name: resname,         type: name_t,            LML_from: resname,         LML_default: "-" }
           - { name: state,           type: jstatus_t,         LML_from: state,           LML_default: 'unknown' }
-          - { name: wall,            type: wall_t,            LML_from: wall,            LML_default: -1 }
+          - { name: wall,            type: wall_t,            LML_from: wall,            LML_default: 0 }
           - { name: numnodes,        type: tasks_t,           LML_from: nodecnt,         LML_default: 0 }
           - { name: numcores,        type: tasks_t,           LML_from: corecnt,         LML_default: 0 }
           - { name: nodelist,        type: extralongstr_t,    LML_from: nodelist,        LML_default: "-" }
