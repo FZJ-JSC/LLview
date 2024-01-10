@@ -40,29 +40,6 @@ The dependencies of LLview Server are:
     - sans-serif: Liberation Sans or Arial
     - monospace: Liberation Mono or Courier New
 
-## Installation Instructions
-
-- Make sure the [Dependencies](#dependencies) are satisfied
-- Get LLview:
-    ```
-    git clone https://github.com/FZJ-JSC/LLview.git
-    ```
-This is where the `$LLVIEW_HOME` should be defined below, and the instructions use this notation.
-
-
-- Configuration:
-    - **[Optional]** Copy and update config folder in `$LLVIEW_CONF` (an example is given in `$LLVIEW_HOME/configs`)
-    This folder contains all the configuration files which defines the specific configuration of what is collected and what will be presented to the users.
-    **Note:** The folder structure should be kept, as some scripts use `$LLVIEW_CONF/server/(...)`.
-    - Edit `.llview_server_rc` (an example is given in `$LLVIEW_HOME/configs/server`) and put it in the home folder `~/`, as this is the basic configuration file and it is the only way to guarantee it is a known folder at this point. The possible options are [listed below](#llview_server_rc).
-    - Edit the `$LLVIEW_CONF/LLgenDB`: here is the whole configuration of metrics, databases, etc. This can also be adapted later, but changes here may require the [checkDB](#checkDB) command to be run to update the databases.
-- Source the main configuration file, to be able to use the variable in the next steps: 
-    ```
-    . ~/.llview_server_rc
-    ```
-
-LLview Server can then be stopped either by touching the `$LLVIEW_SHUTDOWN` file defined in `.llview_server_rc` (the cronjob still runs every minute, but immediately stops). To remove it altogether, additionally delete/comment out the cronjob (editing with `crontab -e`).
-
 ## Configurations
 
 ### `.llview_server_rc`
@@ -88,7 +65,7 @@ Extra definitions can be also exported in this file (for example, to satisfy the
 ### Actions
 
 The collection and processing of data is done via actions (the first workflow level), which can contain many steps (second workflow level) each.
-It is recommended to activate actions and steps inside actions one by one, and follow the `errlog` files, to find eventual issues and solve them one by one.
+**It is recommended to activate actions and steps inside actions one by one**, and follow the `errlog` files, to find eventual issues and solve them one by one.
 
 - Edit action file `$LLVIEW_CONF/server/workflows/actions.inp` to the relevant actions to be used. It is recommended to start with `active=0` for all actions and activate them one by one.
 - Edit the configuration options for each action (e.g. `$LLVIEW_CONF/server/workflows/LML_da_dbupdate.conf`), when needed. It is recommended to start all steps with `active="0"` and activate them little by little. (**Note**: a step may have dependencies that must be activated before or together with it.)
@@ -177,3 +154,39 @@ The subfolders that used for the default steps are:
     - `LMLall`: Daily tarballs containing combined information of jobs
 - `jureptool`: Folder used for temporary JuRepTool files and also location of default `shutdown` file (that stops only JuRepTool)
     - `results`: Where reports are first generated, and then moved to their final location (to avoid problems during copy to the Web Server)
+
+## Installation Instructions
+
+- Make sure the [dependencies](#dependencies) are satisfied
+- Get LLview:
+    ```
+    git clone https://github.com/FZJ-JSC/LLview.git
+    ```
+This is where the `$LLVIEW_HOME` should be defined below, and the instructions use this notation.
+
+
+- Configuration:
+    - **[Optional]** Copy and update config folder in `$LLVIEW_CONF` (an example is given in `$LLVIEW_HOME/configs`)
+    This folder contains all the configuration files which defines the specific configuration of what is collected and what will be presented to the users.
+    **Note:** The folder structure should be kept, as some scripts use `$LLVIEW_CONF/server/(...)`.
+    - Edit `.llview_server_rc` (an example is given in `$LLVIEW_HOME/configs/server`) and put it in the home folder `~/`, as this is the basic configuration file and it is the only way to guarantee it is a known folder at this point. The possible options are [listed below](#llview_server_rc).
+    - Edit the `$LLVIEW_CONF/LLgenDB`: here is the whole configuration of metrics, databases, etc. This can also be adapted later, but changes here may require the [checkDB](#checkDB) command to be run to update the databases.
+- Source the main configuration file, to be able to use the variable in the next steps: 
+    ```
+    . ~/.llview_server_rc
+    ```
+- Add cronjob to crontab:
+    ```
+    crontab $LLVIEW_HOME/da/workflows/server/crontab/crontab.add
+    ```
+Check if the cronjob is added correctly:
+    ```
+    $ crontab -l
+    # start monitor daemon
+    * * * * * . ~/.llview_server_rc ; perl "$LLVIEW_HOME/da/workflows/server/crontab/serverAll.pl"
+    ```
+
+The server part of LLview involves a daemon that starts to run the first time the `serverAll.pl` script is called. Further calls will check if it is already running, and will restart it in case it is not. This script will then run the different [actions](#actions), which can be triggered in different ways (as an example, the basic [`dbupdate` action](#dbupdate) monitors when a signal file was changed to start the process of copying and processing the data).
+
+The monitor daemon of LLview Server can be stopped either by `touch $LLVIEW_SHUTDOWN` (this file should be defined in `.llview_server_rc`) or killing the `monitor_file.pl` process. Note that the cronjob still restarts every minute - if `$LLVIEW_SHUTDOWN` exists, the process immediately stops without starting the daemon. To remove it altogether, additionally delete/comment out the cronjob (editing with `crontab -e`).
+

@@ -58,6 +58,10 @@ SYSTEM:
     cores: 72
     mem: 512
     memgpu: 80
+  dc-gh:
+    cores: 72
+    mem: 480
+    memgpu: 96
   booster:
     cores: 48
     mem: 512
