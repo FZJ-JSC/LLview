@@ -163,7 +163,8 @@
                    desc: "Number of (1-minute) data samples stored in database for this job"  }
 
 # Files
-- { name: htmlfile_reg, sort: "N",  group: "info", title: "HTML", format: "sticky-column-right", data_pre: "html_link account owner", render: "report_link", orderable: "false",
-                       desc: "" , noheader: 1 }
-- { name: pdffile_reg, sort: "N",  group: "info", title: "PDF", format: "sticky-column-right", data_pre: "pdf_link account owner", render: "report_link", orderable: "false",
-                       desc: "", noheader: 1 }
+- { name: htmlfile_reg, group: "info", title: "HTML", format: "sticky-column-right", data_pre: "html_link account owner", render: "report_link", orderable: "false",
+                       desc: "Detailed HTML reports" , noheader: 1 }
+- { name: pdffile_reg, group: "info", title: "PDF", format: "sticky-column-right", data_pre: "pdf_link account owner", render: "report_link", orderable: "false",
+                       desc: "Detailed PDF reports", noheader: 1 }
+

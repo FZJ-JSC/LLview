@@ -1037,6 +1037,9 @@ jobreport_json_stat:
   - table:
       name: datasetstat_steptimings
       %include "./databases/jobreport_databases_stat_tables.yaml"
+  - table:
+      name: datasetstat_corepattern
+      %include "./databases/jobreport_databases_stat_tables.yaml"
 
 jobreport_access_stat:
   tables:

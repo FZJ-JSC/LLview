@@ -45,3 +45,22 @@
     data_table:      rackpwr_time_aggr
     stat_database:   jobreport_stat_sysstat
     stat_table:      datasetstat
+
+- dataset:
+    name: syscorepattern_csv
+    set:        sysstat
+    FORALL:     'P:VAR_corepattern'
+    filepath:   '$outputdir/_sysstat/syscorepattern_${P}.csv'
+    columns:        'ts,coreid,usage1_min,usage1_avg,usage1_max,usage2_min,usage2_avg,usage2_max'
+    header:         'date,coreid,usage1,usage2'
+    column_convert: 'ts->todate_1,usage1_min->toPercent,usage1_avg->toPercent,usage1_max->toPercent,usage2_min->toPercent,usage2_avg->toPercent,usage2_max->toPercent'
+    column_filemap: 'P:pid'
+    format_str:      '%s,%d,%f;%f;%f,%f;%f;%f'
+    column_ts:      'ts'
+    format:         'csv'
+    renew:          'always'
+#    time_aggr:      'span'
+    data_database:   pcpucoresstate
+    data_table:      pcpucores_time_aggr_coreid_span_avg
+    stat_database:   jobreport_stat_sysstat
+    stat_table:      datasetstat

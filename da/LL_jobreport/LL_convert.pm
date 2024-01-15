@@ -122,6 +122,7 @@ sub init_convert_functions {
                                 "wrapstr120" => \&wrapstr120,
                                 "onlygtnull" => \&onlygtnull,
                                 "as_array"   => \&as_array,
+                                "corepattern" => \&corepattern,
                               };
   return();
 }
@@ -149,6 +150,7 @@ sub sec_to_date4 {
 
 sub sec_to_date_csv {
   my ($arg)=@_;
+  return("-") if(!$arg);
   my $lsec; if($arg=~/:/) { $lsec=&date_to_sec($arg);} else { $lsec=$arg;    }
   my ($date);
   my ($sec,$min,$hours,$mday,$mon,$year,$rest)=localtime($lsec);
@@ -457,6 +459,16 @@ sub wrapstr {
       $text="";
     }
   }
+  return($newtext);
+}
+
+sub corepattern {
+  my ($text,$self)=@_;
+  return($text) if(!$text);
+  my $lh=int(length($text)/2);
+  my $newtext=substr($text,0,$lh)."   ".substr($text,$lh);
+  $newtext=~s/0/_/gs;
+  $newtext=~s/1/X/gs;
   return($newtext);
 }
 
