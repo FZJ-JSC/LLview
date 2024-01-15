@@ -212,3 +212,13 @@
     columns:  'sizecls',
     sql: "SELECT distinct sizecls FROM loadmem_aggr_by_ts_node_cls"
   }
+
+- {
+    name: VAR_corepattern,
+    type: 'hash_values',       
+    database: pcpucoresstate,
+    table: pcpucores_current_pattern,
+    columns:  'pid',
+    sql: "SELECT p.pid FROM pcpucores_current_pattern c, pcpucores_time_aggr_span_avg p WHERE c.pattern=p.pattern"
+#    sql: "SELECT distinct p.pid FROM pcpucores_time_aggr_span_avg p"
+  }

@@ -60,25 +60,33 @@ sub process_dataset_template {
     #  header
     $data_thead.="              ";
     if(!$noheader) {
+      # If HEADER is to be added
+      # Header row:
       $data_thead.="<th onclick=\"sort_table(this,'$csort')\"";
       $data_thead.=" class=\"text-center clickable $cgroup\"";
-      $data_thead.=" title=\"$cdesc\">";
+      $data_thead.=" aria-label=\"$ctitle\" title=\"$cdesc\">";
       $data_thead.="$ctitle";
       $data_thead.="<span class=\"fa\" aria-hidden=\"true\"></span></th>\n";	
     } else {
-      $data_thead.="<th class=\"$cgroup\"></th>\n";	
+      $data_thead.="<th class=\"$cgroup\" aria-label=\"$ctitle\" aria-hidden=\"true\" title=\"$cdesc\"></th>\n";	
     }
     #  filter
+    $data_tfilter.="              ";
     if(!$noheader) {
-      $data_tfilter.="            <th><input type=\"text\" placeholder=\"filter\"/></th>\n";
+      $data_tfilter.="<th><input class=\"text-center\" type=\"text\" placeholder=\"filter\"/></th>\n";
     } else {
-      $data_tfilter.="            <th></th>\n";
+      $data_tfilter.="<th></th>\n";
     }
 
     # body
     my $styles=${style}.${cellcolor}.${bg_color_map}.${fg_color};
     $styles=(${styles})?"style=\"${styles}\"":"";
-    $data_tbody.="              <td ${styles} class=\"${cformat}\">{{{$cdataformat$cdatapre$name$cdatapost}}}</td>\n";
+    $data_tbody.="              ";
+    $data_tbody.="<td ${styles} class=\"${cformat}\">";
+    $data_tbody.="<span>" if($bg_color_map || $cellcolor);
+    $data_tbody.="{{{$cdataformat$cdatapre$name$cdatapost}}}";
+    $data_tbody.="</span>" if($bg_color_map || $cellcolor);
+    $data_tbody.="</td>\n";
   }
 
   # check general attributes

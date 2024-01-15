@@ -141,6 +141,18 @@
                      dt->cut4digits,dt_min->cut4digits,dt_avg->cut4digits,dt_max->cut4digits,
                      cmplx_min->cut1digits,cmplx_avg->cut1digits,cmplx_max->cut1digits'
     
+- dataset:
+    name: support_CorePattern
+    set:        corepattern
+    filepath:   '$outputdir/_sysstat/CorePattern.json.gz'
+    data_database:   pcpucoresstate
+    data_table:      pcpucores_time_aggr_span_avg
+    stat_table:      datasetstat_corepattern
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    sql_where:      'nodeh>0' 
+    columns:        'pid,pattern,ncores_used,gpu,min_ts,max_ts,nodeh,njobs,jobids'
+    column_convert: 'pattern->corepattern,min_ts->hourfrac_sincenow,max_ts->hourfrac_sincenow,jobids->wrapword10'
     
 # Remarks:
 #   ts_end is -1 for running jobs

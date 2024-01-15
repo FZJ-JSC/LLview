@@ -97,6 +97,17 @@
     #               ref: [ table ]
     #               data:
     #                 default_columns: [ errmsg ]
+    #           - page:
+    #               name: "Core Usage Pattern"
+    #               section: "corepattern"
+    #               template: "/data/LLtemplates/corepattern"
+    #               context: "data/_sysstat/CorePattern.json"
+    #               default: false
+    #               footer_graph_config: "/data/ll/footer_corepattern.json"
+    #               ref: [ table ]
+    #               data:
+    #                 default_columns: [ pattern ]
+
             #   - page:
             #       name: "System Test"
             #       section: "systest"

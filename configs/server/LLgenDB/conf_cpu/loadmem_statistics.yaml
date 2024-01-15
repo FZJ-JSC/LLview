@@ -114,7 +114,7 @@
                                                      WHERE (ts >= mintsinserted)
                                                      GROUP by TS,memcls,numnodes; 
       archive:
-        limit: max(ts)-72h
+        limit: max(ts)-6h
       index: ts,memcls,sizecls
     columns: 
       - { name: ts,              type: ts_t }
@@ -168,7 +168,7 @@
                                                      WHERE (ts >= mintsinserted)
                                                      GROUP BY ts,memcls; 
       archive:
-        limit: max(ts)-72h
+        limit: max(ts)-6h
       index: ts,memcls
     columns: 
       - { name: ts,              type: ts_t }
@@ -194,7 +194,7 @@
                                                      WHERE (ts >= mintsinserted)
                                                      GROUP BY ts,sizecls; 
       archive:
-        limit: max(ts)-72h
+        limit: max(ts)-6h
       index: ts,sizecls
     columns: 
       - { name: ts,              type: ts_t }
