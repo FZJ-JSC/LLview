@@ -22,7 +22,7 @@ my $system = $ENV{'LLVIEW_SYSTEMNAME'};
 my $llview = $ENV{'LLVIEW_HOME'};
 my $data = $ENV{'LLVIEW_DATA'};
 my $conf = $ENV{'LLVIEW_CONF'};
-my $prefix = "log_crontab"; # prefix for log/err files
+my $prefix = "crontab_server"; # prefix for log/err files
 
 # Defining log and error files
 my $folder="$data/$system/monitor/";

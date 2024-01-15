@@ -118,4 +118,4 @@
   yaxis:  "y"
   type:   "line"
   color:  "#F00000"
-  datapath: "data/_sysstat/sysenvstat_JURECA_DC.csv"
+  datapath: "data/_sysstat/sysenvstat_system.csv"
