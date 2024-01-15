@@ -1,9 +1,26 @@
 # LLview Internal Releases
 
+A simplified package of LLview is also available Open Source on GitHub. [See more](public.md)
+
+
+### 2.2.2 (January 15, 2024)
+
+<h4> Added </h4>
+
+- Added new queue on JuRepTool
+- Possibility to use more than one helper function via `data_pre` (from right to left)
+- Core pattern usage (Support only)
+- Added info button on the top right when a page has a 'description' attribute (JURI)
+
+<h4> Changed </h4>
+
+- Changed images on Web Portal to svg
+- Improve footer resize (JURI)
+- Implemented suggestions from Lighthouse for better accessibility (JURI)
+- Colorscales improved, and changed default to RdYlGr (JURI)
+
 
 ### 2.2.0 (November 13, 2023)
-
-A simplified package of this version was also released Open Source on GitHub. [See more](public.md)
 
 <h4> Added </h4>
 
