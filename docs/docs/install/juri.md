@@ -11,6 +11,7 @@ The functioning of LLview, however - in particular, how the permissions are set 
 - Apache
     - Modules
         - mod_authz_groupfile
+- PHP
 
 We use `.htgroups` and `.htaccess` files to allow the correct access for the different roles (User, Principal Investigator, Project Admin, Mentor, Admin/Support).
 
