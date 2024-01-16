@@ -1,11 +1,12 @@
 # LLview Public Releases
 
-### 2.2.2-base (January 15, 2024)
+### 2.2.2-base (January 16, 2024)
 
 <h4> Added </h4>
 
 - Added link to JURI on README
-- Added troubleshooting page on docs
+- Added [troubleshooting](../../install/troubleshooting) page on docs
+- Added [description of step `webservice` on the `dbupdate`](../../install/server#webservice) action
 - Added timings in Slurm adapter's LML
 - Added new queue on JuRepTool
 - Possibility to use more than one helper function via `data_pre` (from right to left)

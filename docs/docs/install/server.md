@@ -65,7 +65,7 @@ Extra definitions can be also exported in this file (for example, to satisfy the
 ### Actions
 
 The collection and processing of data is done via actions (the first workflow level), which can contain many steps (second workflow level) each.
-**It is recommended to activate actions and steps inside actions one by one**, and follow the `errlog` files, to find eventual issues and solve them one by one.
+**It is recommended to activate actions and steps inside actions little by little**, and follow the `errlog` files, to find eventual issues and solve them as they appear.
 
 - Edit action file `$LLVIEW_CONF/server/workflows/actions.inp` to the relevant actions to be used. It is recommended to start with `active=0` for all actions and activate them one by one.
 - Edit the configuration options for each action (e.g. `$LLVIEW_CONF/server/workflows/LML_da_dbupdate.conf`), when needed. It is recommended to start all steps with `active="0"` and activate them little by little. (**Note**: a step may have dependencies that must be activated before or together with it.)
@@ -80,6 +80,102 @@ The collection and processing of data is done via actions (the first workflow le
 #### `dbupdate`
 
 The `dbupdate` action mainly performs the collection of metrics into SQLite databases (plus other tasks such as archiving). The configuration of the different databases and their columns, types and values are done via the YAML files inside the `$LLVIEW_CONF/server/LLgenDB` folder.
+
+##### `webservice`
+
+To be able to set up the role-based access of LLview (where users will have access only to their own jobs and projects, while mentors can see jobs on all mentored projects and support can see all jobs), information on the user accounts and projects are needed. This is obtained in the `webservice` step of the `dbupdate` action. In the provided example configuration, this information is obtained via a script `$LLVIEW_HOME/da/rms/JSCinternal/get_webservice_accounts.pl` (not-provided) that is run at every 15th update (via the provided script `$LLVIEW_HOME/da/utils/exec_every_n_step_or_empty.pl`) to avoid too many connections to the database. The output of this step should be put in the file `$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/perm/wservice/accountmap.xml` that contains information to be added in the database. A mockup example of this file is the following:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<lml:lgui>
+    <objects>
+        <object id="M000001" name="username1"   type="mentormap"/>
+        <object id="M000002" name="username2"   type="mentormap"/>
+        <object id="Q000001" name="username1_L" type="pipamap"/>
+        <object id="Q000002" name="username3_L" type="pipamap"/>
+        <object id="Q000003" name="username3_A" type="pipamap"/>
+        <object id="S000001" name="username1"   type="supportmap"/>
+        <object id="U000001" name="username1"   type="usermap"/>
+        <object id="U000002" name="username3"   type="usermap"/>
+    </objects>
+    <information>
+        <info oid="M000001" type="short">
+            <data key="id" value="username1"/>
+            <data key="projects" value="project1,project2"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username1"/>
+        </info>
+        <info oid="M000002" type="short">
+            <data key="id" value="username2"/>
+            <data key="projects" value="project3"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username2"/>
+        </info>
+        <info oid="Q000001" type="short">
+            <data key="id" value="username1"/>
+            <data key="kind" value="L"/>
+            <data key="projects" value="project1"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username1"/>
+        </info>
+        <info oid="Q000002" type="short">
+            <data key="id" value="username3"/>
+            <data key="kind" value="L"/>
+            <data key="projects" value="project2,project3"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username3"/>
+        </info>
+        <info oid="Q000003" type="short">
+            <data key="id" value="username3"/>
+            <data key="kind" value="A"/>
+            <data key="projects" value="project1"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username3"/>
+        </info>
+        <info oid="S000001" type="short">
+            <data key="id" value="username1"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username1"/>
+        </info>
+        <info oid="U000001" type="short">
+            <data key="id" value="username1"/>
+            <data key="projects" value="project1,project2,project3"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username1"/>
+        </info>
+        <info oid="U000002" type="short">
+            <data key="id" value="username3"/>
+            <data key="projects" value="project1,project2,project3"/>
+            <data key="ts" value="1705405505"/>
+            <data key="wsaccount" value="username3"/>
+        </info>
+    </information>
+</lml:lgui>
+```
+This example includes:
+
+* Two mentors:
+    * `username1` is a mentor of projects `project1,project2`
+    * `username2` is a mentor of project `project3`
+* Two PIs:
+    * `username1` is the leader of project `project1`
+    * `username3` is the leader of projects `project2,project3`
+* One PA:
+    * `username3` is the administrator of project `project1`
+* One support:
+    * `username1` belongs to the support staff
+* Two users:
+    * `username1` is a user of projects `project1,project2,project3`
+    * `username3` is a user of project `project3`
+
+Notes:
+
+* It is important that the object `id` in the list of objects to be the same as the `oid` in the `<info>` element that defines it below.
+* To avoid duplication of names in the objects, we add the suffixes `_L` and `_A` to the usernames for the Principal Investigator (PI), i.e., the leader of a project and Project Administrator (PA), respectively. These letters are also passed as the value of the keys `kind` inside the respective `<info>` element.
+* The key `wsaccount` should contain the user name used to login to the web service.
+* The groups can have overlap, i.e., a user can be support, mentor, PI/PA and user of a project.
+* A user does not need to be defined in all places. In particular, they can be from support and/or mentor, but not be part of any project.
+* The `ts` key should include the timestamp the data was acquired.
+* Identation is not necessary.
 
 #### `jobreport`
 

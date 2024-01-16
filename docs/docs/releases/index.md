@@ -3,7 +3,7 @@
 A simplified package of LLview is also available Open Source on GitHub. [See more](public.md)
 
 
-### 2.2.2 (January 15, 2024)
+### 2.2.2 (January 16, 2024)
 
 <h4> Added </h4>
 
