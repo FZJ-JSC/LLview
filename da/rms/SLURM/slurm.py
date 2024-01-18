@@ -489,15 +489,22 @@ class SlurmInfo:
     for line in [_.strip() for _ in lines[1:]]:
       # Skip empty lines
       if not line: continue
+      self.log.debug(f"Parsing line: {line}\n")
       # It is necessary to handle lines that can contain '=' and ' ' in 'value' first
-      key,value = line.split('=',1)
+      if len(splitted := line.split('=',1)) == 2: # Checking if line is splittable on "=" sign
+        key,value = splitted
+      else:  # If not, split on ":"
+        key,value = line.split(":",1)
       # Here must be all fields that can contain '=' and ' ', otherwise it may break the workflow below 
-      if key in ['Comment','Reason','Command','WorkDir','StdErr','StdIn','StdOut','TRES']: 
+      if key in ['Comment','Reason','Command','WorkDir','StdErr','StdIn','StdOut','TRES','OS']: 
         self.add_value(key,value,self._raw[current_unit])
         continue
       # Now the pairs are separated by space
       for pair in line.split(' '):
-        key, value = pair.split('=',1)
+        if len(splitted := pair.split('=',1)) == 2: # Checking if line is splittable on "=" sign
+          key,value = splitted
+        else:  # If not, split on ":"
+          key,value = pair.split(":",1)
         if key in ['Dist']: #'JobName'
           self._raw[current_unit][key] = line.split(f'{key}=',1)[1]
           break
@@ -771,7 +778,7 @@ def log_init(level):
 
   # Getting logger
   log = logging.getLogger('logger')
-  log.setLevel(log_config['level'])
+  log.setLevel(level if level else log_config['level'])
 
   # Setup handler (stdout, stderr and file when configured)
   oh = logging.StreamHandler(sys.stdout)
@@ -895,7 +902,6 @@ def main():
     timing[name][f"__nelems_{options['type'] if 'type' in options else 'item'}"] = len(slurm_info)
     timing[name]['__type'] = 'pstat'
     timing[name]['__id'] = f'pstat_get{key}'
-    print("FG: ",timing[name]['nelems'])
     slurm_info.add(timing)
 
     if (not args.singleLML):
