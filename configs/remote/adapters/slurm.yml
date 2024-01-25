@@ -20,6 +20,9 @@ nodeinfo:
   LML: './nodes_LML.xml'
   type: 'node'
   prefix: 'nd'
+  systemname:
+    env: SYSTEMNAME
+  #   file: /path/to/file
   # exclude: 
   #   - gpus: '4'
   # include: 
