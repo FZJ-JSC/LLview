@@ -30,12 +30,20 @@ nav:
   - Access: access/index.md
   - Installation: 
     - Home: install/index.md
-    - Remote: install/remote.md
-    - Server: install/server.md
-    - JURI: install/juri.md
+    - Remote:
+      - About: install/remote_about.md
+      - Folder Structure: install/remote_folder.md
+      - Installation Instructions: install/remote_install.md
+    - Server: 
+      - About: install/server_about.md
+      - Folder Structure: install/server_folder.md
+      - Installation Instructions: install/server_install.md
+      - Account Map: install/accountmap.md
+    - JURI:
+      - About: install/juri_about.md
+      - Folder Structure: install/juri_folder.md
+      - Installation Instructions: install/juri_install.md
     - Troubleshooting: install/troubleshooting.md
-    # - Build: install/build.md
-    # - Common Tasks: install/common_tasks.md
   # - Description:
   #   - Home: description/index.md
   #   - Remote: description/remote.md
