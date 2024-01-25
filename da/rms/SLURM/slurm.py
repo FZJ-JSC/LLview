@@ -269,10 +269,19 @@ def nodeinfo(options: dict, nodes_info) -> dict:
       #   log.debug(f"Unknown node {node} in partition {partname}!\n")
 
   # Adding Used Memory information
-  systemname = get_system_name()
+  systemname = ""
   for nodename,nodeinfo in nodes_info.items():
     if (re.match('^\d+$',nodeinfo['RealMemory'])) and (re.match('^\d+$',nodeinfo['FreeMem'])): 
-      UsedMem = float(nodeinfo['RealMemory']) - float(nodeinfo['FreeMem']) - (options['mem_reserved'][systemname] if ('mem_reserved' in options) and systemname in options['mem_reserved'] else 0)
+      # Getting reserved memory:
+      if ('mem_reserved' in options):
+        if isinstance(options['mem_reserved'],float) or isinstance(options['mem_reserved'],int):
+          memreserved =  options['mem_reserved']
+        elif isinstance(options['mem_reserved'],dict):
+          if not systemname: systemname = get_system_name(options)
+          memreserved = options['mem_reserved'][systemname] if systemname in options['mem_reserved'] else 0
+      else:
+        memreserved = 0
+      UsedMem = float(nodeinfo['RealMemory']) - float(nodeinfo['FreeMem']) - (memreserved)
       if (UsedMem) < 0: 
         log.warning(f"Negative UsedMem in node {nodename}: {UsedMem}\n")
         continue
@@ -694,23 +703,53 @@ def log_continue(log,message):
   return
 
 
-def get_system_name() -> str:
+def get_system_name(options: dict) -> str:
   """
-  Get system name from environment variable or from file
-  If not present on both, return unknown
+  Get system name from systemname key of options
+  Options that are tested (first string, then in the dictionary order):
+    - direct string 
+      systemname: 'system'
+    - file containing system name:
+      systemname: 
+        file: '/path/to/file'
+    - environment variable:
+      systemname: 
+        env: 'SYSTEMNAME'
   """
   log = logging.getLogger('logger')
 
-  # Trying to get from environment variable first
-  systemname = os.environ.get('SYSTEMNAME')
-  # If not present, try to get from file
-  if not systemname:
-    try:
-      with open("/etc/FZJ/systemname", 'r') as file:
-        systemname = file.read()
-    except FileNotFoundError:
-      log.error("Could not get system name from environment $SYSTEMNAME nor file /etc/FZJ/systemname. ")
-      systemname = 'unknown'
+  systemname = 'unknown'
+  # Checking if systemname key is given in the options
+  if 'systemname' in options:
+    if isinstance(options['systemname'],str):
+      # If it's a string, set it as the systemname
+      systemname = options['systemname']
+    elif isinstance(options['systemname'],dict):
+      # If it's a dict, loop over the keys (but only 'file' or 'env' are recognized)
+      for key,value in options['systemname'].items():
+        if key == 'file':
+          # If file is given, try to read it
+          try:
+            with open(value, 'r') as file:
+              systemname = file.read()
+            break # Stop from trying other ways if file was read
+          except FileNotFoundError:
+            log.error(f"Could not get system name from file {value}\n")
+        elif key == 'env':
+          # Trying to get from environment variable
+          name = os.environ.get(value)
+          if name:
+            systemname = name
+            break # Stop from trying other ways if envvar was read
+          else:
+            log.error(f"Could not get system name from environment ${value}\n")
+        else:
+          log.error(f"System name not recognized from {key}:{value}\n")
+    else:
+      log.error(f"Cannot obtain system name from 'systemname' given: {options['systemname']}\n")
+  else:
+    log.error("System name not defined in 'systename'\n")
+
   systemname = systemname.strip()
   log.info(f'Using system name: {systemname}\n')
   return systemname
