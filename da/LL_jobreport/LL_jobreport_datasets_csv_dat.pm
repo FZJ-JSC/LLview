@@ -12,6 +12,7 @@ package LML_jobreport;
 
 my $VERSION='$Revision: 1.00 $';
 my($debug)=0;
+my($check)=1;
 
 use strict;
 use Data::Dumper;
@@ -247,6 +248,10 @@ sub write_data_to_multi_file_csv_dat {
   #                 $file,$c,$format,join(",",(@{$dataref}))) if($dataref->[$c] eq "");
   # }
   # write data
+  if($check) {
+    return if(!$self->check_printf($file,$format,$dataref));
+  }
+
   $self->{SAVE_LASTFH}->printf($format,@{$dataref}) ; 
   $self->{COUNT_OP_WRITE_LINE}++;
 }
@@ -277,6 +282,7 @@ sub write_data_to_single_file_csv_dat {
     $ds->{$file}->{status}=1;
     $self->{SAVE_LASTFILE}=$file;
   }
+  return() if(!defined($dataref));
   # update last ts stored to file
   if($tscol>=0) {
     $ds->{$file}->{lastts_saved}=$dataref->[$tscol];
@@ -292,14 +298,35 @@ sub write_data_to_single_file_csv_dat {
     $dataref->[$colnum]=&{$func}($dataref->[$colnum],$self);
   }
   # write data
-  # for(my $c=0;$c<$#{$dataref};$c++) {
-  #   printf(STDERR "data convert error: undefined data: %s, col=%d (format=%s) (data=%s)\n",
-  #                 $file,$c,$format,join(",",(@{$dataref}))) if(!defined($dataref->[$c]));
-  #   printf(STDERR "data convert error: empty data: %s, col=%d (format=%s) (data=%s)\n",
-  #                 $file,$c,$format,join(",",(@{$dataref}))) if($dataref->[$c] eq "");
-  # }
+  if($check) {
+    return if(!$self->check_printf($file,$format,$dataref));
+  }
+
   $self->{SAVE_LASTFH}->printf($format,@{$dataref}) ; 
   $self->{COUNT_OP_WRITE_LINE}++;
+}
+
+sub check_printf {
+  my $self = shift;
+  my($file,$format,$dataref)=@_;
+  my $myformat=$format;$myformat=~s/\n//gs;
+  my @fmts = ($myformat=~ m/(%[-\d.]*[sfgde])/g);
+  my $numfmts = scalar @fmts;
+  my $numdata = scalar @{$dataref};
+  if($numfmts != $numdata) {
+    printf(STDERR "ERROR: data convert: numfmt=%d numdata=%d (%s) [%s] vs.[%s]\n",$numfmts,$numdata,$file,$myformat,join(",",@{$dataref}));
+    return(0);
+  }
+  for(my $c=0;$c<=$#fmts;$c++) {
+    my $fmt=$fmts[$c];$fmt=~s/[-\d.]+//gs;
+    if($fmt=~/%[dfe]/) {
+      if($dataref->[$c]!~/^[\d\.\+\-e]+$/) {
+        printf(STDERR "ERROR data convert: fmt#=%d (%s) [%s] vs.[%s]\n",$numfmts,$file,$fmt,$dataref->[$c]);
+        printf(STDERR "ERROR data convert: %s\n",Dumper($dataref));
+      }
+    }
+  }
+  return(1);
 }
 
 sub process_data_query_time_aggr_get_where {

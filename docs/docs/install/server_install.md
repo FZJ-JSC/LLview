@@ -70,8 +70,7 @@ The collection and processing of data is done via actions (the first workflow le
 - Important reminders:
     - <a name="checkDB"></a> After making changes on the configurations that afect the databases (i.e., adding or removing tables), they must be updated. To avoid corrupting the databases or losing data, this step must be done manually. To update the databases according to the new configurations, the following `checkDB` command should be run:
         ```
-        . ~/.llview_server_rc; cd $LLVIEW_DATA/$LLVIEW_SYSTEMNAME;
-        $LLVIEW_HOME/da/LLmonDB/LLmonDB_mngt.pl -config=$LLVIEW_CONF/server/LLgenDB/LLgenDB.yaml --force checkDB > logs/checkDBv1.`date +%Y.%m.%d`.log 2>&1
+        . ~/.llview_server_rc; $LLVIEW_HOME/da/LLmonDB/LLmonDB_mngt.pl -config=$LLVIEW_CONF/server/LLgenDB/LLgenDB.yaml --force checkDB > $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDBv1.`date +%Y.%m.%d`.log 2>&1
         ```
     The file ```$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDBv1.`date +%Y.%m.%d`.log``` can then be checked for errors. There is no problem running this command when the change in the configuration does not affect the databases, so it is recommended to run it after changes in the YAML files.
 

@@ -14,6 +14,7 @@
     FORALL:     'T:VAR_DB_table'
     filepath:   '$outputdir/_internal/DBtab/DBtab_${{T}}.csv'
     columns:        'ts,nrows'
+    # sqldebug:       'yes'     
     header:         'date,nrows'
     column_convert: 'ts->todate_1'
     column_filemap: 'T:tabpath'
@@ -73,7 +74,7 @@
     column_ts:      'startts'
     format:         'csv'
     selecttimevar:   startts
-#    sql_where:      '(startts>=wf_startts)'
+    # sql_where:      '(startts>=wf_startts)'
     renew:          'always'
     data_database:   steptimings
     data_table:      steptimingscurrentstep
