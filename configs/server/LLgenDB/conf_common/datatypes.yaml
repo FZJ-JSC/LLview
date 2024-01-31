@@ -43,7 +43,7 @@ resid_t:
 ukey_t:
   sql: VARCHAR(30) NOT NULL DEFAULT '-'
 perc_t:
-  sql: FLOAT(8) NOT NULL DEFAULT 1.0
+  sql: FLOAT(8) DEFAULT 0
 owner_t:
   sql: VARCHAR(50) NOT NULL DEFAULT '-'
 jgroup_t:

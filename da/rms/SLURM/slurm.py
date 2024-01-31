@@ -151,6 +151,7 @@ def modify_state(state: str) -> str:
   elif ( state == "DOWN*+DRAIN" ): ret = "Down"   
   elif ( state == "MAINT+DRAIN" ): ret = "Down"   
   elif ( state == "MAINT*+DRAIN" ): ret = "Maint"  
+  elif ( state == "UNKNOWN+MAINTENANCE" ): ret = "Maint"  
   elif ( state == "IDLE+DRAIN" ): ret = "Drained"
   elif ( state == "RESERVED+DRAIN" ): ret = "Drained"
   elif ( state == "IDLE+COMPLETING" ): ret = "Idle"   
