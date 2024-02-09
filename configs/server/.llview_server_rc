@@ -36,3 +36,6 @@ export PATH="$LLVIEW_DATA/perl5/bin:$PATH"
 
 # Python definitions
 export PYTHON="/usr/bin/python3.9"
+
+export PATH="$PATH:$LLVIEW_HOME/scripts"
+

@@ -59,7 +59,7 @@ if ( $nprocs > 0 ) {
   &check_folder("$folder/results/"); # folder required for temporary reports
 
   my $searchCmdjureptool = "$ENV{PYTHON} $jureptool/src/main.py --configfolder $ENV{LLVIEW_CONF}/server/jureptool --shutdown $ENV{LLVIEW_SHUTDOWN} $folder/shutdown";
-  my $startjureptool = "cd $folder; nice -n 19 $searchCmdjureptool --nohtml --gzip --nprocs $nprocs --daemon --loglevel DEBUG $data/$system/tmp/jobreport/tmp/plotlist.dat --logprefix $data/$system/logs/jureptool 1>> $data/$system/logs/jureptool.out 2>> $data/$system/logs/jureptool.err &";  
+  my $startjureptool = "cd $folder; nice -n 19 $searchCmdjureptool --nohtml --gzip --nprocs $nprocs --daemon --loglevel DEBUG $data/$system/tmp/jobreport/tmp/plotlist.dat --logprefix $data/$system/logs/jureptool 1>> $data/$system/logs/jureptool.out 2>> $data/$system/logs/jureptool.errlog &";  
   restartProg($searchCmdjureptool, $startjureptool);
 }
 

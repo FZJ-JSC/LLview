@@ -68,11 +68,18 @@ The collection and processing of data is done via actions (the first workflow le
 - Edit action file `$LLVIEW_CONF/server/workflows/actions.inp` to the relevant actions to be used. It is recommended to start with `active=0` for all actions and activate them one by one.
 - Edit the configuration options for each action (e.g. `$LLVIEW_CONF/server/workflows/LML_da_dbupdate.conf`), when needed. It is recommended to start all steps with `active="0"` and activate them little by little. (**Note**: a step may have dependencies that must be activated before or together with it.)
 - Important reminders:
-    - <a name="checkDB"></a> After making changes on the configurations that afect the databases (i.e., adding or removing tables), they must be updated. To avoid corrupting the databases or losing data, this step must be done manually. To update the databases according to the new configurations, the following `checkDB` command should be run:
+    - <a name="updatedb"></a> After making changes on the configurations that afect the databases (i.e., adding or removing tables), they must be updated. To avoid corrupting the databases or losing data, this step must be done manually. To simplify the task of updating the databases according to the new configurations, we provide the script `updatedb` in `$LLVIEW_HOME/scripts`, which can be run as:
         ```
-        . ~/.llview_server_rc; $LLVIEW_HOME/da/LLmonDB/LLmonDB_mngt.pl -config=$LLVIEW_CONF/server/LLgenDB/LLgenDB.yaml --force checkDB > $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDBv1.`date +%Y.%m.%d`.log 2>&1
+        updatedb         [updates the db with output on screen]
+        updatedb log     [updates the db appending the output to the log file $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDB.`date +%Y.%m.%d`.log]
+        updatedb viewlog [to view the logfile]
         ```
-    The file ```$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDBv1.`date +%Y.%m.%d`.log``` can then be checked for errors. There is no problem running this command when the change in the configuration does not affect the databases, so it is recommended to run it after changes in the YAML files.
+    `updatedb viewlog` can be used to check for errors (as `updatedb log` appends the output to the same log file, there may be more than one output accumulated in the same file). There is no problem running this command when the change in the configuration does not affect the databases, so it is recommended to run it after changes in the YAML files.
+    - <a name="taillog"></a> To check the log and error files, we also provide a script `taillog` in `$LLVIEW_HOME/scripts` that can be used to simplify following these files with a `tail -f` command. It can be used by running
+        ```
+        taillog [monitor | (actionname)]
+        ```
+    - <a name="listerrors"></a> Another script provided in `$LLVIEW_HOME/scripts` that can be used to list all error files in the folders is `listerrors`.
 
 #### `dbupdate` action
 
@@ -150,7 +157,7 @@ This is where the `$LLVIEW_HOME` should be defined below, and the instructions u
     This folder contains all the configuration files which defines the specific configuration of what is collected and what will be presented to the users.
     **Note:** The folder structure should be kept, as some scripts use `$LLVIEW_CONF/server/(...)`.
     - Edit `.llview_server_rc` (an example is given in `$LLVIEW_HOME/configs/server`) and put it in the home folder `~/`, as this is the basic configuration file and it is the only way to guarantee it is a known folder at this point. The possible options are listed [here](#llview_server_rc).
-    - Edit the `$LLVIEW_CONF/LLgenDB`: here is the whole configuration of metrics, databases, etc. This can also be adapted later, but changes here may require the [checkDB](#checkDB) command to be run to update the databases.
+    - Edit the `$LLVIEW_CONF/LLgenDB`: here is the whole configuration of metrics, databases, etc. This can also be adapted later, but changes here may require the [`updatedb`](#updatedb) command to be run to update the databases.
 - Source the main configuration file, to be able to use the variable in the next steps: 
     ```
     . ~/.llview_server_rc

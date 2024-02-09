@@ -30,7 +30,7 @@ shutdown_signal_file=${LLVIEW_SHUTDOWN}
 [dbupdate]
 active=1
 watchfile=${LLVIEW_SHARED}/remote/datafiles.xml.ready
-execute="${LLVIEW_HOME}/da/LML_da.pl -par -maxprocesses 8 -nostep -conf ${LLVIEW_CONF}/server/workflows/LML_da_dbupdate.conf >> logs/db`date +.%Y.%m.%d`.log 2>> logs/db`date +.%Y.%m.%d`.errlog;"
+execute="${LLVIEW_HOME}/da/LML_da.pl -par -maxprocesses 8 -nostep -conf ${LLVIEW_CONF}/server/workflows/LML_da_dbupdate.conf >> logs/dbupdate`date +.%Y.%m.%d`.log 2>> logs/dbupdate`date +.%Y.%m.%d`.errlog;"
 execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
 logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_dbupdate`date +.%Y.%m.%d`.log"
 
