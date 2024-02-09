@@ -521,7 +521,7 @@ def CreateHTML( config,
     // Getting all plotly graphs that has time as abscissa 
     time_plots = $('div[id$="_time_plot"]'); // jQuery object
     // First one is overview figure
-    overview = $('#overview_time_plot').get(0); // plots.get(0); // Needs to be the element, not jquery
+    overview = $('#overview_plot').get(0); // plots.get(0); // Needs to be the element, not jquery
     // Last one is timeline
     timeline = $('#timeline_plot').get(0); // plots.get(-1); // Needs to be the element, not jquery
     // Getting all graphs per section
@@ -777,7 +777,7 @@ def CreateHTML( config,
                                       # 'displayModeBar': True,
                                       'modeBarButtons': [ [help_button, "zoom2d", "pan2d", "zoomIn2d", "zoomOut2d", "resetScale2d",download_data_button] ], 
                                       }, 
-                              div_id='overview_time_plot').replace('"function','function').replace(';}"}','; }}') #.replace('"function(gd)','function(gd)').replace('(gd.data[3])] );}"','(gd.data[3])] );}')
+                              div_id='overview_plot').replace('"function','function').replace(';}"}','; }}') #.replace('"function(gd)','function(gd)').replace('(gd.data[3])] );}"','(gd.data[3])] );}')
     html += f"""
     </section>
 """
