@@ -189,5 +189,3 @@ sub usage {
         -verbose                 : verbose
 ";
 }
-
-1;

@@ -1,0 +1,44 @@
+#!/usr/bin/bash
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+usage () {
+cat << EOM
+Script to update the LLview database according to config files in $LLVIEW_CONF
+Usage: $(basename "$0") [ log | viewlog ]
+  log - appends the log to $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDB.`date +%Y.%m.%d`.log
+  viewlog - print out the log file
+EOM
+}
+
+log=false
+viewlog=false
+while [ $# -gt 0 ] ; do
+  case $1 in
+    log) log=true ;;
+    viewlog) viewlog=true ;;
+    help) usage ; exit 0 ;;
+    *) usage ; exit 1 ;;
+  esac
+  shift
+done
+
+source ~/.llview_server_rc
+
+if $log
+then
+  # Writing directly on a log file:
+  $LLVIEW_HOME/da/LLmonDB/LLmonDB_mngt.pl -dbdir=$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/perm/db -config=$LLVIEW_CONF/server/LLgenDB/LLgenDB.yaml --force checkDB >> $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDB.`date +%Y.%m.%d`.log 2>&1
+elif $viewlog
+then
+  cat $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/checkDB.`date +%Y.%m.%d`.log
+else
+  $LLVIEW_HOME/da/LLmonDB/LLmonDB_mngt.pl -dbdir=$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/perm/db -config=$LLVIEW_CONF/server/LLgenDB/LLgenDB.yaml --force checkDB
+fi

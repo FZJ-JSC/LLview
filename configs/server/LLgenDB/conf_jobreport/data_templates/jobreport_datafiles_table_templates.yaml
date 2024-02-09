@@ -395,8 +395,8 @@
     stat_table:    datasetstat_templates
     format:        'template'
     columns:
-      - { name: account,         group: "project", sort: "S", title: "Project", desc: "Project name",   format: "text-left" }
-      - { name: ts,              group: "project", sort: "D", title: "Last-Upd", desc: "Date of last update of projects statistics",     format: "text-left" }
+      - { name: account,         group: "project", sort: "S", title: "Project", desc: "Project name",   format: "text-left", data_pre: "gen_project_link '/data/ll/project'" }
+      - { name: ts,              group: "project", sort: "D", title: "Last Update", desc: "Date of last update of projects statistics",     format: "text-left" }
       - { name: numjobs_sum,     group: "project", sort: "N", title: "#Jobs", desc: "Number of jobs with in the project, accumulated over time and all users in project"  }
       - { name: numnodes_min,    group: "minmax",  sort: "N", title: "#Nodes (min)", desc: "Minimum number of nodes used in jobs of project" }
       - { name: numnodes_avg,    group: "project", sort: "N", title: "#Nodes (avg)", data_format: "round_number_or_null", desc: "Average number of nodes used in jobs of project" }

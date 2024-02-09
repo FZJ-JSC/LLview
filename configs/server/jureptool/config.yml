@@ -40,9 +40,9 @@ colors: 'tab10'
 folder_prefix: '$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/tmp/jobreport/data/'
 
 # Plotly js location:
-jquery_js: 'https://llviewtest.zam.kfa-juelich.de/#system(-dc)[ ,_]#/js/ext/jquery-3.6.0.min.js'
+jquery_js: 'https://llviewtest.zam.kfa-juelich.de/#system(-dc)[ ,_]#/js/ext/jquery.min.js'
 # Plotly js location:
-plotly_js: 'https://llviewtest.zam.kfa-juelich.de/#system(-dc)[ ,_]#/js/ext/plotly-2.25.2.min.js'
+plotly_js: 'https://llviewtest.zam.kfa-juelich.de/#system(-dc)[ ,_]#/js/ext/plotly.min.js'
 # Font-awesome location:
 fontawesome: 'https://llviewtest.zam.kfa-juelich.de/#system(-dc)[ ,_]#/css/ext/font-awesome.min.css'
 # favicon location:
