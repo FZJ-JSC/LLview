@@ -11,6 +11,5 @@
 
 source ~/.llview_server_rc
 
-cd $LLVIEW_DATA/$LLVIEW_SYSTEMNAME
-ls -ltr monitor/*errlog logs/*errlog logs/steps/*errlog
+ls -ltr $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/monitor/*errlog $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/*errlog $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/steps/*errlog
 

@@ -32,7 +32,7 @@ else
 fi
 
 shopt -s nullglob
-files=($dir/$1.`date +%Y.%m.%d`*)
+files=($dir/$1.*`date +%Y.%m.%d`*)
 echo ${#files[@]}
 if [[ ${#files[@]} -eq 0 ]]
 then
