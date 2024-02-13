@@ -1,1 +1,0 @@
-Logger is a small tool to parse the logs from LLview and from the Apache server, collecting the number of users that submitted jobs to the Supercomputer as well as the ones that accessed the Web Portal.
