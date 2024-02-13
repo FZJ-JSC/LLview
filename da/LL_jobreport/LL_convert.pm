@@ -505,7 +505,7 @@ sub hhmm_short {
 sub hhmmss_short {
   my ($ts,$self)=@_;
   if($ts!~/^[0-9\.]+$/) {
-    my $msg = "$self->{INSTNAME}\[".(caller(1))[3]."\]\[".(caller(0))[3]."\] ERROR: wrong argument: $ts\n"; logmsg($msg,\*STDERR);
+    # my $msg = "$self->{INSTNAME}\[".(caller(1))[3]."\]\[".(caller(0))[3]."\] ERROR: wrong argument: $ts\n"; logmsg($msg,\*STDERR);
     return($ts); 
   }
 
