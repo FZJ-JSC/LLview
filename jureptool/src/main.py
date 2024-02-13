@@ -796,7 +796,7 @@ def log_init(config):
     log.addHandler(fh)  # add the handler to the logger so records from this process are handled
     handler = [fh]
   elif ('logprefix' in config and config['logprefix']):
-    oh = TimedRotatingFileHandler(config['logprefix']+".out",'midnight',1)
+    oh = TimedRotatingFileHandler(config['logprefix']+".log",'midnight',1)
     oh.suffix = "%Y.%m.%d.log"
     oh.extMatch = re.compile(r"^.\d{4}.\d{2}.\d{2}.log$")
     oh.setLevel(config['level'])

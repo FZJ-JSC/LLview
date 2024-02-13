@@ -461,29 +461,37 @@ def CreateHTML( config,
     download(filename,data)
   }
 
-  function relayout(ed, divs) {
+  function relayout(ed, divs, axn_from, axn_to) {
     if (Object.entries(ed).length == 0) {return;}
     divs.each((index, elem) => {
       let x = elem.layout.xaxis;
       let y = elem.layout.yaxis4;
       var update = {};
-      if ("xaxis3.autorange" in ed && ed["xaxis3.autorange"] != x.autorange) {
-        update['xaxis3.autorange']= ed["xaxis3.autorange"];
+      if (typeof axn_from === 'undefined') { axn_from = "3" }
+      if (typeof axn_to === 'undefined') { axn_to = "3" }
+      if (`xaxis${axn_from}.autorange` in ed && ed[`xaxis${axn_from}.autorange`] != x.autorange) {
+        update[`xaxis${axn_to}.autorange`]= ed[`xaxis${axn_from}.autorange`];
       }
-      if ("yaxis3.autorange" in ed && ed["yaxis3.autorange"] != y.autorange) {
-        update['yaxis3.autorange'] = ed["yaxis3.autorange"];
+      if (`yaxis${axn_from}.autorange` in ed && ed[`yaxis${axn_from}.autorange`] != y.autorange) {
+        update[`yaxis${axn_to}.autorange`] = ed[`yaxis${axn_from}.autorange`];
       }
-      if ("xaxis3.range[0]" in ed && ed["xaxis3.range[0]"] != x.range[0]) {
-        update['xaxis3.range[0]'] = ed["xaxis3.range[0]"];
+      if (`xaxis${axn_from}.range` in ed && ed[`xaxis${axn_from}.range`] != x.range) {
+        update[`xaxis${axn_to}.range`] = ed[`xaxis${axn_from}.range`];
       }
-      if ("xaxis3.range[1]" in ed && ed["xaxis3.range[1]"] != x.range[1]) {
-        update['xaxis3.range[1]'] = ed["xaxis3.range[1]"];
+      if (`yaxis${axn_from}.range` in ed && ed[`yaxis${axn_from}.range`] != y.range) {
+        update[`yaxis${axn_to}.range`] = ed[`yaxis${axn_from}.range`];
       }
-      if ("yaxis3.range[0]" in ed && ed["yaxis3.range[0]"] != y.range[0]) {
-        update['yaxis3.range[0]'] = ed["yaxis3.range[0]"];
+      if (`xaxis${axn_from}.range[0]` in ed && ed[`xaxis${axn_from}.range[0]`] != x.range[0]) {
+        update[`xaxis${axn_to}.range[0]`] = ed[`xaxis${axn_from}.range[0]`];
       }
-      if ("yaxis3.range[1]" in ed && ed["yaxis3.range[1]"] != y.range[1]) {
-        update['yaxis3.range[1]'] = ed["yaxis3.range[1]"];
+      if (`xaxis${axn_from}.range[1]` in ed && ed[`xaxis${axn_from}.range[1]`] != x.range[1]) {
+        update[`xaxis${axn_to}.range[1]`] = ed[`xaxis${axn_from}.range[1]`];
+      }
+      if (`yaxis${axn_from}.range[0]` in ed && ed[`yaxis${axn_from}.range[0]`] != y.range[0]) {
+        update[`yaxis${axn_to}.range[0]`] = ed[`yaxis${axn_from}.range[0]`];
+      }
+      if (`yaxis${axn_from}.range[1]` in ed && ed[`yaxis${axn_from}.range[1]`] != y.range[1]) {
+        update[`yaxis${axn_to}.range[1]`] = ed[`yaxis${axn_from}.range[1]`];
       }
       Plotly.update(elem, {}, update);
     });
@@ -497,15 +505,9 @@ def CreateHTML( config,
 
   function timeline_sync_zoom(ed) {
     if (lockzoom.is(':checked')) {
-  
-      if (!ed["xaxis.range[0]"] || !ed["xaxis.range[1]"]) { return; }
-      /* Relayout overview plot (first plot) */
-      Plotly.update(overview, {}, { "xaxis2.range[0]": ed["xaxis.range[0]"], "xaxis2.range[1]": ed["xaxis.range[1]"] });
+      relayout(ed, $(overview), "", "2");
 
-      /* Relayout regular plots (CPU, GPU, etc.) */
-      time_plots.each((i,div) => {
-          Plotly.update(div, {}, { "xaxis3.range[0]": ed["xaxis.range[0]"], "xaxis3.range[1]": ed["xaxis.range[1]"] });
-      });
+      relayout(ed, time_plots, "", "3");
     }
   }
 
