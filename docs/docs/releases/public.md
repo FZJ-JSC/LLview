@@ -1,12 +1,48 @@
 # LLview Public Releases
 
+### 2.2.3-base (February 13, 2024)
+
+<h4> Added </h4>
+
+- Added [script to convert account mapping from CSV to XML](../install/accountmap.md#csv-format)
+- Slurm adapter: Added 'UNKNOWN+MAINTENANCE' state
+- Added link to project in Project tab
+- Added helper scripts in `$LLVIEW_HOME/scripts` folder and added this folder in PATH
+- JURI: Added CorePattern fonts and style
+
+<h4> Changed </h4>
+
+- Added more debug information
+- Further improved [installations instructions](../install/index.md)
+- Slurm adapter: Removed hardcoded way to give system name and added to options in yaml
+- Removed error msg from hhmm_short and hhmmss_short, as they can have values that can't be converted (e.g: wall can also have 'UNLIMITED' argument)
+- JuRepTool: Changed log file extension
+- JURI: Changed how versions of external libraries are modified (now via links, such that future versions always work with old reports)
+- JURI: Removed old plotly library
+- JURI: Changed login.php to use REMOTE_USER (compatible with OIDC too)
+- JURI: Improved favicon SVG
+
+<h4> Fixed </h4>
+
+- Fixed wall default
+- Removed jobs from root and admin also from plotlist.dat (to avoid errors on JuRepTool)
+- fixed SQL type for perc_t
+- JuRepTool: Fixed loglevel from command line
+- JuRepTool: Improved parsing of (key,value) pairs
+- JuRepTool: Fixed favicon 
+- JuRepTool: Fixed timeline zoom sync
+- JuRepTool/JURI: Removed external js libraries versions
+- JURI: Fix graph_footer_plotly.handlebar to have a common root (to avoid xml error)
+- JURI: Fix .pdf.gz extension on .htaccess
+
+
 ### 2.2.2-base (January 16, 2024)
 
 <h4> Added </h4>
 
 - Added link to JURI on README
-- Added [troubleshooting](../../install/troubleshooting) page on docs
-- Added [description of step `webservice` on the `dbupdate`](../../install/server#webservice) action
+- Added [troubleshooting](../install/troubleshooting.md) page on docs
+- Added [description of step `webservice` on the `dbupdate`](../install/server_install.md#webservice-step) action
 - Added timings in Slurm adapter's LML
 - Added new queue on JuRepTool
 - Possibility to use more than one helper function via `data_pre` (from right to left)
@@ -16,7 +52,7 @@
 <h4> Changed </h4>
 
 - Changed images on Web Portal to svg
-- Improved [installations instructions](../../install)
+- Improved [installations instructions](../install/index.md)
 - Lock PR after merge (CLA action)
 - Improved CITATIONS.cff
 - Automatically create shareddir in remote Slurm action
@@ -71,5 +107,5 @@ Not included are:
 - Client (Live view)
 - Other adapters (currently only Slurm)
 
-The documentation page was also updated to include the [installation instructions](../../install).
+The documentation page was also updated to include the [installation instructions](../install/index.md).
 
