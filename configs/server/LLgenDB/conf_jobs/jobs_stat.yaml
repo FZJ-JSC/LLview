@@ -18,7 +18,7 @@
                INSERT INTO stat_by_queue_ts (queue, ts, numjobs,sum_nodes,avg_waittime)
                                                 SELECT queue, ts, COUNT(jobid), SUM(numnodes), AVG(waittime)/3600.0 
                                                 FROM queuedjobs
-                                                WHERE reason_nr in (0,1,5) AND STARTTIME = '-'
+                                                WHERE reason_nr in (0,1,5) AND STARTTIME = 'Unknown'
                                                       AND (ts >= mintsinserted)
                                                 GROUP BY queue,ts;
                INSERT INTO stat_by_queue_ts (queue, ts, numjobs,sum_nodes,avg_waittime)

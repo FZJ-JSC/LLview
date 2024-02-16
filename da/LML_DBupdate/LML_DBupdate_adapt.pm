@@ -284,7 +284,7 @@ sub adapt_data {
     if(exists($jobref->{queuedate})) {
       my $endwaitts=$currentts;
       if(exists($jobref->{starttime})) {
-        if($jobref->{starttime}) {
+        if($jobref->{starttime} && $jobref->{starttime} ne "Unknown") {
           $endwaitts=LML_da_util::date_to_secj($jobref->{starttime});
         }
       }
@@ -293,7 +293,7 @@ sub adapt_data {
       } 
     }
     if(exists($jobref->{starttime})) {
-      if($jobref->{starttime}) {
+      if($jobref->{starttime} && $jobref->{starttime} ne "Unknown") {
         $jobref->{timetostart}=LML_da_util::date_to_secj($jobref->{starttime})-$currentts;
         delete($jobref->{timetostart}) if($jobref->{timetostart}<0); # already started
         # printf("TMPDEB: timetostart: %d %d -> %d\n",LML_da_util::date_to_secj($jobref->{starttime}),$currentts,LML_da_util::date_to_secj($jobref->{starttime})-$currentts);

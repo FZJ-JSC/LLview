@@ -13,3 +13,9 @@ source ~/.llview_server_rc
 
 ls -ltr $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/monitor/*errlog $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/*errlog $LLVIEW_DATA/$LLVIEW_SYSTEMNAME/logs/steps/*errlog
 
+while [ $# -gt 0 ] ; do
+  case $1 in
+    delete) echo "Deleting error files..." ; cd $LLVIEW_DATA/$LLVIEW_SYSTEMNAME ; find ./ -name *errlog -delete ; exit 0 ;;
+  esac
+  shift
+done

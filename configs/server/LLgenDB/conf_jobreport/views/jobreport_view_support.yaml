@@ -33,16 +33,16 @@
     #        ref: ["llview"]
     #        data:
     #          view: "batch"
-    #    - page:
-    #        name: "System"
-    #        section: "system"
-    #        icon: "cog"
-    #        pages:
-    #           - page:
-    #               name: "Usage"
-    #               section: "sysoverview"
-    #               default: false
-    #               graph_page_config: "/data/ll/graphpage_sysoverview.json"
+       - page:
+           name: "System"
+           section: "system"
+           icon: "cog"
+           pages:
+              - page:
+                  name: "Usage"
+                  section: "sysoverview"
+                  default: false
+                  graph_page_config: "/data/ll/graphpage_sysoverview.json"
     #           - page:
     #               name: "Power"
     #               section: "syspower"
@@ -63,11 +63,11 @@
     #               section: "sysinterconnect"
     #               default: false
     #               graph_page_config: "/data/ll/graphpage_sysinterconnect.json"
-    #           - page:
-    #               name: "Statistics"
-    #               section: "sysstatistics"
-    #               default: false
-    #               graph_page_config: "/data/ll/graphpage_sysstatistics.json"
+              - page:
+                  name: "Statistics"
+                  section: "sysstatistics"
+                  default: false
+                  graph_page_config: "/data/ll/graphpage_sysstatistics.json"
     #           - page:
     #               name: "Detailed Usage"
     #               section: "sysstat"
