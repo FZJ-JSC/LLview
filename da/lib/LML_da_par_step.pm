@@ -155,7 +155,7 @@ sub parprocess {
                       $num_notfinished,$self->get_stepstatus_string(\@steplist)); logmsg($msg,\*STDERR);
         last;
       }
-      $msg=$self->{VERBOSE} ? sprintf("[$PRIMARKER] Waiting 1 second for new steps to be ready\n") : ""; logmsg($msg,\*STDERR);
+      $msg=$self->{VERBOSE} ? sprintf("[$PRIMARKER] Waiting 1 second for new steps to be ready\n") : ""; logmsg($msg);
       usleep(1000000);
       next STEPS;
     }

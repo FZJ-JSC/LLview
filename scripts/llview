@@ -1,0 +1,33 @@
+#!/usr/bin/bash
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+usage () {
+cat << EOM
+LLview controller
+Usage: $(basename "$0") [ start | stop | restart ]
+  start - Start LLview by removing \$LLVIEW_SHUTDOWN
+  stop - Stops LLview by touching \$LLVIEW_SHUTDOWN
+  restart - Restart LLview Server by touching the action file
+EOM
+}
+
+source ~/.llview_server_rc
+
+while [ $# -gt 0 ] ; do
+  case $1 in
+    start) if [[ -f $LLVIEW_SHUTDOWN ]] ; then echo "Starting LLview" ;  rm $LLVIEW_SHUTDOWN ; else echo "LLview is already running" ; fi ;;
+    stop) if [[ -f $LLVIEW_SHUTDOWN ]] ; then echo "LLview is already stopped" ; else echo "Stopping LLview" ; touch $LLVIEW_SHUTDOWN ; fi ;;
+    restart) touch $LLVIEW_CONF/server/workflows/actions.inp ;;
+    *) usage ; exit 1 ;;
+  esac
+  shift
+done
+

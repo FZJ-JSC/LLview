@@ -126,7 +126,7 @@ def get_state(job_state: str, reason: str) -> tuple[str, str]:
 
 
 def modify_date(date: str) -> str:
-  return date.replace("T"," ") if date != "Unknown" else ""
+  return date.replace("T"," ")
 
 def modify_state(state: str) -> str:
   """

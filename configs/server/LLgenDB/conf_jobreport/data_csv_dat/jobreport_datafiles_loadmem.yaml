@@ -176,38 +176,38 @@
     stat_database:   jobreport_stat_loadmem
     stat_table:      datasetstat
 
-- dataset:
-    name: sysstat_heatmap_maxmem_csv
-    set:        loadmem
-    filepath:   '$outputdir/_sysstat/sysstat_heatmap_maxmem.csv'
-    columns:        'ts,memcls,used_mem_max,sum_nodes,sum_jobs'
-    header:         'date,memcls,used_mem_max,sum_nodes,sum_jobs'
-    column_convert: 'ts->todate_1'
-    format_str:      '%s,%d,%f,%d,%d'
-    format:         'csv'
-    renew:          'daily(11:50)'
-    column_ts:      'ts'
-    data_database:   loadmemstate
-    data_table:      loadmem_aggr_by_ts_maxmem_cls
-    stat_database:   jobreport_stat_loadmem
-    stat_table:      datasetstat
+# - dataset:
+#     name: sysstat_heatmap_maxmem_csv
+#     set:        loadmem
+#     filepath:   '$outputdir/_sysstat/sysstat_heatmap_maxmem.csv'
+#     columns:        'ts,memcls,used_mem_max,sum_nodes,sum_jobs'
+#     header:         'date,memcls,used_mem_max,sum_nodes,sum_jobs'
+#     column_convert: 'ts->todate_1'
+#     format_str:      '%s,%d,%f,%d,%d'
+#     format:         'csv'
+#     renew:          'daily(11:50)'
+#     column_ts:      'ts'
+#     data_database:   loadmemstate
+#     data_table:      loadmem_aggr_by_ts_maxmem_cls
+#     stat_database:   jobreport_stat_loadmem
+#     stat_table:      datasetstat
     
-- dataset:
-    name: sysstat_heatmap_maxmem_node_csv
-    set:        loadmem
-    filepath:   '$outputdir/_sysstat/sysstat_heatmap_maxmem_node.csv'
-    sql_where:      'ts = (select max(ts) from loadmem_aggr_by_ts_maxmem_node_cls)'
-    order:          'sizecls desc,memcls desc' 
-    columns:        'sizecls,memcls,used_mem_max,nodes_avg,sum_nodes,sum_jobs'
-    header:         'sizecls,memcls,used_mem_max,nodes_avg,sum_nodes,sum_jobs'
-    format_str:      '%d,%d,%f,%f,%d,%d'
-    format:         'csv'
-    renew:          'daily(11:50)'
-    column_ts:      'ts'
-    data_database:   loadmemstate
-    data_table:      loadmem_aggr_by_ts_maxmem_node_cls
-    stat_database:   jobreport_stat_loadmem
-    stat_table:      datasetstat
+# - dataset:
+#     name: sysstat_heatmap_maxmem_node_csv
+#     set:        loadmem
+#     filepath:   '$outputdir/_sysstat/sysstat_heatmap_maxmem_node.csv'
+#     sql_where:      'ts = (select max(ts) from loadmem_aggr_by_ts_maxmem_node_cls)'
+#     order:          'sizecls desc,memcls desc' 
+#     columns:        'sizecls,memcls,used_mem_max,nodes_avg,sum_nodes,sum_jobs'
+#     header:         'sizecls,memcls,used_mem_max,nodes_avg,sum_nodes,sum_jobs'
+#     format_str:      '%d,%d,%f,%f,%d,%d'
+#     format:         'csv'
+#     renew:          'daily(11:50)'
+#     column_ts:      'ts'
+#     data_database:   loadmemstate
+#     data_table:      loadmem_aggr_by_ts_maxmem_node_cls
+#     stat_database:   jobreport_stat_loadmem
+#     stat_table:      datasetstat
 
 - dataset:
     name: sysstat_hist_size_csv

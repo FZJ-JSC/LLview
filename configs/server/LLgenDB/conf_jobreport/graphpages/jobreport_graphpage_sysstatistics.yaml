@@ -18,29 +18,29 @@
     columns: 1
     graphs: 
 
-       - name: "Job_size_hist_avg"
-         xcol: "date"
-         height: "400px"
-         layout:
-           %include "jobreport_graphpage_layout_range.yaml"
-           yaxis: 
-               title: "#nodes"
-           legend:
-               x: "0.0"
-               xref: "x domain"
-               xanchor: "left"
-               y: "1"
-               yanchor: "top"
-           title:
-               text: "<b>Number of nodes used by jobs of size x<b>"
-               font: 
-                  family: 'Arial'
-                  size: 16
-               xref: "x domain"
-               x:    "0.5"
-               xanchor: "center"
-         traces:
-           %include "jobreport_graphpage_sysstatistics_size_hist_avg.yaml"  
+      #  - name: "Job_size_hist_avg"
+      #    xcol: "date"
+      #    height: "400px"
+      #    layout:
+      #      %include "jobreport_graphpage_layout_range.yaml"
+      #      yaxis: 
+      #          title: "#nodes"
+      #      legend:
+      #          x: "0.0"
+      #          xref: "x domain"
+      #          xanchor: "left"
+      #          y: "1"
+      #          yanchor: "top"
+      #      title:
+      #          text: "<b>Number of nodes used by jobs of size x<b>"
+      #          font: 
+      #             family: 'Arial'
+      #             size: 16
+      #          xref: "x domain"
+      #          x:    "0.5"
+      #          xanchor: "center"
+      #    traces:
+      #      %include "jobreport_graphpage_sysstatistics_size_hist_avg.yaml"  
            
        - name: "Memory_hist_max"
          xcol: "date"
@@ -90,103 +90,103 @@
          traces:
            %include "jobreport_graphpage_sysstatistics_memory_hist_avg.yaml"  
 
-       - name: "UsedNodes_by_MaxMemory_ts_heatmap"
-         xcol: "date"
-         height: "350px"
-         layout:
-          #  %include "jobreport_graphpage_layout_range.yaml"
-           paper_bgcolor: '#FFFFFF'
-           plot_bgcolor: '#FFFFFF'
-          #  xaxis: 
-          #      type: "date"
-           yaxis: 
-               title: "Memory Range"
-          #  legend:
-          #      x: "0.0"
-          #      xref: "x domain"
-          #      xanchor: "left"
-          #      y: "1"
-          #      yanchor: "top"
-           title:
-               text: "<b>Number of nodes used up to x GB memory per time (maximum over runtime of job)<b>"
-               font: 
-                  family: 'Arial'
-                  size: 16
-               xref: "x domain"
-               x:    "0.5"
-               xanchor: "center"
-         traces:
-           - name:   "UsedNodes"
-             xcol: "date"
-             ycol: "memcls"
-             zcol: "sum_nodes"
-            #  yaxis:  "y"
-             type:   "heatmap"
-             fill: null
-            #  colorscale: 'Hot'
-            #  reversescale: true
+      #  - name: "UsedNodes_by_MaxMemory_ts_heatmap"
+      #    xcol: "date"
+      #    height: "350px"
+      #    layout:
+      #     #  %include "jobreport_graphpage_layout_range.yaml"
+      #      paper_bgcolor: '#FFFFFF'
+      #      plot_bgcolor: '#FFFFFF'
+      #     #  xaxis: 
+      #     #      type: "date"
+      #      yaxis: 
+      #          title: "Memory Range"
+      #     #  legend:
+      #     #      x: "0.0"
+      #     #      xref: "x domain"
+      #     #      xanchor: "left"
+      #     #      y: "1"
+      #     #      yanchor: "top"
+      #      title:
+      #          text: "<b>Number of nodes used up to x GB memory per time (maximum over runtime of job)<b>"
+      #          font: 
+      #             family: 'Arial'
+      #             size: 16
+      #          xref: "x domain"
+      #          x:    "0.5"
+      #          xanchor: "center"
+      #    traces:
+      #      - name:   "UsedNodes"
+      #        xcol: "date"
+      #        ycol: "memcls"
+      #        zcol: "sum_nodes"
+      #       #  yaxis:  "y"
+      #        type:   "heatmap"
+      #        fill: null
+      #       #  colorscale: 'Hot'
+      #       #  reversescale: true
 
-            #  stackgroup: "memory"
-             datapath: "data/_sysstat/sysstat_heatmap_maxmem.csv"
+      #       #  stackgroup: "memory"
+      #        datapath: "data/_sysstat/sysstat_heatmap_maxmem.csv"
            
-       - name: "UsedNodes_by_MaxMemory_node_heatmap"
-         xcol: "date"
-         height: "350px"
-         layout:
-           paper_bgcolor: '#FFFFFF'
-           plot_bgcolor: '#FFFFFF'
-           xaxis: 
-               type: "log"
-           yaxis: 
-               title: "Memory Range"
-          #  legend:
-          #      x: "0.0"
-          #      xref: "x domain"
-          #      xanchor: "left"
-          #      y: "1"
-          #      yanchor: "top"
-           title:
-               text: "<b>Number of nodes used up to x GB memory per job size (maximum over runtime of job)<b>"
-               font: 
-                  family: 'Arial'
-                  size: 16
-               xref: "x domain"
-               x:    "0.5"
-               xanchor: "center"
-         traces:
-           - name:   "UsedNodes"
-             xcol: "sizecls"
-             ycol: "memcls"
-             zcol: "sum_nodes"
-            #  yaxis:  "y"
-             type:   "heatmap"
-             fill: null
-            #  colorscale: 'Hot'
-            #  reversescale: true
+      #  - name: "UsedNodes_by_MaxMemory_node_heatmap"
+      #    xcol: "date"
+      #    height: "350px"
+      #    layout:
+      #      paper_bgcolor: '#FFFFFF'
+      #      plot_bgcolor: '#FFFFFF'
+      #      xaxis: 
+      #          type: "log"
+      #      yaxis: 
+      #          title: "Memory Range"
+      #     #  legend:
+      #     #      x: "0.0"
+      #     #      xref: "x domain"
+      #     #      xanchor: "left"
+      #     #      y: "1"
+      #     #      yanchor: "top"
+      #      title:
+      #          text: "<b>Number of nodes used up to x GB memory per job size (maximum over runtime of job)<b>"
+      #          font: 
+      #             family: 'Arial'
+      #             size: 16
+      #          xref: "x domain"
+      #          x:    "0.5"
+      #          xanchor: "center"
+      #    traces:
+      #      - name:   "UsedNodes"
+      #        xcol: "sizecls"
+      #        ycol: "memcls"
+      #        zcol: "sum_nodes"
+      #       #  yaxis:  "y"
+      #        type:   "heatmap"
+      #        fill: null
+      #       #  colorscale: 'Hot'
+      #       #  reversescale: true
 
-            #  stackgroup: "memory"
-             datapath: "data/_sysstat/sysstat_heatmap_maxmem_node.csv"
+      #       #  stackgroup: "memory"
+      #        datapath: "data/_sysstat/sysstat_heatmap_maxmem_node.csv"
            
-       - name: "Job_size_hist_avg"
-         xcol: "date"
-         height: "400px"
-         layout:
-           %include "jobreport_graphpage_layout_range.yaml"
-           yaxis: 
-               title: "#nodes"
-           legend:
-               x: "0.0"
-               xref: "x domain"
-               xanchor: "left"
-               y: "1"
-               yanchor: "top"
-           title:
-               text: "<b>Number of nodes used by jobs of size x<b>"
-               font: 
-                  family: 'Arial'
-                  size: 16
-               xref: "x domain"
-               x:    "0.5"
-               xanchor: "center"
-         traces:
-           %include "jobreport_graphpage_sysstatistics_size_hist_avg.yaml"  
+      #  - name: "Job_size_hist_avg"
+      #    xcol: "date"
+      #    height: "400px"
+      #    layout:
+      #      %include "jobreport_graphpage_layout_range.yaml"
+      #      yaxis: 
+      #          title: "#nodes"
+      #      legend:
+      #          x: "0.0"
+      #          xref: "x domain"
+      #          xanchor: "left"
+      #          y: "1"
+      #          yanchor: "top"
+      #      title:
+      #          text: "<b>Number of nodes used by jobs of size x<b>"
+      #          font: 
+      #             family: 'Arial'
+      #             size: 16
+      #          xref: "x domain"
+      #          x:    "0.5"
+      #          xanchor: "center"
+      #    traces:
+      #      %include "jobreport_graphpage_sysstatistics_size_hist_avg.yaml"  
