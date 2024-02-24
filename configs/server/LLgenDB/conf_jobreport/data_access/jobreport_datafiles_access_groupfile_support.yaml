@@ -8,5 +8,5 @@
 # Contributors:
 #    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
 
-post_rows:          '# Support\nAuthGroupFile /home/llstat/jobreport_system/data/sec_files/.htgroups\nRequire group support\n'
+post_rows:          '# Support\nAuthGroupFile ${LLVIEW_WEB_DATA}/data/sec_files/.htgroups\nRequire group support\n'
 

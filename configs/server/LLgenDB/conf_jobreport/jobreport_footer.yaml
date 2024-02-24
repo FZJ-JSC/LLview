@@ -59,8 +59,8 @@
     footerset:
        %include "./footers/jobreport_footer_projstat.yaml"
 
-- footer:
-    name:          "corepattern"
-    filepath:      "$outputdir/ll/footer_corepattern.json"
-    footerset:
-       %include "./footers/jobreport_footer_corepattern.yaml"
+# - footer:
+#     name:          "corepattern"
+#     filepath:      "$outputdir/ll/footer_corepattern.json"
+#     footerset:
+#        %include "./footers/jobreport_footer_corepattern.yaml"

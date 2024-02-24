@@ -200,8 +200,8 @@ def sysinfo(options: dict, slurm_info) -> dict:
   
   log = logging.getLogger('logger')
 
-  # Getting basic information from the system (currently only 'cluster' type)
-  log.info("Collecting system information...\n")
+  # Adding basic information from the system (currently only 'cluster' type)
+  log.info("Adding extra information for sysinfo...\n")
 
   import platform
   sysextra = {}
@@ -235,6 +235,9 @@ def nodeinfo(options: dict, nodes_info) -> dict:
   Specific function to add extra items to nodeinfo
   """
   log = logging.getLogger('logger')
+
+  # Getting information from the nodes
+  log.info("Adding extra information for nodeinfo...\n")
 
   nodeextra = {}
 
@@ -297,6 +300,9 @@ def jobinfo(options: dict, jobs_info) -> dict:
   """
   log = logging.getLogger('logger')
 
+  # Getting information from the jobs
+  log.info("Adding extra information for jobinfo...\n")
+
   jobextra = {}
 
   # Updating the jobs dictionary by adding or removing keys
@@ -327,8 +333,13 @@ def jobinfo(options: dict, jobs_info) -> dict:
 
 def stepinfo(options: dict, steps_info) -> dict:
   """
-  Specific function to add extra items to jobinfo
+  Specific function to add extra items to stepinfo
   """
+  log = logging.getLogger('logger')
+
+  # Getting information from the steps
+  log.info("Adding extra information for stepinfo...\n")
+
   stepsextra = {}
   # Updating the jobs dictionary by adding or removing keys
   for stepname,stepinfo in steps_info.items():
@@ -710,12 +721,14 @@ def get_system_name(options: dict) -> str:
   Options that are tested (first string, then in the dictionary order):
     - direct string 
       systemname: 'system'
+      or
+      systemname: '${LLVIEW_SYSTEMNAME}'
     - file containing system name:
       systemname: 
         file: '/path/to/file'
     - environment variable:
       systemname: 
-        env: 'SYSTEMNAME'
+        env: 'LLVIEW_SYSTEMNAME' # Note that there's no ${...} here
   """
   log = logging.getLogger('logger')
 
@@ -724,7 +737,7 @@ def get_system_name(options: dict) -> str:
   if 'systemname' in options:
     if isinstance(options['systemname'],str):
       # If it's a string, set it as the systemname
-      systemname = options['systemname']
+      systemname = os.path.expandvars(options['systemname'])
     elif isinstance(options['systemname'],dict):
       # If it's a dict, loop over the keys (but only 'file' or 'env' are recognized)
       for key,value in options['systemname'].items():
@@ -885,6 +898,8 @@ def main():
       continue
 
     start_time = time.time()
+
+    log.info(f"Collecting {key}...\n")
 
     # Initializing new object of type given in config
     slurm_info = SlurmInfo()

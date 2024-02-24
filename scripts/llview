@@ -19,7 +19,8 @@ Usage: $(basename "$0") [ start | stop | restart ]
 EOM
 }
 
-source ~/.llview_server_rc
+# Note: file .llview_server_rc must be sourced, e.g.:
+# $ source ~/.llview_server_rc
 
 while [ $# -gt 0 ] ; do
   case $1 in

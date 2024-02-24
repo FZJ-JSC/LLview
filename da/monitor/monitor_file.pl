@@ -20,7 +20,7 @@ use Time::HiRes qw( time sleep );
 # Use internal library
 use FindBin;
 use lib "$FindBin::RealBin/../lib";
-use LML_da_util qw( logmsg system_call get_date _max _min );
+use LML_da_util qw( logmsg system_call get_date _max _min check_folder );
 
 my ($action,$actions,$msg,$watchfile2action,$pid2action,$options);
 my $logfile="monitor.".&get_date().".log";
@@ -433,6 +433,7 @@ sub handle_event {
       my $execcmd=$actions->{$action}->{execute};
       $execcmd=~s/^[\"\']//gs; $execcmd=~s/[\"\']$//gs; $execcmd=~s/^[\(]//s; $execcmd=~s/[\)]$//s;
       my $cmd="(cd $actions->{$action}->{execdir}; (".$execcmd.") >> $actions->{$action}->{logfile} 2>&1 )";
+      &check_folder($actions->{$action}->{execdir});
       $msg=sprintf(" CHILD %d start cmd %s\n",$pid,$cmd); &logmsg($msg,$actions->{$action}->{logfile});
       $rc = system($cmd);
       $rc = $rc >> 8?$rc >> 8:0;
