@@ -15,8 +15,6 @@ export LLVIEW_SYSTEMNAME="system"
 export LLVIEW_HOME="$HOME/llview"
 export LLVIEW_DATA="$HOME/.data"
 export LLVIEW_CONF="$LLVIEW_DATA/configs"
-# Number of processors used by JuRepTool (default: 2, 0 to turn off)
-export JUREPTOOL_NPROCS=0
 # Shared folder between Remote and Server (same as $LLVIEW_SHARED in .llview_remote_rc)
 export LLVIEW_SHARED="/p/hpcmon/JURECA/llstat/$LLVIEW_SYSTEMNAME"
 
@@ -26,8 +24,18 @@ export LLVIEW_SHUTDOWN="$HOME/HALT_ALL"
 # How many days logs should be kept apart from current day (default: 1)
 export LLVIEW_LOG_DAYS=2
 
+# Number of processors used by JuRepTool (default: 2, 0 to turn off)
+export JUREPTOOL_NPROCS=0
+
+# Folder on the webserver that is shared on the web (necessary for the definition of the .htgroups)
+export LLVIEW_WEB_DATA="/home/llstat/jobreport_system"
+
+# Exporting llview scripts folder to PATH
+export PATH="$PATH:$LLVIEW_HOME/scripts"
 
 # PERL5 definitions
+# module load Perl
+# module load Perl-bundle-CPAN
 export PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:$LLVIEW_DATA/perl5"
 export PERL_MB_OPT="--install_base $LLVIEW_DATA/perl5"
 export PERL_MM_OPT="INSTALL_BASE=$LLVIEW_DATA/perl5"
@@ -35,7 +43,6 @@ export PERL5LIB="$LLVIEW_DATA/perl5/lib/perl5:$PERL5LIB"
 export PATH="$LLVIEW_DATA/perl5/bin:$PATH"
 
 # Python definitions
+# module load Python
+# module load PyYAML
 export PYTHON="/usr/bin/python3.9"
-
-export PATH="$PATH:$LLVIEW_HOME/scripts"
-

@@ -20,18 +20,16 @@ nodeinfo:
   LML: './nodes_LML.xml'
   type: 'node'
   prefix: 'nd'
-  systemname:
-    env: SYSTEMNAME
-  #   file: /path/to/file
+  systemname: ${LLVIEW_SYSTEMNAME}
+    # env: LLVIEW_SYSTEMNAME # Note that there's no ${...} here
+    # file: /path/to/file
   # exclude: 
   #   - gpus: '4'
   # include: 
   #   - 'jrc000.*'
   #   - 'jrc020.*'
   mem_reserved:
-    juwels: 5017.6 # 2.3*1024 + 2.6*1024, # (GPFS page pool + daemon) + (OS image RAM disk)
-    jusuf: 14336 # 8*1024 + 6*1024,
-    jurecadc: 8000 # Value that does not give negative numbers in any node # 19.85*1024,
+    system: 8000 # Value that does not give negative numbers in any node,
   modify_before_mapping:
     State: modify_state
     CPULoad: modify_load
@@ -48,6 +46,8 @@ nodeinfo:
     UsedMem: 'memU'
     gpus: 'gpus'
     classes: 'classes'
+    CurrentWatts: 'currentwatts'
+    AveWatts: 'avewatts'
 
 jobinfo:
   cmd: 'scontrol show job --detail --all'
@@ -107,7 +107,6 @@ jobinfo:
     HetJobOffset: 'HetJobOffset'
 
     totaltasks: 'totaltasks' #? only for DOSTEPS
-
 
 reservationinfo:
   cmd: 'scontrol show reservation --detail --all'

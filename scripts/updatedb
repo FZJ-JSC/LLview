@@ -30,7 +30,8 @@ while [ $# -gt 0 ] ; do
   shift
 done
 
-source ~/.llview_server_rc
+# Note: file .llview_server_rc must be sourced, e.g.:
+# $ source ~/.llview_server_rc
 
 if $log
 then

@@ -116,7 +116,7 @@ if ($hostname !~/$help/) {
   close(RUNNING);
   chomp($pid);
   if (-d "/proc/$pid") {
-    $msg=sprintf("[LML_da.pl] another LML_da.pl process is running [PID: $pid]! Exiting, please remove $permdir/$signalfilename\n"); logmsg($msg,\*STDERR);
+    $msg=sprintf("[LML_da.pl] another LML_da.pl process may be running [PID: $pid]! Exiting, please remove $permdir/$signalfilename if error persists.\n"); logmsg($msg,\*STDERR);
     exit(1);
   } else {
     unlink("$permdir/$signalfilename") or &mydie("[LML_da.pl] Can't delete $permdir/$signalfilename: $!\n");

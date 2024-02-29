@@ -267,7 +267,13 @@ sub write_data_to_file_access_cache {
       $datastr.=sprintf($dataset->{row_format},@parms);
       $count++;
     }
-    $datastr.=$dataset->{post_rows}."\n" if(exists($dataset->{post_rows}));
+
+    if(exists($dataset->{post_rows})) {
+      # Substituting environment variables
+      $dataset->{post_rows} =~ s/\$\{(\w+)\}/$ENV{$1}/g;
+      $dataset->{post_rows} =~ s/\$ENV\{(\w+)\}/$ENV{$1}/g;
+      $datastr.=$dataset->{post_rows}."\n" 
+    }
     $datastr=~s/\\n/\n/gs;
     
     # write data to file
@@ -343,7 +349,13 @@ sub process_data_query_and_save_access {
   my $datastr="";
   $datastr.=$dataset->{pre_rows}."\n"  if(exists($dataset->{pre_rows}));
   $datastr.=$dataset->{rows}."\n"      if(exists($dataset->{rows}));
-  $datastr.=$dataset->{post_rows}."\n" if(exists($dataset->{post_rows}));
+
+  if(exists($dataset->{post_rows})) {
+    # Substituting environment variables
+    $dataset->{post_rows} =~ s/\$\{(\w+)\}/$ENV{$1}/g;
+    $dataset->{post_rows} =~ s/\$ENV\{(\w+)\}/$ENV{$1}/g;
+    $datastr.=$dataset->{post_rows}."\n" 
+  }
   $datastr=~s/\\n/\n/gs;
 
   $fh->print($datastr);

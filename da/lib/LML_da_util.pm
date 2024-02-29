@@ -519,7 +519,7 @@ sub check_folder {
     my ($package, $filename, $line) = caller;
     my ($callervol,$callerfolder,$callerfile) = File::Spec->splitpath($filename);
     # Creating the folder
-    $msg=sprintf("[$callerfile] Folder not found, creating new directory '$folder'...\n"); logmsg($msg,\*STDERR);
+    $msg=sprintf("[$callerfile] Folder not found, creating new directory '$folder'...\n"); logmsg($msg);
     system("mkdir -p $folder") == 0 or die "[$callerfile] Could not create '$folder': $!\n".&stacktrace();
   }
 }

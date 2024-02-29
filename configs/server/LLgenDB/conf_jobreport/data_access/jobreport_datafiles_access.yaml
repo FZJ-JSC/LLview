@@ -29,6 +29,7 @@
     pre_rows:           '# Owner' 
     row_format:         'Require user %s\n'
     row_columns:        'wsaccount'
+    %include "jobreport_datafiles_access_groupfile_support.yaml"
 
 - dataset:
     name: user_access_pipa
@@ -49,7 +50,6 @@
     pre_rows:           '# PI/PA' 
     row_format:         'Require user %s\n' 
     row_columns:        'wsaccount'
-    %include "jobreport_datafiles_access_groupfile_support.yaml"
 
     
 - dataset:
