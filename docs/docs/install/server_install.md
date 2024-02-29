@@ -56,7 +56,8 @@ The existing variables are:
 - `$LLVIEW_SHARED`: A shared folder between LLview Server and [LLview Remote](remote_install.md#configuration), where the generated files from Remote will be written and read by the Server (therefore, it must be the same set up in `.llview_remote_rc` in the Remote part)
 - `$LLVIEW_SHUTDOWN`: File to be used to stop LLview's workflow (the cronjob runs, but immediately stops)
 - `$LLVIEW_LOG_DAYS`: Number of days to keep the logs
-- `JUREPTOOL_NPROCS`: Number of processors used by JuRepTool (default: 2). As JuRepTool runs in parallel to the main LLview workflow, it is recommended to initially use `JUREPTOOL_NPROCS=0` to deactivate JuRepTool and only activate it when the full LLview cycle is working.
+- `$JUREPTOOL_NPROCS`: Number of processors used by JuRepTool (default: 2). As JuRepTool runs in parallel to the main LLview workflow, it is recommended to initially use `export JUREPTOOL_NPROCS=0` to deactivate JuRepTool and only activate it when the full LLview cycle is working.
+- `$LLVIEW_WEB_DATA`: Folder on the Web Server (accessible via https) where the `data` will be copied to.
 
 Extra definitions can be also exported or modules loaded in this file (for example, to satisfy the [Dependencies](#dependencies)).
 
