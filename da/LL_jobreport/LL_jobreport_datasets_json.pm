@@ -313,7 +313,7 @@ sub collect_data_for_file_json_multi_file {
       $self->{SAVE_LASTFILE}=$file;
     }
   } else {
-    print STDERR "collect_data_for_file_json_multi_file ($dataset->{name}): WARNING $skey not in known files, skipping entry\n";
+    print "collect_data_for_file_json_multi_file ($dataset->{name}): WARNING $skey not in known files, skipping entry\n";
     return();
   }
   
