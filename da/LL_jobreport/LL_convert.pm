@@ -326,30 +326,48 @@ sub bytes_to_mbytes {
 
 sub cut6digits {
   my ($number)=@_;
+  if($number!~/^[0-9\.]+$/) {
+    return($number); 
+  }
   return(int($number*1000000)/1000000.0);
 }
 
 sub cut5digits {
   my ($number)=@_;
+  if($number!~/^[0-9\.]+$/) {
+    return($number); 
+  }
   return(int($number*100000)/100000.0);
 }
 
 sub cut4digits {
   my ($number)=@_;
+  if($number!~/^[0-9\.]+$/) {
+    return($number); 
+  }
   return(int($number*10000)/10000.0);
 }
 
 sub cut3digits {
   my ($number)=@_;
+  if($number!~/^[0-9\.]+$/) {
+    return($number); 
+  }
   return(int($number*1000)/1000.0);
 }
 
 sub cut2digits {
   my ($number)=@_;
+  if($number!~/^[0-9\.]+$/) {
+    return($number); 
+  }
   return(int($number*100)/100.0);
 }
 sub cut1digits {
   my ($number)=@_;
+  if($number!~/^[0-9\.]+$/) {
+    return($number); 
+  }
   return(int($number*10)/10.0);
 }
 
@@ -395,6 +413,9 @@ sub jobdays_sincenow {
 sub hourfrac {
   my ($ts,$self)=@_;
   return(0) if(!$ts);
+  if($ts!~/^[0-9\.]+$/) {
+    return($ts); 
+  }
   return(&cut3digits(($ts)/3600.0));
 }
 
