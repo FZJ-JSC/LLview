@@ -17,6 +17,7 @@ from datetime import datetime
 import re
 import os
 import sys
+from pathlib import Path
 import math
 import csv
 from copy import deepcopy
@@ -649,6 +650,8 @@ class SlurmInfo:
     information of self._dict
     """
     self.log.info(f"Writing LML data to {filename}... ")
+    # Creating folder if it does not exist
+    Path(filename).mkdir(parents=True, exist_ok=True) 
     # Opening LML file
     with open(filename,"w") as file:
       # Writing initial XML preamble
@@ -866,7 +869,7 @@ def main():
   """
   
   # Parse arguments
-  parser = argparse.ArgumentParser(description="Slurm Adapter for LLview")
+  parser = argparse.ArgumentParser(description="Slurm Plugin for LLview")
   # parser.add_argument("--LMLjobfile",  default="./jumonc_LML.xml", help="Output LML file for information of jobs")
   parser.add_argument("--config",    default=False, help="YAML config file containing the information to be gathered and converted to LML")
   parser.add_argument("--loglevel",  default=False, help="Select log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR' (more to less verbose)")

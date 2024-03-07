@@ -23,6 +23,7 @@ use Time::HiRes qw ( time );
 
 use LLmonDB_config;
 use LLmonDB_check;
+use LLmonDB_graphs;
 use LLmonDB_sqlite;
 use LLmonDB_input_LML;
 use LLmonDB_input_LML_jobmap;

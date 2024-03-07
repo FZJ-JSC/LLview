@@ -24,7 +24,7 @@ The dependencies of LLview Remote are:
         - DBD::SQLite
         - Config::IniFiles
         - JSON
-- Python (>3.9) (For the Slurm adapter)
+- Python (>3.9) (For the Slurm plugin)
     - Modules (install with `pip install <ModuleName>`)
         - pyyaml
 
@@ -60,8 +60,8 @@ This is where the `$LLVIEW_HOME` should be defined below, and the instructions u
     This folder contains all the configuration files which defines the specific configuration of what is collected and what will be presented to the users.
     **Note:** The folder structure should be kept, as some scripts use `$LLVIEW_CONF/remote/(...)`.
     - Edit `.llview_remote_rc` (an example is given in `$LLVIEW_HOME/configs/remote`) and put it in the home folder `~/`, as this is the basic configuration file and it is the only way to guarantee it is a known folder at this point. The possible options are listed [here](#llview_remote_rc).
-    - Edit the `executehostpattern` value on the remote workflow given in `$LLVIEW_CONF/remote/workflows/LML_da_slurm.conf`. This workflow consists basically in running the Slurm adapter to collect the data from the system. As this usually runs by cronjobs in a login node, to avoid it running in all the nodes (which would generate unnecessary work and data races), the variable `executehostpattern` should be set to the hostname of the computer where it will run.
-    - **[Optional]** Check configuration of Slurm adapter on `$LLVIEW_CONF/remote/adapters/slurm.yml` (`$LLVIEW_CONF` is the configuration folder defined in `.llview_remote_rc`). The default configuration should work out-of-the-box.
+    - Edit the `executehostpattern` value on the remote workflow given in `$LLVIEW_CONF/remote/workflows/LML_da_slurm.conf`. This workflow consists basically in running the Slurm plugin to collect the data from the system. As this usually runs by cronjobs in a login node, to avoid it running in all the nodes (which would generate unnecessary work and data races), the variable `executehostpattern` should be set to the hostname of the computer where it will run.
+    - **[Optional]** Check configuration of Slurm plugin on `$LLVIEW_CONF/plugins/slurm.yml` (`$LLVIEW_CONF` is the configuration folder defined in `.llview_remote_rc`). The default configuration should work out-of-the-box.
 - Add cronjob to crontab:
     ```
     crontab $LLVIEW_HOME/da/workflows/remote/crontab/crontab.add

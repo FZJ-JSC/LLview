@@ -51,7 +51,7 @@ sub process_dataset_template {
     my $bg_color_map=""; $bg_color_map="{{cell_color ".$colref->{bg_color_map}."}}; " if(exists($colref->{bg_color_map}));
     my $fg_color="";    $fg_color="color: {{{".$colref->{fg_color}."}}}; " if(exists($colref->{fg_color}));
     my $style="";       $style=$colref->{style}."; " if(exists($colref->{style}));
-    my $cdataformat=""; $cdataformat=$colref->{data_format}." " if(exists($colref->{data_format}));
+    my $cdataformat=""; $cdataformat=$colref->{data_format} if(exists($colref->{data_format}));
     my $cdatapre="";    $cdatapre=$colref->{data_pre}." " if(exists($colref->{data_pre}));
     my $cdatapost="";   $cdatapost=" ".$colref->{data_post} if(exists($colref->{data_post}));
     my $noheader=0;     $noheader=$colref->{noheader} if(exists($colref->{noheader}));
@@ -84,7 +84,19 @@ sub process_dataset_template {
     $data_tbody.="              ";
     $data_tbody.="<td ${styles} class=\"${cformat}\">";
     $data_tbody.="<span>" if($bg_color_map || $cellcolor);
-    $data_tbody.="{{{$cdataformat$cdatapre$name$cdatapost}}}";
+    # When data_format is given, it can support different helper functions separated by comma
+    # They are applied from right (first) to left (last). For the Handlebars, it must have the format
+    # {{function3 (function2 (function1 <argument>)))}}
+    my $finalformat = "$cdatapre$name$cdatapost";
+    if ($cdataformat) {
+      my @dataformats = reverse split(',', $cdataformat);
+      foreach my $dataformat (@dataformats) {
+        $finalformat = "(".$dataformat." ".$finalformat.")";
+      }
+      $finalformat = substr($finalformat, 1, -1);
+    }
+    $data_tbody.="{{{$finalformat}}}";
+    # $data_tbody.="{{{$cdataformat$cdatapre$name$cdatapost}}}";
     $data_tbody.="</span>" if($bg_color_map || $cellcolor);
     $data_tbody.="</td>\n";
   }

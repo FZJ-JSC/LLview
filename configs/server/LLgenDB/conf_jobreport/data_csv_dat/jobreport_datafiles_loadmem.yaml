@@ -13,19 +13,20 @@
     set:        loadmem
     FORALL:     'P,U,J:VAR_project_user_job'
     filepath:   '$outputdir/projects/$P/$U/LoadMem_${J}_node.dat'
-    columns:        'jobid,ts,nodeid,load,used_mem,usage,used_cores,used_cores_phys,used_cores_logic'
+    columns:        'jobid,ts,nodeid,load,used_mem,usage,used_cores,used_cores_phys,used_cores_logic,currentwatts'
     column_convert: 'used_mem->MiBtoGiB,usage->toPercent'
     column_filemap: 'J:jobid'
     column_ts:      'ts'
     format:         'dat'
-    format_str:      '%-10s %10d %12s %8.2f %8.2f %8.2f %3d %3d %3d'
-    format_header:   '%-10s %10s %12s %8s %8s %8s %8s %8s %8s'
+    format_str:      '%-10s %10d %12s %8.2f %8.2f %8.2f %3d %3d %3d %8.2f'
+    format_header:   '%-10s %10s %12s %8s %8s %8s %8s %8s %8s %8s'
     data_database:   loadmemstate
     data_table:      loadmem_by_jobid_nodeid_ts
     stat_database:   jobreport_stat_loadmem
     stat_table:      datasetstat_node_dat
     mngt_actions:   'compress_finished_files,archive_jobs_files'
     # renew:          'daily(13:46)'
+    # renew:          'always'
 
 - dataset:
     name: loadmem_csv
@@ -141,91 +142,23 @@
     stat_table:      datasetstat
 
 - dataset:
-    name: sysstat_hist_avgmem_csv
-    set:        loadmem
-    FORALL:     'F:VAR_hist_memcls'
-    filepath:   '$outputdir/_sysstat/sysstat_hist_avgmem_${F}.csv'
-    columns:        'ts,memcls,used_mem_avg,sum_nodes,sum_jobs'
-    header:         'date,memcls,used_mem_avg,sum_nodes,sum_jobs'
-    column_convert: 'ts->todate_1'
-    column_filemap: 'F:memcls'
-    format_str:      '%s,%d,%f,%d,%d'
-    format:         'csv'
-    renew:          'daily(12:07)'
-    column_ts:      'ts'
-    data_database:   loadmemstate
-    data_table:      loadmem_aggr_by_ts_avgmem_cls
-    stat_database:   jobreport_stat_loadmem
-    stat_table:      datasetstat
-
-- dataset:
     name: sysstat_hist_maxmem_csv
     set:        loadmem
     FORALL:     'F:VAR_hist_memcls'
     filepath:   '$outputdir/_sysstat/sysstat_hist_maxmem_${F}.csv'
-    columns:        'ts,memcls,used_mem_max,sum_nodes,sum_jobs'
-    header:         'date,memcls,used_mem_max,sum_nodes,sum_jobs'
+    columns:        'ts,memcls,n_1,n_2,n_3,n_4,n_5,n_6,n_7,n_8,n_9,n_10,n_12,n_16,n_24,n_32,n_48,n_64,n_96,n_128,n_192,n_256,n_384,n_512,n_768,n_1024,n_2048,n_4096,n_8192'
+    header:         'date,memcls,n_1,n_2,n_3,n_4,n_5,n_6,n_7,n_8,n_9,n_10,n_12,n_16,n_24,n_32,n_48,n_64,n_96,n_128,n_192,n_256,n_384,n_512,n_768,n_1024,n_2048,n_4096,n_8192'
     column_convert: 'ts->todate_1'
     column_filemap: 'F:memcls'
-    format_str:      '%s,%d,%f,%d,%d'
+    format_str:      '%s,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f'
     format:         'csv'
-    renew:          'daily(11:50)'
+    renew:          'always'
     column_ts:      'ts'
     data_database:   loadmemstate
-    data_table:      loadmem_aggr_by_ts_maxmem_cls
+    data_table:      loadmem_aggr_by_ts_maxmem_node_cls
     stat_database:   jobreport_stat_loadmem
     stat_table:      datasetstat
-
-# - dataset:
-#     name: sysstat_heatmap_maxmem_csv
-#     set:        loadmem
-#     filepath:   '$outputdir/_sysstat/sysstat_heatmap_maxmem.csv'
-#     columns:        'ts,memcls,used_mem_max,sum_nodes,sum_jobs'
-#     header:         'date,memcls,used_mem_max,sum_nodes,sum_jobs'
-#     column_convert: 'ts->todate_1'
-#     format_str:      '%s,%d,%f,%d,%d'
-#     format:         'csv'
-#     renew:          'daily(11:50)'
-#     column_ts:      'ts'
-#     data_database:   loadmemstate
-#     data_table:      loadmem_aggr_by_ts_maxmem_cls
-#     stat_database:   jobreport_stat_loadmem
-#     stat_table:      datasetstat
     
-# - dataset:
-#     name: sysstat_heatmap_maxmem_node_csv
-#     set:        loadmem
-#     filepath:   '$outputdir/_sysstat/sysstat_heatmap_maxmem_node.csv'
-#     sql_where:      'ts = (select max(ts) from loadmem_aggr_by_ts_maxmem_node_cls)'
-#     order:          'sizecls desc,memcls desc' 
-#     columns:        'sizecls,memcls,used_mem_max,nodes_avg,sum_nodes,sum_jobs'
-#     header:         'sizecls,memcls,used_mem_max,nodes_avg,sum_nodes,sum_jobs'
-#     format_str:      '%d,%d,%f,%f,%d,%d'
-#     format:         'csv'
-#     renew:          'daily(11:50)'
-#     column_ts:      'ts'
-#     data_database:   loadmemstate
-#     data_table:      loadmem_aggr_by_ts_maxmem_node_cls
-#     stat_database:   jobreport_stat_loadmem
-#     stat_table:      datasetstat
-
-- dataset:
-    name: sysstat_hist_size_csv
-    set:        loadmem
-    FORALL:     'F:VAR_hist_sizecls'
-    filepath:   '$outputdir/_sysstat/sysstat_hist_size_${F}.csv'
-    columns:        'ts,sizecls,nodes_avg,sum_nodes,sum_jobs'
-    header:         'date,sizecls,nodes_avg,sum_nodes,sum_jobs'
-    column_convert: 'ts->todate_1'
-    column_filemap: 'F:sizecls'
-    format_str:      '%s,%d,%f,%d,%d'
-    format:         'csv'
-    renew:          'daily(14:00)'
-    column_ts:      'ts'
-    data_database:   loadmemstate
-    data_table:      loadmem_aggr_by_ts_node_cls
-    stat_database:   jobreport_stat_loadmem
-    stat_table:      datasetstat
     
 - dataset:
     name: sysstatminmax_csv
@@ -248,7 +181,6 @@
     stat_database:   jobreport_stat_loadmem
     stat_table:      datasetstat
 
-  
 - dataset:
     name: sysstat_all_hourly_csv
     set:        loadmem
@@ -304,4 +236,3 @@
     data_table:      loadmem_by_ts_feat_status_last
     stat_database:   jobreport_stat_loadmem
     stat_table:      datasetstat
-

@@ -186,7 +186,7 @@ sub archive_data_by_limit {
       } else {
         printf STDERR ("%s  LLmonDB:    WARNING: unknown time expr '$subvalue'\n",$self->{INSTNAME});
       }
-      push(@whereparts,"($col<$maxvalue)");
+      push(@whereparts,"( ($col<$maxvalue) AND ($col>0) )");
     } else {
       printf STDERR ("%s  LLmonDB:    WARNING: unknown pattern '$expr'\n",$self->{INSTNAME});
     }
@@ -276,7 +276,8 @@ sub archive_process_data {
                     columns => $colsref,
                     where => $where,
                     execute => sub {
-                      print $fh join(",",@_),"\n";
+                      my @values=map {($_=~/,/) ? "\"".$_."\"" : $_ } @_;
+                      print $fh join(",",@values),"\n";
                     }
                     });
       $fh->close();

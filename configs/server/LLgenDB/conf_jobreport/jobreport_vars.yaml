@@ -199,18 +199,9 @@
     name: VAR_hist_memcls,
     type: 'hash_values',       
     database: loadmemstate,
-    table: loadmem_aggr_by_ts_avgmem_cls,
+    table: loadmem_heatmap_node_mem_cls,
     columns:  'memcls',
-    sql: "SELECT distinct memcls FROM loadmem_aggr_by_ts_avgmem_cls"
-  }
-  
-- {
-    name: VAR_hist_sizecls,
-    type: 'hash_values',       
-    database: loadmemstate,
-    table: loadmem_aggr_by_ts_node_cls,
-    columns:  'sizecls',
-    sql: "SELECT distinct sizecls FROM loadmem_aggr_by_ts_node_cls"
+    sql: "SELECT distinct memcls FROM loadmem_heatmap_node_mem_cls"
   }
 
 - {

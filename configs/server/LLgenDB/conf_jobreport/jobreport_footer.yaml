@@ -64,3 +64,9 @@
 #     filepath:      "$outputdir/ll/footer_corepattern.json"
 #     footerset:
 #        %include "./footers/jobreport_footer_corepattern.yaml"
+
+- footer:
+    name:          "memheatmap"
+    filepath:      "$outputdir/ll/footer_memheatmap.json"
+    footerset:
+       %include "./footers/jobreport_footer_memheatmap.yaml"

@@ -95,7 +95,7 @@ $msg=sprintf("%s starttime_ts %d\n",$instname,$starttime); logmsg($msg);
 
 $DB = LLmonDB->new($opt_config,$opt_dbdir,undef,$opt_verbose,$opt_systemname,$currentts);
 $DB->init();
-my $fileobj=LML_DBupdate_file->new($opt_verbose,,$opt_dbdir, $opt_demo);
+my $fileobj=LML_DBupdate_file->new($opt_verbose, $opt_dbdir, $opt_demo);
 my $endtime=time();
 $msg=sprintf("%s openDB                                          in %7.4fs (ts=%.5f,%.5f,l=0,nr=1)\n",$instname,$endtime-$starttime,$starttime,$endtime); logmsg($msg);
 my ($count_lml,$count_csv)=(0,0);
@@ -105,7 +105,7 @@ foreach my $filename (@ARGV) {
     $msg=sprintf("$instname ERROR: File $filename does not exist!\n"); logmsg($msg,\*STDERR);
     next;
   }
-  if($filename=~/\.csv$/) {
+  if($filename=~/\.csv(.xz)?$/) {
     $msg=$opt_verbose ? sprintf("$instname reading CSV file: $filename...\n") : ""; logmsg($msg);
     my $fstarttime=time();
     $fileobj->read_CSV($filename);

@@ -103,7 +103,7 @@ if ($opt_verbose) {
   printf("%s  tmpdir             = %s\n",$instname,$opt_tmpdir);
   printf("%s  archdir            = %s\n",$instname,$opt_archdir);
   printf("%s  journalonly        = %s\n",$instname,$opt_journalonly);
-  printf("%s  journaldir         = %s\n",$instname,$opt_journaldir); 
+  printf("%s  journaldir         = %s\n",$instname,$opt_journaldir) if(defined($opt_journaldir));; 
   printf("%s  systemname         = %s\n",$instname,$opt_systemname);
   printf("%s  opt_currentts      = %s\n",$instname,$opt_currentts) if(defined($opt_currentts));
   printf("%s  opt_currenttsfile  = %s\n",$instname,$opt_currenttsfile) if(defined($opt_currenttsfile));

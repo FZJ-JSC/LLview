@@ -130,8 +130,8 @@ sub process_footersettrace {
   my ($traceref,$varsetref)=@_;
   my ($ds);
 
-  
-  foreach my $name ("xcol", "ycol", "name", "yaxis", "type", "color", "factor", "map") {
+  # Parse all keys for plotly graphs
+  foreach my $name (keys(%{$traceref})) {
     $ds->{$name}=$self->apply_varset($traceref->{$name},$varsetref) if(exists($traceref->{$name}));
   }
 

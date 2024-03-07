@@ -47,7 +47,6 @@ nodeinfo:
     gpus: 'gpus'
     classes: 'classes'
     CurrentWatts: 'currentwatts'
-    AveWatts: 'avewatts'
 
 jobinfo:
   cmd: 'scontrol show job --detail --all'
