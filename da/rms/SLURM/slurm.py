@@ -17,7 +17,6 @@ from datetime import datetime
 import re
 import os
 import sys
-from pathlib import Path
 import math
 import csv
 from copy import deepcopy
@@ -651,7 +650,7 @@ class SlurmInfo:
     """
     self.log.info(f"Writing LML data to {filename}... ")
     # Creating folder if it does not exist
-    Path(filename).mkdir(parents=True, exist_ok=True) 
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     # Opening LML file
     with open(filename,"w") as file:
       # Writing initial XML preamble
