@@ -84,7 +84,8 @@
       cpu:  'used_mem_avg, used_mem_min, used_mem_max, load_avg, load_min, load_max, usage_avg, usage_min, usage_max,
              used_cores_min,used_cores_avg,used_cores_max,
              used_cores_phys_min,used_cores_phys_avg,used_cores_phys_max,
-             used_cores_logic_min,used_cores_logic_avg,used_cores_logic_max'
+             used_cores_logic_min,used_cores_logic_avg,used_cores_logic_max,
+             currentwatts_avg,currentwatts_min,currentwatts_max'
       gpu:  'gpu_usage_avg,gpu_memu_avg,gpu_memu_max,gpulist,gpuspec,gpu_sclk_max,gpu_pu_avg,gpu_pu_max,
              gpu_clk_max,gpu_temp_avg,gpu_temp_max,gpu_memur_avg,
              gpu_dcgm_up_avg,gpu_dcgm_up_max'

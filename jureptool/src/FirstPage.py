@@ -288,8 +288,8 @@ def FirstPage(pdf,data,config,df,time_range,page_num,tocentries,num_cpus,num_gpu
       page.ax1.tick_params(axis='y', colors=config['appearance']['colors_cmap'][7])
       
       # Getting plotting curves
-      cols = [config['plots']['x']['header'],config['plots']['CPU']['Usage']['header'] if 'Usage' in config['plots']['CPU'] else config['plots']['CPU']['Load']['header']]
-      df_cpu = df['CPU'][cols].groupby([config['plots']['x']['header']], as_index=False).mean()
+      cols = [config['plots']['x']['header'],config['plots']['Node']['Usage']['header'] if 'Usage' in config['plots']['Node'] else config['plots']['Node']['Load']['header']]
+      df_cpu = df['Node'][cols].groupby([config['plots']['x']['header']], as_index=False).mean()
       df_cpu['datetime'] = pd.to_datetime(df_cpu['ts']+config['appearance']['timezonegap'],unit='s')
       x1 = list(df_cpu['datetime'])
       y1 = list(df_cpu[cols[1]])

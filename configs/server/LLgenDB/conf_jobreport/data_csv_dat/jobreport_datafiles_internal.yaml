@@ -16,7 +16,7 @@
     columns:        'ts,nrows'
     # sqldebug:       'yes'     
     header:         'date,nrows'
-    column_convert: 'ts->todate_1'
+    column_convert: 'ts->todate_1,nrows->null_if_empty'
     column_filemap: 'T:tabpath'
     format_str:      '%s,%d'
     column_ts:      'ts'

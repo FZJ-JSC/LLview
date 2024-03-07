@@ -56,6 +56,7 @@ datafiles:
  %include "./data_csv_dat/jobreport_datafiles_projstat.yaml"
  %include "./data_csv_dat/jobreport_datafiles_jumonc.yaml"
 #  %include "./data_csv_dat/jobreport_datafiles_export.yaml"
+#  %include "./data_csv_dat/jobreport_datafiles_export_for_offline.yaml"
 
 datamngt:
  - action:

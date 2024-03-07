@@ -62,7 +62,7 @@ def dict_to_lml(csvdict: dict, xmlfile: str):
         # if ts:
         #   file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"ts\"',ts))
 
-      file.write(f"{4*' '}</info>\n")
+        file.write(f"{4*' '}</info>\n")
 
     file.write(f"{2*' '}</information>\n" )
     file.write("</lml:lgui>\n" )

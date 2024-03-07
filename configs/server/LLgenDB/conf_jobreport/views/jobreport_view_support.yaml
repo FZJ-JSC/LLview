@@ -15,12 +15,19 @@
 - view:
     name:          "support"
     filepath:      "$outputdir/ll/support.json"
-    # title:         "<strong>$systemname</strong>: Support view"
-    image:         "img/$systemname.jpg"
-    logo:          "img/llview_logo_white.svg"
-    home:          "login.php"
     info:          "data/_info/info.json"
+    # Logo on header (right)
+    logo:          "img/llview_logo_white.svg"
+    # Image to be used on header (left)
+    image:         "img/$systemname.jpg"
+    # Link when clicking on image
+    home:          "login.php"
+    # Field to use to search on other pages (e.g. History) - needs mapjobid_to_day
     search_field:  "jobid"
+    # System selection on header (display name: 'subfolder')
+    # systems: 
+    #   SYSTEM1: 'system1'
+    #   SYSTEM2: 'system2'
     data:
         system:     "$systemname"
         permission: "support"
@@ -107,7 +114,17 @@
     #               ref: [ table ]
     #               data:
     #                 default_columns: [ pattern ]
-
+              - page:
+                  name: "Memory Heatmap"
+                  description: "Heatmaps showing the memory and node usage in different categories. Selecting each 'Memory Class' row, the footer presents time-series of each job class for the last three days."
+                  section: "memheatmap"
+                  template: "/data/LLtemplates/memheatmap"
+                  context: "data/_sysstat/memheatmap.json"
+                  default: false
+                  footer_graph_config: "/data/ll/footer_memheatmap.json"
+                  ref: [ table ]
+                  data:
+                    default_columns: [ heatmap ]
             #   - page:
             #       name: "System Test"
             #       section: "systest"

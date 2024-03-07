@@ -436,6 +436,7 @@ sub update_table {
   }
   
   foreach my $up_table (@trig_tables) {
+    next if($up_table eq $table); # avoid infinite loop if a table has input + triggered update methods
     $self->update_table($dbobj,$db,$up_table,$LMLminlastinsert,$LMLmaxlastinsert);
   }
   

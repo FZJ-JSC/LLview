@@ -45,11 +45,11 @@ y:
 #     lim: [0,100]
 #     description: 'Average logical core usage along the runtime of the job (max. 100%)'
 
-CPU:
+Node:
   _file_header: 'loadmemnodefile'
   _datapoints_header: 'ld_ndps'
   _max_graph_per_page: 3
-  # Usage:
+  # CPU Usage:
   #   header: 'usage'
   #   type: 'float16'
   #   unit: '%'
@@ -94,6 +94,15 @@ CPU:
     cmap: 'cmc.hawaii'
     lim: [0,'mem']
     description: 'Amount of allocated RAM memory (in GiB) in the node'
+  Current Power:
+    header: 'currentwatts'
+    type: 'float32'
+    unit: 'W'
+    log: False
+    note: ''
+    cmap: 'cmc.hawaii'
+    lim: False
+    description: 'Current power (in Watts) used in the whole node'
 GPU:
   _file_header: 'gpunodefile'
   _datapoints_header: 'gpu_ndps'
@@ -182,7 +191,7 @@ GPU:
     lim: [0,15] 
     skip_when_all: 0
     description: 'The current performance state for the GPU. States range from P0 (maximum performance) to P12 (minimum performance)'
-  PCIE TX:
+  PCIe TX:
     header: 'gpu_pcie_tx'  
     type: 'float32'  
     unit: 'GiB/s'  
@@ -190,8 +199,8 @@ GPU:
     note: ''  
     cmap: 'cmc.hawaii'
     lim: False
-    description: 'The GPU-centric transmission throughput across the PCIe bus (in GiB/s) over the past 20ms'
-  PCIE RX:
+    description: 'The rate of data transmitted over the PCIe bus in GiB/s'
+  PCIe RX:
     header: 'gpu_pcie_rx'  
     type: 'float32'  
     unit: 'GiB/s'  
@@ -199,7 +208,25 @@ GPU:
     note: ''  
     cmap: 'cmc.hawaii'
     lim: False
-    description: 'The GPU-centric receive throughput across the PCIe bus (in GiB/s) over the past 20ms'
+    description: 'The rate of data received over the PCIe bus in GiB/s'
+  NVLink TX:
+    header: 'gpu_nvlink_tx'
+    type: 'float32'
+    unit: 'GiB/s'
+    log: False
+    note: ''
+    cmap: 'cmc.hawaii'
+    lim: False
+    description: 'The rate of data transmitted over NVLink in in GiB/s'
+  NVLink RX:
+    header: 'gpu_nvlink_rx'
+    type: 'float32'
+    unit: 'GiB/s'
+    log: False
+    note: ''
+    cmap: 'cmc.hawaii'
+    lim: False
+    description: 'The rate of data received over NVLink in GiB/s'
 
 File System \$HOME:
   _file_header: 'fshomenodefile'  

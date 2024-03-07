@@ -107,11 +107,11 @@ sub solve_datasets {
             $ds->{$shortfile}->{checksum}=0;
             $ds->{$shortfile}->{ukey}=$ukey;
 
-            printf("%s[%05d] not_in_DB: [%d,%d,%d,%d] %s %s\n",$self->{INSTNAME},$cnt_not_in_DB,
+            printf("%s[%05d] not_in_DB: [%s,%s,%s,%s] %s %s\n",$self->{INSTNAME},$cnt_not_in_DB,
                     $ds->{$shortfile}->{status},
                     $ds->{$shortfile}->{lastts_saved},
-                    $ds->{$shortfile}->{checksum},
-                    $ds->{$shortfile}->{ukey},
+                    (defined($ds->{$shortfile}->{checksum})?$ds->{$shortfile}->{checksum}:"?"),
+                    (defined($ds->{$shortfile}->{ukey})?$ds->{$shortfile}->{ukey}:"?"),
                     &sec_to_date($ds->{$shortfile}->{lastts_saved}),
                     $shortfile);
           }

@@ -123,6 +123,7 @@ sub init_convert_functions {
                                 "onlygtnull" => \&onlygtnull,
                                 "as_array"   => \&as_array,
                                 "corepattern" => \&corepattern,
+                                "null_if_empty" => \&null_if_empty
                               };
   return();
 }
@@ -484,13 +485,16 @@ sub wrapstr {
 }
 
 sub corepattern {
-  my ($text,$self)=@_;
-  return($text) if(!$text);
-  my $lh=int(length($text)/2);
-  my $newtext=substr($text,0,$lh)."   ".substr($text,$lh);
-  $newtext=~s/0/_/gs;
-  $newtext=~s/1/X/gs;
-  return($newtext);
+    my ($text,$self)=@_;
+    return($text) if(!$text);
+    my $lh=int(length($text)/2);
+    my @first  = split(//, substr($text,0,$lh));
+    my @second = split(//, substr($text,$lh));
+    my $newtext="";
+    for(my $i=0;$i<=$#first;$i++) {
+	$newtext.="&#xc".$first[$i].$second[$i].";";
+    }
+    return($newtext);
 }
 
 sub hhmmss {
@@ -599,6 +603,17 @@ sub as_array {
     @list = split(/\s*[,; ]\s*/,$string);
   } 
   return(\@list);
+}
+
+sub null_if_empty {
+  my ($number)=@_;
+  if(!defined($number)) {
+    return(0);
+  } elsif($number eq "" ) {
+    return(0);
+  } else {
+    return($number);
+  }
 }
 
 sub systemname {

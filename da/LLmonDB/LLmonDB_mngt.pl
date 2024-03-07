@@ -168,7 +168,28 @@ if($operation=~/checkDB/i) {
   $starttime=time();
   $DB->close();
   printf("    [close DB file in %7.5ss]\n",time()-$starttime);
+} elsif($operation=~/graphs/i) {
+  printf("OPERATION:    graphs\n");
+  printf("     config:  $opt_config\n");
+  printf("     verbose: $opt_verbose\n");
+  printf("     outfile: $opt_outfile\n");
 
+  my $DB;
+  $starttime=time();
+  $DB  = LLmonDB->new($opt_config,$opt_dbdir,undef,$opt_verbose);
+  printf("    [create DB file in %7.5ss]\n",time()-$starttime);
+
+  $starttime=time();
+  $DB->init();
+  printf("    [init DB file in %7.5ss]\n",time()-$starttime);
+
+  $starttime=time();
+  $DB->get_graphsDB($opt_outfile);
+  printf("    [graphs DB file in %7.5ss]\n",time()-$starttime);
+
+  $starttime=time();
+  $DB->close();
+  printf("    [close DB file in %7.5ss]\n",time()-$starttime);
 } else {
   usage($0);
 }

@@ -2,10 +2,10 @@
 
 The public version of LLview can be downloaded from [GitHub](https://github.com/FZJ-JSC/LLview).
 It currently contains a simplified workload including all the necessary
-scripts and adapters for a basic functioning. This version does not include:
+scripts and plugins for a basic functioning. This version does not include:
 
 - Client (Live view)
-- Adapters other than Slurm
+- Plugins other than Slurm
 - Logger (module that collects LLview's access metrics)
 
 These features will be added in future updates.

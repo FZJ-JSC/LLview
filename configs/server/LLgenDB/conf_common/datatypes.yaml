@@ -130,6 +130,8 @@ llongstr_t:
   sql: VARCHAR(2048) NOT NULL DEFAULT '-'
 extralongstr_t:
   sql: VARCHAR(100000) NOT NULL DEFAULT '-'
+extralongstr_n_t:
+  sql: VARCHAR(100000) DEFAULT '-'
 score_t:
   sql: FLOAT(16) NOT NULL DEFAULT 0
 flag_t:

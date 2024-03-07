@@ -7,6 +7,7 @@
 #
 # Contributors:
 #    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
 
 loadmemstate:
   tables:
@@ -37,31 +38,31 @@ loadmemstate:
             - loadmem_by_jobid_nodeid_ts
             - loadmem_aggr_by_jobid_ts
             - loadmem_aggr_by_jobid
-            - loadmem_aggr_by_ts_avgmem_node_cls
-            - loadmem_aggr_by_ts_avgmem_cls
             - loadmem_aggr_by_ts_node_cls
             - loadmem_aggr_by_ts_maxmem_node_cls
             - loadmem_aggr_by_ts_maxmem_cls
+            - loadmem_heatmap_node_mem_cls
           archive:
             limit: max(ts)-25h
           index: nodeid,ts
         columns: 
-          - { name: nodeid,      type: nodeid_t,   LML_from: id,          LML_default: 'unknown' }
-          - { name: ts,          type: ts_t,       LML_from: ts,          LML_default: -1,  LML_minlastinsert: mintsinserted }
-          - { name: status,      type: status_t,   LML_from: status,      LML_default: 'U' }
-          - { name: substatus,   type: status_t,   LML_from: substatus,   LML_default: '-' }
-          - { name: feat,        type: feature_t,  LML_from: feat,        LML_default: 'U' }
-          - { name: istatus,     type: istatus_t,  LML_from: istatus,     LML_default: 9 }
-          - { name: load,        type: load_t,     LML_from: load,        LML_default: 0 }
-          - { name: usage,       type: usage_t,    LML_from: usage,       LML_default: 0 }
-          - { name: used_cores,       type: cores_t, LML_from: used_cores,       LML_default: 0 }
-          - { name: used_cores_phys,  type: cores_t, LML_from: used_cores_phys,  LML_default: 0 }
-          - { name: used_cores_logic, type: cores_t, LML_from: used_cores_logic, LML_default: 0 }
-          - { name: total_cores, type: cores_t,    LML_from: ncores,      LML_default: 0 }
-          - { name: total_mem,   type: mem_t,      LML_from: physmem,     LML_default: 0.0 }          # Memory in MiB
-          - { name: used_mem,    type: mem_t,      LML_from: memU,        LML_default: 0.0 }          # Memory in MiB
-          - { name: ngpus,       type: count_t,    LML_from: gpus,        LML_default: 0 }   
-          - { name: classes,     type: longstr_t,  LML_from: classes,     LML_default: '-' }   
+          - { name: nodeid,           type: nodeid_t,   LML_from: id,               LML_default: 'unknown' }
+          - { name: ts,               type: ts_t,       LML_from: ts,               LML_default: -1,  LML_minlastinsert: mintsinserted }
+          - { name: status,           type: status_t,   LML_from: status,           LML_default: 'U' }
+          - { name: substatus,        type: status_t,   LML_from: substatus,        LML_default: '-' }
+          - { name: feat,             type: feature_t,  LML_from: feat,             LML_default: 'U' }
+          - { name: istatus,          type: istatus_t,  LML_from: istatus,          LML_default: 9 }
+          - { name: load,             type: load_t,     LML_from: load,             LML_default: 0 }
+          - { name: usage,            type: usage_t,    LML_from: usage,            LML_default: 0 }
+          - { name: used_cores,       type: cores_t,    LML_from: used_cores,       LML_default: 0 }
+          - { name: used_cores_phys,  type: cores_t,    LML_from: used_cores_phys,  LML_default: 0 }
+          - { name: used_cores_logic, type: cores_t,    LML_from: used_cores_logic, LML_default: 0 }
+          - { name: total_cores,      type: cores_t,    LML_from: ncores,           LML_default: 0 }
+          - { name: total_mem,        type: mem_t,      LML_from: physmem,          LML_default: 0.0 }          # Memory in MiB
+          - { name: used_mem,         type: mem_t,      LML_from: memU,             LML_default: 0.0 }          # Memory in MiB
+          - { name: ngpus,            type: count_t,    LML_from: gpus,             LML_default: 0 }   
+          - { name: classes,          type: longstr_t,  LML_from: classes,          LML_default: '-' }   
+          - { name: currentwatts,     type: float_t,    LML_from: currentwatts,     LML_default: 0.0 }   
           
     #-------------------------------
     # tables, containing per ts info
@@ -83,7 +84,8 @@ loadmemstate:
                                       used_cores_logic_avg, used_cores_logic_min, used_cores_logic_max,
                                       total_cores_avg,
                                       used_mem_avg, used_mem_min, used_mem_max,
-                                      total_mem_avg)
+                                      total_mem_avg,
+                                      currentwatts_avg, currentwatts_min, currentwatts_max)
                                                   SELECT ts,
                                                          AVG(istatus),    MIN(istatus),    MAX(istatus),
                                                          AVG(load),       MIN(load),       MAX(load),
@@ -93,35 +95,39 @@ loadmemstate:
                                                          AVG(used_cores_logic), MIN(used_cores_logic), MAX(used_cores_logic),
                                                          AVG(total_cores),
                                                          AVG(used_mem),   MIN(used_mem),   MAX(used_mem),
-                                                         AVG(total_mem)
+                                                         AVG(total_mem),
+                                                         AVG(currentwatts), MIN(currentwatts), MAX(currentwatts)
                                                   FROM loadmem WHERE (ts >= mintsinserted)
                                                   GROUP by ts
         columns: 
-          - { name: ts,              type: ts_t }
-          - { name: istatus_avg,     type: istatus_t }
-          - { name: istatus_min,     type: istatus_t }
-          - { name: istatus_max,     type: istatus_t }
-          - { name: load_avg,        type: load_t }
-          - { name: load_min,        type: load_t }
-          - { name: load_max,        type: load_t }
-          - { name: usage_avg,       type: usage_t }
-          - { name: usage_min,       type: usage_t }
-          - { name: usage_max,       type: usage_t }
-          - { name: used_cores_avg,  type: cores_f_t }
-          - { name: used_cores_min,  type: cores_f_t }
-          - { name: used_cores_max,  type: cores_f_t }
+          - { name: ts,                   type: ts_t }
+          - { name: istatus_avg,          type: istatus_t }
+          - { name: istatus_min,          type: istatus_t }
+          - { name: istatus_max,          type: istatus_t }
+          - { name: load_avg,             type: load_t }
+          - { name: load_min,             type: load_t }
+          - { name: load_max,             type: load_t }
+          - { name: usage_avg,            type: usage_t }
+          - { name: usage_min,            type: usage_t }
+          - { name: usage_max,            type: usage_t }
+          - { name: used_cores_avg,       type: cores_f_t }
+          - { name: used_cores_min,       type: cores_f_t }
+          - { name: used_cores_max,       type: cores_f_t }
           - { name: used_cores_phys_avg,  type: cores_f_t }
           - { name: used_cores_phys_min,  type: cores_f_t }
           - { name: used_cores_phys_max,  type: cores_f_t }
           - { name: used_cores_logic_avg, type: cores_f_t }
           - { name: used_cores_logic_min, type: cores_f_t }
           - { name: used_cores_logic_max, type: cores_f_t }
-          - { name: total_cores_avg,  type: cores_f_t }
-          - { name: used_mem_avg,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_min,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_max,    type: mem_f_t }          # Memory in MiB
-          - { name: total_mem_avg,   type: mem_f_t }          # Memory in MiB
-          
+          - { name: total_cores_avg,      type: cores_f_t }
+          - { name: used_mem_avg,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_min,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_max,         type: mem_f_t }          # Memory in MiB
+          - { name: total_mem_avg,        type: mem_f_t }          # Memory in MiB
+          - { name: currentwatts_avg,     type: float_t }   
+          - { name: currentwatts_min,     type: float_t }   
+          - { name: currentwatts_max,     type: float_t }   
+
     %include "loadmem_status.yaml"       
           
     #-----------------------------------
@@ -146,7 +152,8 @@ loadmemstate:
                                         used_cores_phys_avg, used_cores_phys_min, used_cores_phys_max,
                                         used_cores_logic_avg, used_cores_logic_min, used_cores_logic_max,
                                         total_cores_avg, used_mem_avg, used_mem_min, used_mem_max,
-                                        total_mem_avg)
+                                        total_mem_avg,
+                                        currentwatts_avg, currentwatts_min, currentwatts_max)
                                                    SELECT nodeid,
                                                            AVG(istatus),    MIN(istatus),    MAX(istatus),
                                                            AVG(load),       MIN(load),       MAX(load),
@@ -156,42 +163,44 @@ loadmemstate:
                                                            AVG(used_cores_logic), MIN(used_cores_logic), MAX(used_cores_logic),
                                                            AVG(total_cores),
                                                            AVG(used_mem),   MIN(used_mem),   MAX(used_mem),
-                                                           MAX(total_mem)
+                                                           MAX(total_mem),
+                                                           AVG(currentwatts), MIN(currentwatts), MAX(currentwatts)
                                                    FROM loadmem 
                                                    WHERE nodeid IN (
                                                          SELECT nodeid FROM nodeinfo, node_update_status
                                                          WHERE nid%update_step_max=update_step and step_id=1
                                                          )
                                                    GROUP by nodeid
-
         columns: 
-          - { name: nodeid,          type: nodeid_t }
-          - { name: istatus_avg,     type: istatus_t }
-          - { name: istatus_min,     type: istatus_t }
-          - { name: istatus_max,     type: istatus_t }
-          - { name: load_avg,        type: load_t }
-          - { name: load_min,        type: load_t }
-          - { name: load_max,        type: load_t }
-          - { name: usage_avg,       type: usage_t }
-          - { name: usage_min,       type: usage_t }
-          - { name: usage_max,       type: usage_t }
-          - { name: used_cores_avg,  type: cores_f_t }
-          - { name: used_cores_min,  type: cores_f_t }
-          - { name: used_cores_max,  type: cores_f_t }
+          - { name: nodeid,               type: nodeid_t }
+          - { name: istatus_avg,          type: istatus_t }
+          - { name: istatus_min,          type: istatus_t }
+          - { name: istatus_max,          type: istatus_t }
+          - { name: load_avg,             type: load_t }
+          - { name: load_min,             type: load_t }
+          - { name: load_max,             type: load_t }
+          - { name: usage_avg,            type: usage_t }
+          - { name: usage_min,            type: usage_t }
+          - { name: usage_max,            type: usage_t }
+          - { name: used_cores_avg,       type: cores_f_t }
+          - { name: used_cores_min,       type: cores_f_t }
+          - { name: used_cores_max,       type: cores_f_t }
           - { name: used_cores_phys_avg,  type: cores_f_t }
           - { name: used_cores_phys_min,  type: cores_f_t }
           - { name: used_cores_phys_max,  type: cores_f_t }
           - { name: used_cores_logic_avg, type: cores_f_t }
           - { name: used_cores_logic_min, type: cores_f_t }
           - { name: used_cores_logic_max, type: cores_f_t }
-          - { name: total_cores_avg, type: cores_f_t }
-          - { name: used_mem_avg,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_min,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_max,    type: mem_f_t }          # Memory in MiB
-          - { name: total_mem_avg,   type: mem_f_t }          # Memory in MiB
+          - { name: total_cores_avg,      type: cores_f_t }
+          - { name: used_mem_avg,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_min,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_max,         type: mem_f_t }          # Memory in MiB
+          - { name: total_mem_avg,        type: mem_f_t }          # Memory in MiB
+          - { name: currentwatts_avg,     type: float_t }   
+          - { name: currentwatts_min,     type: float_t }   
+          - { name: currentwatts_max,     type: float_t }   
 
 
-          
     #----------------------------------
     # tables, containing per jobid info
     #----------------------------------
@@ -204,11 +213,11 @@ loadmemstate:
               vars: mintsinserted
               sql: DELETE FROM loadmem_by_jobid_nodeid_ts WHERE (ts >= mintsinserted);
                    INSERT INTO loadmem_by_jobid_nodeid_ts
-                              (jobid,ts,nodeid,istatus,load,usage,used_cores,used_cores_phys,used_cores_logic,total_cores,used_mem,total_mem)
+                              (jobid,ts,nodeid,istatus,load,usage,used_cores,used_cores_phys,used_cores_logic,total_cores,used_mem,total_mem,currentwatts)
                               SELECT jnt.jobid, ld.ts, ld.nodeid,
                                      ld.istatus, ld.load, ld.usage, ld.used_cores, ld.used_cores_phys,
                                      ld.used_cores_logic, ld.total_cores,
-                                     ld.used_mem, ld.total_mem
+                                     ld.used_mem, ld.total_mem, ld.currentwatts
                                FROM loadmem_jobmap_by_nd_ts jnt,
                                     loadmem ld
                                WHERE  (ld.ts >= mintsinserted)
@@ -216,19 +225,20 @@ loadmemstate:
           archive:
             limit: max(ts)-25h
         columns: 
-          - { name: jobid,       type: jobid_t }
-          - { name: ts,          type: ts_t }
-          - { name: nodeid,      type: nodeid_t }
-          - { name: istatus,     type: istatus_t }
-          - { name: load,        type: load_t }
-          - { name: usage,       type: load_t }
-          - { name: used_cores,  type: cores_t }
+          - { name: jobid,            type: jobid_t }
+          - { name: ts,               type: ts_t }
+          - { name: nodeid,           type: nodeid_t }
+          - { name: istatus,          type: istatus_t }
+          - { name: load,             type: load_t }
+          - { name: usage,            type: load_t }
+          - { name: used_cores,       type: cores_t }
           - { name: used_cores_phys,  type: cores_t }
           - { name: used_cores_logic, type: cores_t }
-          - { name: total_cores, type: cores_t }
-          - { name: used_mem,    type: mem_t }          # Memory in MiB
-          - { name: total_mem,   type: mem_t }          # Memory in MiB
-          
+          - { name: total_cores,      type: cores_t }
+          - { name: used_mem,         type: mem_t }          # Memory in MiB
+          - { name: total_mem,        type: mem_t }          # Memory in MiB
+          - { name: currentwatts,     type: float_t }   
+
     - table:
         name: loadmem_aggr_by_jobid_ts
         options:
@@ -244,7 +254,9 @@ loadmemstate:
                           used_cores_phys_avg, used_cores_phys_min, used_cores_phys_max,
                           used_cores_logic_avg, used_cores_logic_min, used_cores_logic_max,
                           total_cores_avg, used_mem_avg, used_mem_min, used_mem_max,
-                          total_mem_avg, numnodes )
+                          total_mem_avg, 
+                          currentwatts_avg, currentwatts_min, currentwatts_max,
+                          numnodes )
                         SELECT jobid,
                                ts,
                                AVG(istatus),     MIN(istatus),    MAX(istatus),
@@ -255,7 +267,9 @@ loadmemstate:
                                AVG(used_cores_logic), MIN(used_cores_logic), MAX(used_cores_logic),
                                AVG(total_cores),
                                AVG(used_mem),    MIN(used_mem),   MAX(used_mem),
-                               AVG(total_mem),   COUNT(nodeid)
+                               AVG(total_mem),   
+                               AVG(currentwatts), MIN(currentwatts), MAX(currentwatts),
+                               COUNT(nodeid)
                                FROM loadmem_by_jobid_nodeid_ts
                                WHERE (ts >= mintsinserted)
                                GROUP by jobid,ts;
@@ -263,32 +277,35 @@ loadmemstate:
             limit: max(ts)-25h
 #          index: jobid,ts
         columns: 
-          - { name: jobid,       type: jobid_t }
-          - { name: ts,          type: ts_t    }
-          - { name: istatus_avg,     type: istatus_t }
-          - { name: istatus_min,     type: istatus_t }
-          - { name: istatus_max,     type: istatus_t }
-          - { name: load_avg,        type: load_t }
-          - { name: load_min,        type: load_t }
-          - { name: load_max,        type: load_t }
-          - { name: usage_avg,       type: usage_t }
-          - { name: usage_min,       type: usage_t }
-          - { name: usage_max,       type: usage_t }
-          - { name: used_cores_avg,  type: cores_f_t }
-          - { name: used_cores_min,  type: cores_f_t }
-          - { name: used_cores_max,  type: cores_f_t }
+          - { name: jobid,                type: jobid_t }
+          - { name: ts,                   type: ts_t    }
+          - { name: istatus_avg,          type: istatus_t }
+          - { name: istatus_min,          type: istatus_t }
+          - { name: istatus_max,          type: istatus_t }
+          - { name: load_avg,             type: load_t }
+          - { name: load_min,             type: load_t }
+          - { name: load_max,             type: load_t }
+          - { name: usage_avg,            type: usage_t }
+          - { name: usage_min,            type: usage_t }
+          - { name: usage_max,            type: usage_t }
+          - { name: used_cores_avg,       type: cores_f_t }
+          - { name: used_cores_min,       type: cores_f_t }
+          - { name: used_cores_max,       type: cores_f_t }
           - { name: used_cores_phys_avg,  type: cores_f_t }
           - { name: used_cores_phys_min,  type: cores_f_t }
           - { name: used_cores_phys_max,  type: cores_f_t }
           - { name: used_cores_logic_avg, type: cores_f_t }
           - { name: used_cores_logic_min, type: cores_f_t }
           - { name: used_cores_logic_max, type: cores_f_t }
-          - { name: total_cores_avg, type: cores_f_t }
-          - { name: used_mem_avg,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_min,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_max,    type: mem_f_t }          # Memory in MiB
-          - { name: total_mem_avg,   type: mem_f_t }          # Memory in MiB
-          - { name: numnodes,        type: count_t    }
+          - { name: total_cores_avg,      type: cores_f_t }
+          - { name: used_mem_avg,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_min,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_max,         type: mem_f_t }          # Memory in MiB
+          - { name: total_mem_avg,        type: mem_f_t }          # Memory in MiB
+          - { name: currentwatts_avg,     type: float_t }   
+          - { name: currentwatts_min,     type: float_t }   
+          - { name: currentwatts_max,     type: float_t }   
+          - { name: numnodes,             type: count_t }
           
     - table:
         name: loadmem_aggr_by_jobid
@@ -305,7 +322,8 @@ loadmemstate:
                           used_cores_phys_avg, used_cores_phys_min, used_cores_phys_max,
                           used_cores_logic_avg, used_cores_logic_min, used_cores_logic_max,
                           total_cores_avg,
-                          used_mem_avg, used_mem_min, used_mem_max, total_mem_avg )
+                          used_mem_avg, used_mem_min, used_mem_max, total_mem_avg,
+                          currentwatts_avg, currentwatts_min, currentwatts_max)
                         SELECT jobid, COUNT(ts), MAX(ts),
                                AVG(istatus_avg),    MIN(istatus_min),    MAX(istatus_max),
                                AVG(load_avg),       MIN(load_min),       MAX(load_max),
@@ -315,7 +333,8 @@ loadmemstate:
                                AVG(used_cores_logic_avg), MIN(used_cores_logic_min), MAX(used_cores_logic_max),
                                MAX(total_cores_avg),
                                AVG(used_mem_avg),   MIN(used_mem_min),   MAX(used_mem_max),
-                               AVG(total_mem_avg)
+                               AVG(total_mem_avg),
+                               AVG(currentwatts_avg), MIN(currentwatts_min), MAX(currentwatts_max)
                                FROM loadmem_aggr_by_jobid_ts
                                WHERE jobid IN (  SELECT jobid from loadmem_current_jobid )
                                GROUP by jobid;
@@ -323,32 +342,35 @@ loadmemstate:
           archive:
             limit: max(ldlastts)-25h
         columns: 
-          - { name: jobid,           type: jobid_t }
-          - { name: ld_ndps,         type: count_t    }
-          - { name: ldlastts,        type: ts_t    }
-          - { name: istatus_avg,     type: istatus_t }
-          - { name: istatus_min,     type: istatus_t }
-          - { name: istatus_max,     type: istatus_t }
-          - { name: load_avg,        type: load_t }
-          - { name: load_min,        type: load_t }
-          - { name: load_max,        type: load_t }
-          - { name: usage_avg,       type: usage_t }
-          - { name: usage_min,       type: usage_t }
-          - { name: usage_max,       type: usage_t }
-          - { name: used_cores_avg,  type: cores_f_t }
-          - { name: used_cores_min,  type: cores_f_t }
-          - { name: used_cores_max,  type: cores_f_t }
+          - { name: jobid,                type: jobid_t }
+          - { name: ld_ndps,              type: count_t }
+          - { name: ldlastts,             type: ts_t    }
+          - { name: istatus_avg,          type: istatus_t }
+          - { name: istatus_min,          type: istatus_t }
+          - { name: istatus_max,          type: istatus_t }
+          - { name: load_avg,             type: load_t }
+          - { name: load_min,             type: load_t }
+          - { name: load_max,             type: load_t }
+          - { name: usage_avg,            type: usage_t }
+          - { name: usage_min,            type: usage_t }
+          - { name: usage_max,            type: usage_t }
+          - { name: used_cores_avg,       type: cores_f_t }
+          - { name: used_cores_min,       type: cores_f_t }
+          - { name: used_cores_max,       type: cores_f_t }
           - { name: used_cores_phys_avg,  type: cores_f_t }
           - { name: used_cores_phys_min,  type: cores_f_t }
           - { name: used_cores_phys_max,  type: cores_f_t }
           - { name: used_cores_logic_avg, type: cores_f_t }
           - { name: used_cores_logic_min, type: cores_f_t }
           - { name: used_cores_logic_max, type: cores_f_t }
-          - { name: total_cores_avg, type: cores_f_t }
-          - { name: used_mem_avg,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_min,    type: mem_f_t }          # Memory in MiB
-          - { name: used_mem_max,    type: mem_f_t }          # Memory in MiB
-          - { name: total_mem_avg,   type: mem_f_t }          # Memory in MiB
+          - { name: total_cores_avg,      type: cores_f_t }
+          - { name: used_mem_avg,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_min,         type: mem_f_t }          # Memory in MiB
+          - { name: used_mem_max,         type: mem_f_t }          # Memory in MiB
+          - { name: total_mem_avg,        type: mem_f_t }          # Memory in MiB
+          - { name: currentwatts_avg,     type: float_t }   
+          - { name: currentwatts_min,     type: float_t }   
+          - { name: currentwatts_max,     type: float_t }   
 
     %include "loadmem_statistics.yaml"
     
@@ -388,8 +410,4 @@ loadmemstate:
         columns: 
           - { name: jobid,    type: jobid_t }
 
-          
 #          select n.jobid, n.nodeid, l.ts, l.load * n.perc  from loadmem l, jobnodemap n, jobtsmap t where  (l.nodeid=n.nodeid) and (l.ts=t.ts) and (n.jobid=t.jobid);
-
-
-          

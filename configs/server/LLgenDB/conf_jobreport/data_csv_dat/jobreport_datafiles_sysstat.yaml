@@ -59,7 +59,6 @@
     column_ts:      'ts'
     format:         'csv'
     renew:          'always'
-#    time_aggr:      'span'
     data_database:   pcpucoresstate
     data_table:      pcpucores_time_aggr_coreid_span_avg
     stat_database:   jobreport_stat_sysstat
