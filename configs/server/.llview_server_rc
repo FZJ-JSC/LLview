@@ -45,4 +45,6 @@ export PATH="$LLVIEW_DATA/perl5/bin:$PATH"
 # Python definitions
 # module load Python
 # module load PyYAML
-export PYTHON="/usr/bin/python3.9"
+
+# It is important to set the PYTHON variable to use the version with the dependencies of JuRepTool satisfied
+export PYTHON="python3.9"

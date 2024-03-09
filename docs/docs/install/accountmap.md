@@ -2,7 +2,7 @@
 
 ## XML-format
 
-The file `accountmap.xml`, that is generated on the [`webservice` step of the `dbupdate` action](server_install.md#webservice-step), contains the information of the system accounts, their roles and which projects they should have access to.
+The file `accountmap.xml`, that is generated on the [`webservice` step of the `dbupdate` action](server_install.md#webservice-step), contains the information of the system accounts, their roles and which projects they should have access to. This information is used to generate the folders and `.htaccess` for the correct setting of permissions.
 
 A mockup example of this file is the following:
 ```

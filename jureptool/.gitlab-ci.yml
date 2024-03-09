@@ -66,7 +66,7 @@ run_tests:
   parallel:
     matrix:
       - TEST:
-        - coreusage    # Test for core-usage graphs
+        - manysteps    # Test job with many steps
         - userdefined  # Test for user-defined section (JuMonC)
         - errormessage # Test with error messages at the end
   tags:

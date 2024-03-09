@@ -26,8 +26,8 @@ include:
   - local: jureptool/.gitlab-ci.yml
     rules:
       - changes:
-        - jureptool/**/*                # all files under folder 'jureptool'
-        - configs/server/jureptool/**/* # all config files under folder 'configs/server/jureptool'
+        - jureptool/**/*         # all files under folder 'jureptool'
+        - configs/jureptool/**/* # all config files under folder 'configs/jureptool'
 
 stages:
   - build

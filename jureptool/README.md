@@ -61,7 +61,7 @@ optional arguments:
   --logprefix LOGPREFIX
                         Prefix for the daily log and errlog files
   --configfolder CONFIGFOLDER
-                        Folder with YAML configuration files (default: src/../../configs/server/jureptool)
+                        Folder with YAML configuration files (default: src/../../configs/jureptool)
   --outfolder OUTFOLDER
                         Folder to store temporary and demo PDFs
   --semail SEMAIL       Sender email to use in case of errors (default: None)
@@ -72,18 +72,18 @@ In the current version, the pdfs are (temporarily) written to a local `./results
 
 ### Dependencies:
 
-* matplotlib
+* matplotlib (>3.5.0)
 * numpy
 * pandas
 * pyyaml
 * plotly
 * cmcrameri
-* gzip (if compressed HTML are to be generated with option `--gzip`)
+* python compiled with gzip option (if compressed HTML are to be generated with option `--gzip`)
 
 ### After installation
 
 * Install dependencies: `pip install numpy pandas matplotlib plotly PyYAML cmcrameri`.
-* Check `${LLVIEW_CONF}/server/jureptool` for prefix to be included in plotlists.dat items
+* Check `${LLVIEW_CONF}/jureptool` for prefix to be included in plotlists.dat items
 * `mkdir ./results`
 * Add required fonts (Liberation Sans or Arial, Liberation Mono or Courier New). Liberation fonts are free and can be downloaded from https://github.com/liberationfonts/liberation-fonts/releases.
 Fonts can be installed with:

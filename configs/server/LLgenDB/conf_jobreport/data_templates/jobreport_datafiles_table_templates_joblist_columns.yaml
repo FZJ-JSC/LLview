@@ -11,160 +11,160 @@
 - { name: jobid,           title: "JobID" , desc: "Slurm JobID"    }
 
 # Job general info
-- { name: owner,           group: "info", sort: "S", title: "Owner", data_pre: "gen_project_user_link '/data/ll/user' account", render: "function ( data, type, row, meta ) { return gen_link('/data/ll/user', meta.settings.aoColumns[meta.col].title, row.account, data); }", 
+- { name: owner,           group: "Info/Reports", sort: "S", title: "Owner", data_pre: "gen_project_user_link '/data/ll/user' account", render: "function ( data, type, row, meta ) { return gen_link('/data/ll/user', meta.settings.aoColumns[meta.col].title, row.account, data); }", 
     desc: "User owner of the job",     format: "text-left" }
-- { name: account,         group: "info", sort: "S", title: "Project", data_pre: "gen_project_link '/data/ll/project'", render: "function ( data, type, row, meta ) { return gen_link('/data/ll/project', meta.settings.aoColumns[meta.col].title, data); }", 
+- { name: account,         group: "Info/Reports", sort: "S", title: "Project", data_pre: "gen_project_link '/data/ll/project'", render: "function ( data, type, row, meta ) { return gen_link('/data/ll/project', meta.settings.aoColumns[meta.col].title, data); }", 
     desc: "Budget used for job submission" ,       format: "text-left"}
-- { name: mentor,          group: "mentor", sort: "S", title: "Mentor", data_pre: "gen_mentor_link '/data/ll/mentor'", render: "function ( data, type, row, meta ) { return gen_link('/data/ll/mentor', meta.settings.aoColumns[meta.col].title, data); }", 
+- { name: mentor,          group: "Mentor", sort: "S", title: "Mentor", data_pre: "gen_mentor_link '/data/ll/mentor'", render: "function ( data, type, row, meta ) { return gen_link('/data/ll/mentor', meta.settings.aoColumns[meta.col].title, data); }", 
     desc: "Mentor of the project" ,       format: "text-left"}
-- { name: queue,           group: "info", sort: "S", title: "Queue",  desc: "Slurm partition",       format: "text-left" }
+- { name: queue,           group: "Info/Reports", sort: "S", title: "Queue",  desc: "Slurm partition",       format: "text-left" }
 
 # Job Slurm scheduling info
-- { name: starttime,       group: "sched",     sort: "D", title: "Start Date",        desc: "Start date of the job"  }
-- { name: ts,              group: "sched",     sort: "D", title: "Last Update",       desc: "Date of last update from scheduler or end time of job"  }
-- { name: endtime,         group: "sched_ext", sort: "D", title: "End Date (est)",    desc: "End date (or estimate) of the job"  }
-- { name: wall,            group: "sched_ext", sort: "N", title: "Walltime",          desc: "Requested walltime"  }
-- { name: runtime,         group: "sched",     sort: "N", title: "Runtime",           desc: "Overall runtime"  }
-- { name: numnodes,        group: "sched",     sort: "N", title: "#Nodes",            desc: "Number of nodes used by the job"  }
-- { name: nsteps,          group: "sched_ext", sort: "N", title: "#Steps",            desc: "Number of steps within the job"  }
-- { name: waittime,        group: "sched_ext", sort: "N", title: "Wait Time",         desc: "Wait time before job start (difference between start time and submit time)"  }
-- { name: resid,           group: "sched_ext", sort: "S", title: "Reservation",  format: "text-left", desc: "Reservation used by the job"  }
+- { name: starttime,       group: "Scheduler",     sort: "D", title: "Start Date",        desc: "Start date of the job"  }
+- { name: ts,              group: "Scheduler",     sort: "D", title: "Last Update",       desc: "Date of last update from scheduler or end time of job"  }
+- { name: endtime,         group: "Scheduler (Ext)", sort: "D", title: "End Date (est)",    desc: "End date (or estimate) of the job"  }
+- { name: wall,            group: "Scheduler (Ext)", sort: "N", title: "Walltime",          desc: "Requested walltime"  }
+- { name: runtime,         group: "Scheduler",     sort: "N", title: "Runtime",           desc: "Overall runtime"  }
+- { name: numnodes,        group: "Scheduler",     sort: "N", title: "#Nodes",            desc: "Number of nodes used by the job"  }
+- { name: nsteps,          group: "Scheduler (Ext)", sort: "N", title: "#Steps",            desc: "Number of steps within the job"  }
+- { name: waittime,        group: "Scheduler (Ext)", sort: "N", title: "Wait Time",         desc: "Wait time before job start (difference between start time and submit time)"  }
+- { name: resid,           group: "Scheduler (Ext)", sort: "S", title: "Reservation",  format: "text-left", desc: "Reservation used by the job"  }
     
 # Job timings
-- { name: firstts,         group: "timings", sort: "S", title: "&Delta;t (first)",  desc: "Time passed since the first job update" }
-- { name: lastts,          group: "timings", sort: "S", title: "&Delta;t (last)",   desc: "Time passed since the last job update" }
+- { name: firstts,         group: "Timings", sort: "S", title: "&Delta;t (first)",  desc: "Time passed since the first job update" }
+- { name: lastts,          group: "Timings", sort: "S", title: "&Delta;t (last)",   desc: "Time passed since the last job update" }
 
 # CORE Usage                    
-# - { name: usage_avg, sort: "N",  group: "coreusage", title: "Usage", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
+# - { name: usage_avg, sort: "N",  group: "Core Usage", title: "Usage", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
 #                     bg_color_map: "cpuscore", 
 #                     desc: "Average CPU usage (max 200%), 1-min usage average among all job nodes and over time"  }
-# - { name: used_cores_avg, sort: "N", group: "coreusage", title: "#Cores", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
+# - { name: used_cores_avg, sort: "N", group: "Core Usage", title: "#Cores", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
 #                     desc: "Number of cores with usage > 25%, 1-min average among all job nodes and over time"  }
-# - { name: used_cores_phys_avg, sort: "N", group: "coreusage", title: "#PhysCores", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
+# - { name: used_cores_phys_avg, sort: "N", group: "Core Usage", title: "#PhysCores", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
 #                     desc: "Number of physical cores with usage > 25%, 1-min average among all job nodes and over time" }
-# - { name: used_cores_logic_avg, sort: "N", group: "coreusage", title: "#LogicCores", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
+# - { name: used_cores_logic_avg, sort: "N", group: "Core Usage", title: "#LogicCores", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
 #                     desc: "Number of logical cores with usage > 25%, 1-min average among all job nodes and over time" }
 
 # Load/Memory
-- { name: load_avg, sort: "N",  group: "loadmem", title: "Load", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }", createdCell: "function ( cell, cellData, rowData ) { return cell_color(cell,rowData.ldscore); }",
+- { name: load_avg, sort: "N",  group: "Load/Memory", title: "Load", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }", createdCell: "function ( cell, cellData, rowData ) { return cell_color(cell,rowData.ldscore); }",
                     bg_color_map: "ldscore", 
                     desc: "CPU load, 1-min average among all job nodes and over time"  }
-- { name: used_mem_max, sort: "N",  group: "loadmem", title: "MaxMem", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
+- { name: used_mem_max, sort: "N",  group: "Load/Memory", title: "MaxMem", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
                     desc: "Maximum used memory by the job across all job nodes and over time (GiB)"  }
                     
 # GPU
 # - { name: gpu_usage_avg, sort: "N",  group: "GPU", title: "GPUUsage", data_format: "round_number_or_null", format: "text-right", bg_color_map: "gpu_usage_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average GPU usage (percent of time one or more kernels was executing)"  }
-# - { name: gpu_usage_max, sort: "N",  group: "GPU_ext", title: "GPUMaxUsage", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_usage_max, sort: "N",  group: "GPU (Ext)", title: "GPUMaxUsage", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Max. GPU usage (percent of time one or more kernels was executing)"  }
-# - { name: gpu_memu_avg, sort: "N",  group: "GPU_ext", title: "GPUAvgMem", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_memu_avg, sort: "N",  group: "GPU (Ext)", title: "GPUAvgMem", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average used GPU memory by the job across all job GPUs and over time (GiB)"  }
 # - { name: gpu_memu_max, sort: "N",  group: "GPU", title: "GPUMaxMem", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum used GPU memory by the job across all job GPUs and over time (GiB)"  }
-# - { name: gpu_memur_avg, sort: "N",  group: "GPU_ext",    title: "GPUAvgMemRate", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_memur_avg, sort: "N",  group: "GPU (Ext)",    title: "GPUAvgMemRate", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average GPU memory usage rate (percent of time global device memory was beeing read/written)"  }
 # - { name: gpu_pu_avg, sort: "N",  group: "GPU",       title: "GPUAvgPower", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average GPU power usage (W)"  }
-# - { name: gpu_pu_max, sort: "N",  group: "GPU_ext",   title: "GPUMaxPower", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_pu_max, sort: "N",  group: "GPU (Ext)",   title: "GPUMaxPower", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum GPU power usage (W)"  }
-# - { name: gpu_temp_avg, sort: "N",  group: "GPU_ext",     title: "GPUAvgTemp.", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_temp_avg, sort: "N",  group: "GPU (Ext)",     title: "GPUAvgTemp.", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average GPU temperature (&deg;C)"  }
-# - { name: gpu_temp_max, sort: "N",  group: "GPU_ext", title: "GPUMaxTemp.", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_temp_max, sort: "N",  group: "GPU (Ext)", title: "GPUMaxTemp.", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum GPU temperature (&deg;C)"  }
-# - { name: gpu_sclk_avg, sort: "N",  group: "GPU_ext",     title: "GPUAvgFreq", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_sclk_avg, sort: "N",  group: "GPU (Ext)",     title: "GPUAvgFreq", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average GPU streaming clock frequency (MHz)"  }
-# - { name: gpu_sclk_max, sort: "N",  group: "GPU_ext", title: "GPUMaxFreq", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_sclk_max, sort: "N",  group: "GPU (Ext)", title: "GPUMaxFreq", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum GPU streaming clock frequency (MHz)"  }
-# - { name: gpu_clkr_avg, sort: "N",  group: "GPU_ext",     title: "GPUAvgClkr", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_clkr_avg, sort: "N",  group: "GPU (Ext)",     title: "GPUAvgClkr", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average GPU clock throttle reason (1:GpuIdle, 2:AppClkSet, 4:SwPwrCap, 8:HWSlowDown, 16:SyncBoost, 32:SwThermSlDwn, 64:HwThermSlDwn, 128:PwrBrakeSlDw)"  }
 # - { name: gpu_clkr_max, sort: "N",  group: "GPU", title: "GPUMaxClkr", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum GPU clock throttle reason (1:GpuIdle, 2:AppClkSet, 4:SwPwrCap, 8:HWSlowDown, 16:SyncBoost, 32:SwThermSlDwn, 64:HwThermSlDwn, 128:PwrBrakeSlDw)"  }
-# - { name: gpu_pcie_tx_avg, sort: "N",  group: "GPU_ext",   title: "GPUAvgPCIeTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_pcie_tx_avg, sort: "N",  group: "GPU (Ext)",   title: "GPUAvgPCIeTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average transmission rate over PCIe"  }
-# - { name: gpu_pcie_tx_max, sort: "N",  group: "GPU_ext",   title: "GPUMaxPCIeTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_pcie_tx_max, sort: "N",  group: "GPU (Ext)",   title: "GPUMaxPCIeTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum transmission rate over PCIe"  }
-# - { name: gpu_pcie_rx_avg, sort: "N",  group: "GPU_ext",   title: "GPUAvgPCIeRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_pcie_rx_avg, sort: "N",  group: "GPU (Ext)",   title: "GPUAvgPCIeRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average reception rate over PCIe"  }
-# - { name: gpu_pcie_rx_max, sort: "N",  group: "GPU_ext",   title: "GPUMaxPCIeRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_pcie_rx_max, sort: "N",  group: "GPU (Ext)",   title: "GPUMaxPCIeRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum reception rate over PCIe"  }
-# - { name: gpu_nvlink_tx_avg, sort: "N",  group: "GPU_ext",   title: "GPUAvgNVLTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_nvlink_tx_avg, sort: "N",  group: "GPU (Ext)",   title: "GPUAvgNVLTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average transmission rate over NVlink"  }
-# - { name: gpu_nvlink_tx_max, sort: "N",  group: "GPU_ext",   title: "GPUMaxNVLTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_nvlink_tx_max, sort: "N",  group: "GPU (Ext)",   title: "GPUMaxNVLTX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum transmission rate over NVlink"  }
-# - { name: gpu_nvlink_rx_avg, sort: "N",  group: "GPU_ext",   title: "GPUAvgNVLRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_nvlink_rx_avg, sort: "N",  group: "GPU (Ext)",   title: "GPUAvgNVLRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average reception rate over NVlink"  }
-# - { name: gpu_nvlink_rx_max, sort: "N",  group: "GPU_ext",   title: "GPUMaxNVLRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_nvlink_rx_max, sort: "N",  group: "GPU (Ext)",   title: "GPUMaxNVLRX", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum reception rate over NVlink"  }
-# - { name: gpu_dcgm_up_avg, sort: "N",  group: "GPU_ext",       title: "DCGM", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_dcgm_up_avg, sort: "N",  group: "GPU (Ext)",       title: "DCGM", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Average DCGM enabled"  }
-# - { name: gpu_dcgm_up_max, sort: "N",  group: "GPU_ext",   title: "DCGMmax", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: gpu_dcgm_up_max, sort: "N",  group: "GPU (Ext)",   title: "DCGMmax", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Maximum DCGM enabled"  }
 
 # Network
-# - { name: mbinout_avg, sort: "N",  group: "network", title: "IC Data", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
+# - { name: mbinout_avg, sort: "N",  group: "Network", title: "IC Data", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
 #                         desc: "Data transferred (in+out) over interconnect, average among all job nodes and over time (MiB/s)"  }
-# - { name: pckinout_avg, sort: "N",  group: "network", title: "IC Pck", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
+# - { name: pckinout_avg, sort: "N",  group: "Network", title: "IC Pck", data_format: "round_number", format: "text-right", render: "function ( data ) { return round_number_generic(data, false); }",
 #                         desc: "Number of packets transferred (in+out) over interconnect, average among all job nodes and over time (M-pck/s)"  }
 
 # File system (All)
-# - { name: fs_all_Mbw_sum, sort: "N",  group: "FS_all", title: "Write", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_all_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_all_Mbw_sum, sort: "N",  group: "Total I/O", title: "Write", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_all_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume written for all file systems during job run time (GiB)"  }
-# - { name: fs_all_Mbr_sum, sort: "N",  group: "FS_all", title: "Read", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_all_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_all_Mbr_sum, sort: "N",  group: "Total I/O", title: "Read", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_all_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume read for all file systems during job run time (GiB)"  }
-# - { name: fs_all_Moc_sum, sort: "N",  group: "FS_all", title: "O/C", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_all_Moc_sum, sort: "N",  group: "Total I/O", title: "O/C", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total number of file open/close operations on all file systems during job run time (M)"  }
 
 # File system (by fs)
-# - { name: fs_home_Mbw_sum, sort: "N",  group: "FS_by_fs", title: "HOME Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_home_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_home_Mbw_sum, sort: "N",  group: "I/O per FS", title: "HOME Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_home_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume written for HOME during job run time (GiB)"  }
-# - { name: fs_home_Mbr_sum, sort: "N",  group: "FS_by_fs", title: "HOME Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_home_r_score", render: "function ( data ) { return round_number_generic(data, true); }",  
+# - { name: fs_home_Mbr_sum, sort: "N",  group: "I/O per FS", title: "HOME Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_home_r_score", render: "function ( data ) { return round_number_generic(data, true); }",  
 #                       desc: "Total data volume read for HOME during job run time (GiB)"  }
-# - { name: fs_home_Moc_sum, sort: "N",  group: "FS_by_fs", title: "HOME OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_home_Moc_sum, sort: "N",  group: "I/O per FS", title: "HOME OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total number of file open/close operations on HOME during job run time (M)"  }
 
-# - { name: fs_project_Mbw_sum, sort: "N",  group: "FS_by_fs", title: "PRJ Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_project_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_project_Mbw_sum, sort: "N",  group: "I/O per FS", title: "PRJ Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_project_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume written for PROJECT during job run time (GiB)"  }
-# - { name: fs_project_Mbr_sum, sort: "N",  group: "FS_by_fs", title: "PRJ Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_project_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_project_Mbr_sum, sort: "N",  group: "I/O per FS", title: "PRJ Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_project_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume read for PROJECT during job run time (GiB)"  }
-# - { name: fs_project_Moc_sum, sort: "N",  group: "FS_by_fs", title: "PRJ OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_project_Moc_sum, sort: "N",  group: "I/O per FS", title: "PRJ OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total number of file open/close operations on PROJECT during job run time (M)"  }
 
-# - { name: fs_scratch_Mbw_sum, sort: "N",  group: "FS_by_fs", title: "SCR Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_scratch_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_scratch_Mbw_sum, sort: "N",  group: "I/O per FS", title: "SCR Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_scratch_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume written for SCRATCH during job run time (GiB)"  }
-# - { name: fs_scratch_Mbr_sum, sort: "N",  group: "FS_by_fs", title: "SCR Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_scratch_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_scratch_Mbr_sum, sort: "N",  group: "I/O per FS", title: "SCR Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_scratch_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume read for SCRATCH during job run time (GiB)"  }
-# - { name: fs_scratch_Moc_sum, sort: "N",  group: "FS_by_fs", title: "SCR OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_scratch_Moc_sum, sort: "N",  group: "I/O per FS", title: "SCR OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total number of file open/close operations on SCRATCH during job run time (GiB)"  }
 
-# - { name: fs_fastdata_Mbw_sum, sort: "N",  group: "FS_by_fs", title: "DATA Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_fastdata_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_fastdata_Mbw_sum, sort: "N",  group: "I/O per FS", title: "DATA Wr", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_fastdata_w_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume written for FASTDATA during job run time (GiB)"  }
-# - { name: fs_fastdata_Mbr_sum, sort: "N",  group: "FS_by_fs", title: "DATA Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_fastdata_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_fastdata_Mbr_sum, sort: "N",  group: "I/O per FS", title: "DATA Rd", data_format: "round_number_or_null", format: "text-right", bg_color_map: "fs_fastdata_r_score", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total data volume read for FASTDATA during job run time (GiB)"  }
-# - { name: fs_fastdata_Moc_sum, sort: "N",  group: "FS_by_fs", title: "DATA OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
+# - { name: fs_fastdata_Moc_sum, sort: "N",  group: "I/O per FS", title: "DATA OC", data_format: "round_number_or_null", format: "text-right", render: "function ( data ) { return round_number_generic(data, true); }",
 #                       desc: "Total number of file open/close operations on FASTDATA during job run time (M)"  }
 
 # RC/State
-- { name: rc_state, sort: "S",  group: "final_status", title: "State", format: "text-right", 
+- { name: rc_state, sort: "S",  group: "Status", title: "State", format: "text-right", 
                   style: "font-weight: bold", fg_color: "rc_state_color", desc: "State of the Job"  }
-# - { name: nummsgs, sort: "N",  group: "final_status", title: "#Err", data_format: "round_number_or_null_int", format: "text-right", 
+# - { name: nummsgs, sort: "N",  group: "Status", title: "#Err", data_format: "round_number_or_null_int", format: "text-right", 
 #                   style: "color: red; font-weight: bold", 
 #                   desc: "Number of error messages from node logs"  }
-# - { name: numerrnodes, sort: "N",  group: "final_status", title: "#ErrNds", data_format: "round_number_or_null_int", format: "text-right", 
+# - { name: numerrnodes, sort: "N",  group: "Status", title: "#ErrNds", data_format: "round_number_or_null_int", format: "text-right", 
 #                   style: "color: red; font-weight: bold", 
 #                   desc: "Number of nodes with error messages from node logs"  }
 
 # Scores
-- { name: total_score, sort: "N",  group: "score", title: "Score", data_format: "round_number", format: "text-right", 
+- { name: total_score, sort: "N",  group: "Score", title: "Score", data_format: "round_number", format: "text-right", 
                    bg_color_map: "total_score", 
                    desc: "Total score taking into account the CPU and eventual GPU usages"  }
 
 # other
-- { name: ld_ndps, sort: "N",  group: "info", title: "#Samples", format: "text-right", 
+- { name: ld_ndps, sort: "N",  group: "Info/Reports", title: "#Samples", format: "text-right", 
                    desc: "Number of (1-minute) data samples stored in database for this job"  }
 
 # Files
-- { name: htmlfile_reg, group: "info", title: "HTML", format: "sticky-column-right", data_pre: "html_link account owner", render: "report_link", orderable: "false",
+- { name: htmlfile_reg, group: "Info/Reports", title: "HTML", format: "sticky-column-right", data_pre: "html_link account owner", render: "report_link", orderable: "false",
                        desc: "Detailed HTML reports" , noheader: 1 }
-- { name: pdffile_reg, group: "info", title: "PDF", format: "sticky-column-right", data_pre: "pdf_link account owner", render: "report_link", orderable: "false",
+- { name: pdffile_reg, group: "Info/Reports", title: "PDF", format: "sticky-column-right", data_pre: "pdf_link account owner", render: "report_link", orderable: "false",
                        desc: "Detailed PDF reports", noheader: 1 }
 
