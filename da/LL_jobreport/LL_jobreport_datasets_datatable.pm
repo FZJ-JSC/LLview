@@ -50,6 +50,7 @@ sub process_dataset_datatable {
     $ctype = "string" if ( $csort eq "S" );
     my $cgroup = "";
     if ( exists( $colref->{group} ) ) {
+      $colref->{group} =~ s/\s/_/gs;
       $cgroup = "group_" . $colref->{group};
       # $groups{ $colref->{group} }++;
     }

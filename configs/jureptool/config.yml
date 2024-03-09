@@ -1,0 +1,48 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+# Timezone name (a list can be found in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+timezone: 'Europe/Berlin'
+
+# Hostname where the LLview website can be accessed (to create links)
+# Substitutions can be used with keys given in #(...)#. Inside it:
+# - replace can be done with: [string_from,string_to]
+# - removals can be done with: (string_to_remove)
+hostname: 'https://llviewtest.zam.kfa-juelich.de/#system(-dc)[ ,_]#'
+
+#Folder prefix to be added to items in plotlists file
+folder_prefix: '$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/tmp/jobreport/data/'
+
+# PDF configuration
+page_width: 8.25
+page_height: 11.75
+max_graph_per_page: 4
+max_lines_per_page: 73 # 73 is the maximum number of lines that fit on the page between header and footer
+
+# Timeline configuration
+max_timeline_size: 0.87
+max_steps_in_timeline: 5000         # Cut steps up to this value
+max_timeline_steps_per_page: 128    # Number of max timeline steps per page
+min_timeline_steps_last_page: 3     # Min timeline steps in last page (Used when pages>1. Takes priority over the previous one, to avoid having too few steps in a page)
+max_bar_size: 0.03                  # Max bar size in gantt charts
+max_timeline_height_html: 1000      # Max timeline height in pixels (using by default 3000*barsize for each step)
+
+min_space_for_err: 0.1              # Minimum amount of space left to put error on the same page as timeline
+
+# Font sizes:
+hugefont: 11
+bigfont: 10
+normalfont: 8
+smallfont: 7
+tinyfont: 6
+
+# Colors:
+minmax_color: 'lightblue' # Color for shadowed area between min-max
+colors: 'tab10'           # Colors for different interconnect and line plots (when llview_plot_lines is used)

@@ -184,7 +184,7 @@
             footer_graph_config: "/data/ll/footer_CPU_GPU.json"
             ref: [ table ]
             data:
-              default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+              default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
        - page:
             name: "History"
             section: "history_three_weeks"
@@ -197,7 +197,7 @@
             scripts: [ "joblist_history.js" ]
             functions: [ "init_dates" ]
             data:
-              default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+              default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
     #    - page:
     #         name: "All jobs"
     #         section: "all_jobs"
@@ -208,7 +208,7 @@
     #         # footer_graph_config: "/data/ll/footer_CPU_GPU.json"
     #         ref: [ datatable ]
     #         data:
-    #           default_columns: [ info, sched, loadmem, coreusage, network, GPU, "FS_all", final_status, score ]
+    #           default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
        - page:
            name: "Projects&Roles"
            section: "roles"

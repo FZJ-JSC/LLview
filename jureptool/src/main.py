@@ -240,12 +240,12 @@ def _ProcessReport(njob,total_jobs,job,config):
         # This is then a User-defined/Custom section
         # Then we add the given file "as is" to df_custom
         if not graphs:
-          df_temp = pd.read_csv(file, delim_whitespace=True, comment='#', names=header, index_col=False)
+          df_temp = pd.read_csv(file, sep='\s+', comment='#', names=header, index_col=False)
         else:
           # Else, get the headers given on the graph list
           icols = [header.index(_) for _ in cols.keys()]
           # Reading database
-          df_temp = pd.read_csv(file, delim_whitespace=True, comment='#', names=header, index_col=False, usecols=icols,dtype=cols)[cols.keys()]
+          df_temp = pd.read_csv(file, sep='\s+', comment='#', names=header, index_col=False, usecols=icols,dtype=cols)[cols.keys()]
 
         # Getting header title for timestamp and nodelist
         y_x_keys = [key for key in {**y_headers, **x_headers}.keys()]
@@ -257,15 +257,16 @@ def _ProcessReport(njob,total_jobs,job,config):
         if config['appearance']['maxsec']:
           df_temp.drop(df_temp[df_temp[config['plots']['x']['header']] > df_temp[config['plots']['x']['header']].min()+config['appearance']['maxsec']].index, inplace=True) 
 
-        # Completing the dataframe by ts and node
+        # Completing the dataframe by y_x_keys (ts and node)
         # Build the full MultiIndex, set the partial MultiIndex, and reindex.
         full_idx = pd.MultiIndex.from_product([df_temp[col].unique() for col in y_x_keys], names=y_x_keys)
-        df_temp = df_temp.set_index(y_x_keys).reindex(full_idx)
-        df_temp = df_temp.groupby(level=y_x_keys[0]).fillna(value=(np.nan if '_fill_with' not in config['plots'][section] else config['plots'][section]['_fill_with'])).reset_index()
+        df_temp = df_temp.set_index(y_x_keys).reindex(full_idx).fillna(value=(np.nan if '_fill_with' not in config['plots'][section] else config['plots'][section]['_fill_with'])).reset_index()
+        # df_temp = df_temp.groupby(level=y_x_keys[0]).fillna(value=(np.nan if '_fill_with' not in config['plots'][section] else config['plots'][section]['_fill_with'])).reset_index()
+        # Alternative way of filling the dataframe by y_x_keys (ts and node)
         # df_temp = df_temp.set_index(y_x_keys)\
-        #                          .unstack(level=y_x_keys[1])\
+        #                          .unstack(level=y_x_keys[1], fill_value=0.0)\
         #                          .stack(level=y_x_keys[1], dropna=False)
-        # df_temp = df_temp.groupby(level=y_x_keys[1]).fillna(0.0).reset_index()
+        # df_temp = df_temp.groupby(level=y_x_keys[1]).reset_index()
 
         # Creating datetime entry (for plotting)
         # df_temp['datetime']= pd.to_datetime(df_temp['ts']+config.timezonegap,unit='s')
@@ -513,9 +514,10 @@ def _ProcessReport(njob,total_jobs,job,config):
   nsteps_last = 0
   # If data for steps is present
   if rows:
-    timeline_df = pd.DataFrame(rows, columns=step_details.keys()).apply(pd.to_numeric,errors='ignore').fillna(0)
+    timeline_df = pd.DataFrame(rows, columns=step_details.keys()).fillna(0)
+    timeline_df[['rc','sig','beg','end','nnodes','ntasks','ncpus']] = timeline_df[['rc','sig','beg','end','nnodes','ntasks','ncpus']].apply(pd.to_numeric)
     if 'ntasks' in timeline_df:
-      timeline_df['ntasks'] = timeline_df['ntasks'].astype('int')
+      timeline_df['ntasks'] = timeline_df['ntasks'].fillna(0).astype('int')
     # Getting only the first 'max_steps_in_timeline' rows of dataframe (defined in the config file)
     if( 'max_steps_in_timeline' in config['appearance'] and config['appearance']['max_steps_in_timeline'] > -1 ):
       timeline_df = timeline_df.head(config['appearance']['max_steps_in_timeline'])
@@ -851,14 +853,14 @@ def main():
   parser.add_argument("--nomove", default=False, action="store_true" , help="Don't copy files to final location")
   parser.add_argument("--nohtml", default=False, action="store_true" , help="Deactivate generation of HTML")
   parser.add_argument("--gzip", default=False, action="store_true" , help="Compress HTML using gzip")
-  parser.add_argument("--plotlyjs", default='cdn', help="Location of the 'plotly.min.js' file (default: 'cdn')")
+  # parser.add_argument("--plotlyjs", default='cdn', help="Location of the 'plotly.min.js' file (default: 'cdn')")
   parser.add_argument("--maxjobs", default=10000, type=int, help="Maximum number of jobs to process (default: MAXJOBS=10000)")
   parser.add_argument("--maxsec", default=0, type=int, help="Filter date range with maximum seconds range (default: no filter)")
   parser.add_argument("--shutdown", nargs="+", default=["./shutdown"], help="File(s) that triggers the script to shutdown")
   parser.add_argument("--nprocs", default=4, type=int, help="Number of process to run in parallel (default: NPROCS=4)")
   parser.add_argument("--loglevel", default=False, help="Select log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR' (more to less verbose)")
   parser.add_argument("--logprefix", help="Prefix for the daily log and errlog files (default: None)")
-  parser.add_argument("--configfolder", default=os.path.dirname(os.path.realpath(__file__))+"/../../configs/server/jureptool", help="Folder with YAML configuration files (default: src/../../configs/server/jureptool)")
+  parser.add_argument("--configfolder", default=os.path.dirname(os.path.realpath(__file__))+"/../../configs/jureptool", help="Folder with YAML configuration files (default: src/../../configs/jureptool)")
   parser.add_argument("--outfolder", default="./results", help="Folder to store temporary and demo PDFs")
   parser.add_argument("--semail", default="", help="Sender email to use in case of errors (default: None)")
   parser.add_argument("--remail", default="", help="Receiver email to use in case of errors (default: None)")
@@ -873,8 +875,8 @@ def main():
   config['appearance']['gradient'] = np.outer(np.arange(0, 1, 0.01), np.ones(1))
   config['appearance']['traffic_light_cmap'] = LinearSegmentedColormap.from_list("", ["tab:red","gold","tab:green"])
   config['appearance']['maxsec'] = args.maxsec
-  if 'plotly_js' not in config['appearance']:
-    config['appearance']['plotly_js'] = args.plotlyjs
+  # if 'plotly_js' not in config['appearance']:
+  #   config['appearance']['plotly_js'] = args.plotlyjs
 
   # Configuration
   config['file'] = []

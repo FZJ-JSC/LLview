@@ -42,6 +42,7 @@ sub process_dataset_template {
     my $csort="N";	    $csort=$colref->{sort} if(exists($colref->{sort}));
     my $cgroup="";
     if(exists($colref->{group})) {
+      $colref->{group} =~ s/\s/_/gs;
       $cgroup="group_".$colref->{group};
     }
     my $ctitle=$name;   $ctitle=$colref->{title} if(exists($colref->{title}));
