@@ -2,6 +2,31 @@
 
 A simplified package of LLview is also available Open Source on GitHub. [See more](public.md)
 
+### 2.2.4 (April 3, 2024)
+
+<h4> Added </h4>
+
+- Added generation of DBgraphs to automatically create dependency graphs (shown as mermaid graphs on the "Dependency Graphs" of Support View)
+- JURI: Added CorePattern fonts and style
+- JURI: Added system selector (Support View)
+- JURI: Added buttons on fields in `login.php`
+- JURI: Added home button
+
+<h4> Changed </h4>
+
+- JURI: Changed how versions of external libraries are modified (now via links, such that future versions always work with old reports)
+- JURI: Updated plotly.js and removed old one
+- JURI: Changed login.php to use REMOTE_USER (compatible with OIDC too)
+- JURI: Improved favicon SVG
+
+<h4> Fixed </h4>
+
+- JuRepTool: Fixed favicon 
+- JuRepTool: Fixed timeline zoom sync
+- JuRepTool/JURI: Removed external js libraries versions
+- JURI: Fix graph_footer_plotly.handlebar to have a common root (to avoid xml error)
+- JURI: Fix .pdf.gz extension on .htaccess
+
 
 ### 2.2.2 (January 16, 2024)
 
