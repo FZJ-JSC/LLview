@@ -1,5 +1,68 @@
 # LLview Public Releases
 
+### 2.2.4-base (April 3, 2024)
+
+<h4> Added </h4>
+
+- Added System tab (usage and statistics) for Support View
+- Added option to delete error files on `listerrors` script
+- Added `llview` controller in scripts (`llview stop` and `llview start` for now)
+- Added power measurements (`CurrentWatts`) (LML, database and JuRepTool)
+- Added `LLVIEW_WEB_DATA` option on `.llview_server_rc` (not hardcoded on yaml anymore, as the envvars are expanded for `post_rows`)
+- Added `LLVIEW_WEB_IMAGE` option on `.llview_server_rc` to change web image file
+- Added `wservice` and `execdir` automatic folder creation
+- Added `.llview_server_rc` to monitor (otherwise, changes in that file required "hard" restart)
+- Added `icmap` action, configuration and documentation
+- Added generation of DBgraphs (from production) to automatically create dependency graphs (shown as mermaid graphs on the "Dependency Graphs" of Support View)
+- Added trigger script and step to `dbupdate` action to use on DBs that need triggering
+- Added options to dump options as JSON or YAML using envvars (LLMONDB_DUMP_CONFIG_TO_JSON and LLMONDB_DUMP_CONFIG_TO_YAML)
+- Added `CODE_OF_CONDUCT.md`
+- JURI: Added CorePattern fonts and style
+- JURI: Added `.htpasswd` and OIDC examples and general improvements on `.htaccess`
+- JURI: Added system selector when given on setup
+- JURI: Added 'RewriteEngine on' to `.htaccess` (required for `.gz` files)
+- JURI: Added buttons on fields in `login.php`
+- JURI: Added home button
+- JURI: Added mermaid graphs and external js
+- JURI: Added svg-pan-zoom to zoom on graphs
+- JURI: Added option to pass image in config
+- JURI: Added "DEMO" on system name when new option `demo: true` is used
+
+<h4> Changed </h4>
+
+- Improved `systemname` in slurm plugin
+- Changed order on `.llview_server_rc` to match  `.llview_remote_rc`
+- Separated `transferreports` stat step on `dbupdate.conf`
+- Moved folder creation msg to log instead of errlog
+- Improved documentation about `.htaccess` and `accountmap`
+- Improved column group names (now possible with special characters and space)
+- Changed name "adapter" to "plugins"
+- Improved parsing of envvars (that can now be empty strings) from .conf files
+- Further general improvements on texts, logs, error messages and documentation
+- JuRepTool: Improvements on documentation and config files
+- JuRepTool: Moved config folder outside server folder
+- JURI: Adapted `login.php` to handle also OIDC using REMOTE_USER
+- JURI: Improved favicon
+- JURI: Changed how versions of external libraries are modified (now via links, such that future versions always work with old reports)
+- JURI: Updated plotly.js
+- JURI: Improvements in column group names, with special characters being escaped
+- JURI: Changed footer filename (as it does not include only plotly anymore)
+
+<h4> Fixed </h4>
+
+- Fixed `starttime=unknown`
+- Fixed support in `.htgroups` when there's no PI/PA 
+- Fixed `'UNLIMITED'` time in conversion
+- Fixed creation of folder on SLURM plugin
+- Fixed missing `id` on `<input>` element
+- Removed export of `.llview_server_rc` from scripts (as it resulted in errors when in a different location)
+- JuRepTool: Fixed deprecation messages
+- JURI: Fix `graph_footer_plotly.handlebar` to have a common root (caused an error in Firefox)
+- JURI: Fix `.pdf.gz` extension on `.htaccess` example
+- JURI: Removed some anchors `href=#` as it was breaking the fragment of the page
+- JURI: Fixed forwarding to job report when using jump to jobID
+
+
 ### 2.2.3-base (February 13, 2024)
 
 <h4> Added </h4>
