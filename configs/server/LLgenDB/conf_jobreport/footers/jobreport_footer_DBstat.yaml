@@ -8,9 +8,9 @@
 # Contributors:
 #    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
 
-############
-# Footer CPU
-############
+###############
+# Footer DBstat
+###############
 - footersetelem:
     name: "Nodes"
     info: "Database: #Database#, Table: #Table#"

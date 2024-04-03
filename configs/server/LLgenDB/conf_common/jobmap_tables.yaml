@@ -17,7 +17,6 @@
         archive:
           non_existent: currentjobs/jobid # if table exists
       index: jobid
-
     columns: 
     - { name: jobid,       type: jobid_t }
     - { name: nodeid,      type: nodeid_t }
@@ -35,4 +34,3 @@
     - { name: jobid,       type: jobid_t }
     - { name: ts,          type: ts_t }
 
-          

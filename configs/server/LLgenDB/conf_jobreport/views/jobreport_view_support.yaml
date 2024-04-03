@@ -16,10 +16,10 @@
     name:          "support"
     filepath:      "$outputdir/ll/support.json"
     info:          "data/_info/info.json"
+    # Demo mode
+    # demo:          true
     # Logo on header (right)
     logo:          "img/llview_logo_white.svg"
-    # Image to be used on header (left)
-    image:         "img/$systemname.jpg"
     # Link when clicking on image
     home:          "login.php"
     # Field to use to search on other pages (e.g. History) - needs mapjobid_to_day
@@ -280,7 +280,7 @@
                   default: false
                   graph_page_config: "/data/ll/graphpage_internalstat.json"
               - page:
-                  name: "DBstat"
+                  name: "DB Statistics"
                   section: "DBstat"
                   template: "/data/LLtemplates/DBstat"
                   context: "data/_internal/DBstat.json"
@@ -290,7 +290,17 @@
                   data:
                     default_columns: [ DBstat ]
               - page:
-                  name: "Steptimings"
+                  name: "DB Dependency Graphs"
+                  section: "DBgraph"
+                  template: "/data/LLtemplates/DBgraph"
+                  context: "data/_internal/DBgraph.json"
+                  default: false
+                  footer_graph_config: "/data/ll/footer_DBgraph.json"
+                  ref: [ table ]
+                  data:
+                    default_columns: [ DBgraph ]
+              - page:
+                  name: "Step Timings"
                   section: "steptimings"
                   template: "/data/LLtemplates/steptimings"
                   context: "data/_internal/steptimings.json"
@@ -313,7 +323,5 @@
            name: "Help"
            section: "help"
            icon: "question"
-           href: "https://apps.fz-juelich.de/jsc/llview/docu/"
+           href: "https://llview.fz-juelich.de/docu/"
 
-
-                 

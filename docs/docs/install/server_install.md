@@ -46,19 +46,21 @@ The main configuration file of LLview Server is `.llview_server_rc`, that should
 This file export environment variables that will be used by the different scripts of LLview.
 The existing variables are:
 
-- `$LLVIEW_SYSTEMNAME`: Defines the system name
-- `$LLVIEW_HOME`: LLview's home folder, where the repo was cloned
+- `$LLVIEW_SYSTEMNAME`: Defines the system name.
+- `$LLVIEW_HOME`: LLview's home folder, where the repo was cloned.
 - `$LLVIEW_DATA`: Folder in which the data will be stored. It is also possible to use another hard drive or file system (depending on the amount of metrics, this may be recommended). Either the driver is directly mounted and defined in `$LLVIEW_DATA`, or a symbolic link is created:
     ```
     ln -s /externalvolume/ $LLVIEW_DATA
     ```
-- `$LLVIEW_CONF`: Folder with the configuration files (example configuration files is given in `$LLVIEW_HOME/configs`)
-- `$LLVIEW_SHARED`: A shared folder between LLview Server and [LLview Remote](remote_install.md#configuration), where the generated files from Remote will be written and read by the Server (therefore, it must be the same set up in `.llview_remote_rc` in the Remote part)
-- `$LLVIEW_SHUTDOWN`: File to be used to stop LLview's workflow (the cronjob runs, but immediately stops)
-- `$LLVIEW_LOG_DAYS`: Number of days to keep the logs
+- `$LLVIEW_CONF`: Folder with the configuration files (example configuration files is given in `$LLVIEW_HOME/configs`).
+- `$LLVIEW_SHARED`: A shared folder between LLview Server and [LLview Remote](remote_install.md#configuration), where the generated files from Remote will be written and read by the Server (therefore, it must be the same set up in `.llview_remote_rc` in the Remote part).
+- `$LLVIEW_SHUTDOWN`: File to be used to stop LLview's workflow (the cronjob runs, but immediately stops).
+- `$LLVIEW_LOG_DAYS`: Number of days to keep the logs.
 - `$JUREPTOOL_NPROCS`: Number of processors used by JuRepTool (default: 2). As JuRepTool runs in parallel to the main LLview workflow, it is recommended to initially use `export JUREPTOOL_NPROCS=0` to deactivate JuRepTool and only activate it when the full LLview cycle is working.
 - `$LLVIEW_WEB_DATA`: Folder on the Web Server (accessible via https) where the `data` will be copied to.
+- `$LLVIEW_WEB_IMAGE`: Path of image to be used on the login page, relative to DocumentRoot (starting with `/`) or relative to `$LLVIEW_WEB_DATA` (default: `img/$LLVIEW_SYSTEMNAME.jpg`).
 - `$PYTHON`: This variable is used to launch [JuRepTool](#jureptool). It is important to set the PYTHON variable to use the version with the [dependencies](#dependencies) satisfied.
+- `$LLVIEW_CONF_FILE`: This variable is used to export the location of the file `.llview_server_rc` itself to be monitored for changes.
 
 Extra definitions can be also exported or modules loaded in this file (for example, to satisfy the [Dependencies](#dependencies)).
 
@@ -125,9 +127,20 @@ Finally, the command itself must be updated with the correct values for:
     ```
 **Note:** An initial login may be needed to accept the authenticity of the host (`ssh <login>@<webserver address>` and then `yes` is enough, even if you get "Permission denied" afterwards)
 
+#### `icmap` action
+
+To color the nodes in the detailed job reports according to their interconnect group, the information of their cell/rack can be given in an `icmap` file on the form:
+    ```
+    # nodelist_range[:str]  cell[:int]
+    nd[0001-0005,0015-0020]  1
+    nd[0006-0015]  2
+    (...)
+    ```
+This information is then converted into an xml file via the `$LLVIEW_HOME/da/utils/get_hostnodemap.py` script and imported to the database to be used by the reports.
+
 #### `supportinput` action
 
-To set the users that have "Support" access on LLview, we use the `supportinput` action. This action watches a file (default in `${LLVIEW_SHARED}/../config/support_input.dat`) that contains a simple list of usernames (one per line). When this file is changed, the file is copied to `${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/wservice`. This file is then used in the [`webservice` step of the `dbupdate` action](#webservice-step).
+One of the options to set the users that have "Support" access on LLview is via the `supportinput` action. This action watches a file (default in `${LLVIEW_SHARED}/../config/support_input.dat`) that contains a simple list of usernames (one per line). When this file is changed, the file is copied to `${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/wservice`. This file is then used in the [`webservice` step of the `dbupdate` action](#webservice-step).
 
 
 #### `compress` and `archive` actions

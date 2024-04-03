@@ -110,11 +110,13 @@ sub process_footersetelemgraph {
 
   # print Dumper($graphref);
 
-  foreach my $name ("name", "xcol", "datapath") {
+  # foreach my $name ("name", "xcol", "datapath") {
+  foreach my $name (keys(%{$graphref})) {
+    next if ($name eq "traces"); # To skip the traces key (that is parsed below)
     $ds->{$name}=$self->apply_varset($graphref->{$name},$varsetref) if(exists($graphref->{$name}));
   }
 
-  $ds->{layout}=$graphref->{layout};
+  # $ds->{layout}=$graphref->{layout};
   
   if(exists($graphref->{traces})) {
     foreach my $traceref (@{$graphref->{traces}}) {

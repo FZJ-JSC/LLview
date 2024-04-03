@@ -77,6 +77,11 @@ $starttime=time();
 my $dbstat=$DB->DBstat($opt_dblist,$opt_tmpdir,$opt_maxproc);
 printf("%s get table sizes                                 in %7.4fs\n",$instname,time()-$starttime);
 
+$starttime=time();
+my $dbgraphtime=time();
+my $md_data_hash=$DB->get_graphsDB();
+printf("%s: get dependency graphs                           in %7.4fs\n",$instname,time()-$starttime);
+
 #print Dumper($dbstat);
 
 if($opt_outfile) {
@@ -129,6 +134,25 @@ if($opt_lmlfile) {
       $filehandler->{DATA}->{INFODATA}->{$id}->{nrows}=$dbstat->{$db}->{$table}->{nrows};
       $filehandler->{DATA}->{INFODATA}->{$id}->{time_aggr_res}=$dbstat->{$db}->{$table}->{time_aggr_res};
     }
+  }
+
+  $cnt=0;
+  foreach my $db (sort(keys(%{$md_data_hash}))) {
+    $cnt++;
+    my $id=sprintf("dbg%06d",$cnt);
+    $filehandler->{DATA}->{OBJECT}->{$id}->{type}="DBgraph";
+    $filehandler->{DATA}->{OBJECT}->{$id}->{id}="$id";
+    $filehandler->{DATA}->{OBJECT}->{$id}->{name}=$id;
+    $filehandler->{DATA}->{INFO}->{$id}->{oid}=$id;
+    $filehandler->{DATA}->{INFO}->{$id}->{type}="short";
+    $filehandler->{DATA}->{INFODATA}->{$id}->{ts}=$dbgraphtime;
+    $filehandler->{DATA}->{INFODATA}->{$id}->{db}=$db;
+    my $help=$md_data_hash->{$db}->{md};
+    $help=~s/\n/ /gs;$help=~s/\t/ /gs;
+    $filehandler->{DATA}->{INFODATA}->{$id}->{nlinks}=$md_data_hash->{$db}->{nlinks};
+    $filehandler->{DATA}->{INFODATA}->{$id}->{ntabs}=$md_data_hash->{$db}->{ntabs};
+    $filehandler->{DATA}->{INFODATA}->{$id}->{LMLattr}=$md_data_hash->{$db}->{LMLattr};
+    $filehandler->{DATA}->{INFODATA}->{$id}->{graph}=$help;
   }
 
   if($opt_verbose) {

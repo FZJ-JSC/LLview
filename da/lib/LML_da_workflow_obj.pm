@@ -116,11 +116,18 @@ sub xml_start {
     return(1);
   }
   my %attr=(@_);
-
   # Substituting environment variables on values
   foreach $k (sort keys %attr) {
-    $attr{$k} =~ s/\$\{(\w+)\}/$ENV{$1}/g;
-    $attr{$k} =~ s/\$ENV\{(\w+)\}/$ENV{$1}/g;
+    while ( $attr{$k} =~ /\$\{(\w+)\}/ ) {
+      # Checking if environment variable is defined
+      if (defined($ENV{$1})) {
+        $attr{$k} =~ s/\$\{(\w+)\}/$ENV{$1}/g;
+        $attr{$k} =~ s/\$ENV\{(\w+)\}/$ENV{$1}/g;
+      } else {
+        $attr{$k} =~ s/\$\{(\w+)\}//g;
+        $attr{$k} =~ s/\$ENV\{(\w+)\}//g;
+      }
+    }
   }
 
   if($name eq "LML_da_workflow") {

@@ -300,6 +300,11 @@ sub update_structure {
           my $jref    = $fh->{DATA}->{INFODATA}->{$key};
           push(@{$data->{DBSTAT_ENTRIES}},$jref);
         }
+      } elsif ($ref->{type} eq "DBgraph") {
+        if(exists($fh->{DATA}->{INFODATA}->{$key})) {
+          my $jref    = $fh->{DATA}->{INFODATA}->{$key};
+          push(@{$data->{DBGRAPH_ENTRIES}},$jref);
+        }
       } elsif ($ref->{type} eq "steptime") {
         if(exists($fh->{DATA}->{INFODATA}->{$key})) {
           my $jref    = $fh->{DATA}->{INFODATA}->{$key};
@@ -367,8 +372,13 @@ sub update_structure {
           my $jref    = $fh->{DATA}->{INFODATA}->{$key};
           push(@{$data->{JUMONC_ENTRIES}},$jref);
         }
+      } elsif ($ref->{type} eq "trigger") {
+        if(exists($fh->{DATA}->{INFODATA}->{$key})) {
+          my $jref    = $fh->{DATA}->{INFODATA}->{$key};
+          push(@{$data->{TRIGGER_ENTRIES}},$jref);
+        }
       } else {
-        printf("\t LML_DBupdate_file, WARNING: scan keys, unknown type %s\n",$ref->{type});
+        printf(STDERR "\t LML_DBupdate_file, WARNING: scan keys, unknown type %s\n",$ref->{type});
       }
     }
   } # foreach $fh

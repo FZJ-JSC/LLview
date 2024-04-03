@@ -30,6 +30,10 @@ export JUREPTOOL_NPROCS=0
 # Folder on the webserver that is shared on the web (necessary for the definition of the .htgroups)
 export LLVIEW_WEB_DATA="/home/llstat/jobreport_system"
 
+# Image to be used on the login page, relative to DocumentRoot (starting with /) 
+# or relative to $LLVIEW_WEB_DATA (default: img/$LLVIEW_SYSTEMNAME.jpg)
+#export LLVIEW_WEB_IMAGE=""
+
 # Exporting llview scripts folder to PATH
 export PATH="$PATH:$LLVIEW_HOME/scripts"
 
@@ -48,3 +52,6 @@ export PATH="$LLVIEW_DATA/perl5/bin:$PATH"
 
 # It is important to set the PYTHON variable to use the version with the dependencies of JuRepTool satisfied
 export PYTHON="python3.9"
+
+# Location of this file to be monitored for changes
+export LLVIEW_CONF_FILE=${BASH_SOURCE[0]}

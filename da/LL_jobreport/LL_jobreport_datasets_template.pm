@@ -74,7 +74,9 @@ sub process_dataset_template {
     #  filter
     $data_tfilter.="              ";
     if(!$noheader) {
-      $data_tfilter.="<th><input class=\"text-center\" type=\"text\" placeholder=\"filter\"/></th>\n";
+      my $ctitle_escaped = $ctitle;
+      $ctitle_escaped =~ s/\s/_/gs;
+      $data_tfilter.="<th><input class=\"text-center\" type=\"text\" placeholder=\"filter\" id=\"filter_${ctitle_escaped}\"/></th>\n";
     } else {
       $data_tfilter.="<th></th>\n";
     }

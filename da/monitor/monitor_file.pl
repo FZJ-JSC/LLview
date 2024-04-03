@@ -117,6 +117,17 @@ while(1) {
     # Getting action of the current change
     $action=$watchfile2action->{$change->name};
 
+    # If the change was in the main config file $ENV{LLVIEW_CONF_FILE}, 
+    # stops the monitor for it to be restarted with the (possible) new variables
+    if($change->name eq $ENV{LLVIEW_CONF_FILE}) {
+      $msg=sprintf("MAIN CONFIG file signaled via %s, stopping monitor... (make sure it will be restarted via cronjob or by hand)\n",$ENV{LLVIEW_CONF_FILE}); &logmsg($msg,$logfile);
+      &shutdown_server();
+
+      # exit now
+      $msg=sprintf("Exiting...\n"); &logmsg($msg,$logfile);
+      exit;
+    }
+
     # If the change was in the config file, check if options changed 
     # (in which case, triggers a restart)
     if($change->name eq $opt_config) {
@@ -135,8 +146,6 @@ while(1) {
       # exit now
       $msg=sprintf("Exiting...\n"); &logmsg($msg,$logfile);
       exit;
-
-      next ACTION;
     }
 
     # If the change was in an action watchfile, perform respective event
@@ -308,7 +317,7 @@ sub start_server {
     }
   }
 
-  # register signal file  'shutdown_signal_file' for changes
+  # register signal file 'shutdown_signal_file' for changes
   if(exists($options->{auto_shutdown}) && exists($options->{shutdown_signal_file})) {
     if($options->{auto_shutdown}) {
       if(!$options->{auto_shutdown_registered}) {
@@ -324,6 +333,12 @@ sub start_server {
   # are changed)
   $msg=sprintf("Register current config file %s\n",$opt_config); &logmsg($msg,$logfile);
   $monitor->watch($opt_config);
+
+  # register main configuration file LLVIEW_CONF_FILE to be monitored (to update env vars in case they are changed)
+  if(defined($ENV{LLVIEW_CONF_FILE})) {
+    $msg=sprintf("Register main config file %s\n",$ENV{LLVIEW_CONF_FILE}); &logmsg($msg,$logfile);
+    $monitor->watch($ENV{LLVIEW_CONF_FILE});
+  }
 
   # First scan just finds out about the monitored files. No changes will be reported.
   $msg=sprintf("Run first scan\n"); &logmsg($msg,$logfile);

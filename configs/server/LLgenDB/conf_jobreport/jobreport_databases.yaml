@@ -148,8 +148,8 @@ jobreport:
         - { name: pckout_min,      type: pck_t,             LLDB_from: fabricstate/fabric_aggr_by_jobid,   LL_default: 0 }
         - { name: pckout_max,      type: pck_t,             LLDB_from: fabricstate/fabric_aggr_by_jobid,   LL_default: 0 }
 
-        - { name: icmaplastts,     type: ts_t,              LLDB_from: fabricstate/fabric_aggr_by_jobid_icmap,   LLDB_from_lastts: yes, LL_default: -1 }
-        - { name: icgroupmap,      type: extralongstr_t,    LLDB_from: fabricstate/fabric_aggr_by_jobid_icmap,   LL_default: "-" }
+        - { name: icmaplastts,     type: ts_t,              LLDB_from: icmapstate/icmap_aggr_by_jobid,   LLDB_from_lastts: yes, LL_default: -1 }
+        - { name: icgroupmap,      type: extralongstr_t,    LLDB_from: icmapstate/icmap_aggr_by_jobid,   LL_default: "-" }
 
         - { name: fs_all_fslastts,       type: ts_t,        LLDB_from: fsusagestate_all/fsusage_aggr_by_jobid/fslastts, LLDB_from_lastts: yes,   LL_default: -1    }
         - { name: fs_all_ndps,           type: count_t,     LLDB_from: fsusagestate_all/fsusage_aggr_by_jobid/fs_ndps,   LL_default: 0 }
@@ -941,6 +941,14 @@ jobreport_stat_DBstat:
         index: ukey,lastts_saved,name
       %include "./databases/jobreport_databases_stat_tables.yaml"
 
+jobreport_stat_DBgraph:
+  tables:
+  - table:
+      name: datasetstat
+      options:
+        index: ukey,lastts_saved,name
+      %include "./databases/jobreport_databases_stat_tables.yaml"
+
 jobreport_stat_steptimings:
   tables:
   - table:
@@ -1033,6 +1041,9 @@ jobreport_json_stat:
       %include "./databases/jobreport_databases_stat_tables.yaml"
   - table:
       name: datasetstat_dbstat
+      %include "./databases/jobreport_databases_stat_tables.yaml"
+  - table:
+      name: datasetstat_dbgraph
       %include "./databases/jobreport_databases_stat_tables.yaml"
   - table:
       name: datasetstat_nodeerr

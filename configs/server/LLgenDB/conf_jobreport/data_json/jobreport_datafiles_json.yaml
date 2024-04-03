@@ -126,6 +126,18 @@
     column_convert: 'ts->todate_std_hhmm,ts_min->todate_std_hhmm,ts_max->todate_std_hhmm,ts_dur->hhmm_short'
 
 - dataset:
+    name:            DBgraph_json
+    set:             json_dbgraph
+    filepath:       '$outputdir/_internal/DBgraph.json.gz'
+    data_database:   DBstat
+    data_table:      LMLDBgraph
+    stat_table:      datasetstat_DBgraph
+    stat_database:   jobreport_json_stat
+    format:         'json'
+    columns:        'ts,db,ntabs,nlinks,LMLattr'
+    column_convert: 'ts->todate_std_hhmm'
+
+- dataset:
     name:            steptimings_json
     set:             json_steptimings
     filepath:       '$outputdir/_internal/steptimings.json.gz'

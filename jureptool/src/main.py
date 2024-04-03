@@ -515,7 +515,7 @@ def _ProcessReport(njob,total_jobs,job,config):
   # If data for steps is present
   if rows:
     timeline_df = pd.DataFrame(rows, columns=step_details.keys()).fillna(0)
-    timeline_df[['rc','sig','beg','end','nnodes','ntasks','ncpus']] = timeline_df[['rc','sig','beg','end','nnodes','ntasks','ncpus']].apply(pd.to_numeric)
+    timeline_df[['beg','end','nnodes','ntasks','ncpus']] = timeline_df[['beg','end','nnodes','ntasks','ncpus']].apply(pd.to_numeric)
     if 'ntasks' in timeline_df:
       timeline_df['ntasks'] = timeline_df['ntasks'].fillna(0).astype('int')
     # Getting only the first 'max_steps_in_timeline' rows of dataframe (defined in the config file)

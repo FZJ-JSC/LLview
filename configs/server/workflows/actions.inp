@@ -42,6 +42,14 @@ execute="${LLVIEW_HOME}/da/LML_da.pl -par -maxprocesses 8 -nostep -conf ${LLVIEW
 execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
 logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_jobreport`date +.%Y.%m.%d`.log"
 
+# Workflow to create the interconnect mapping file
+[icmap]
+active=1
+watchfile=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/icmap
+execute="${PYTHON} ${LLVIEW_HOME}/da/utils/get_hostnodemap.py --map perm/icmap --xml tmp/icnodemap_new.xml >> logs/icmap`date +.%Y.%m.%d`.log 2>> logs/icmap`date +.%Y.%m.%d`.errlog;"
+execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
+logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/monitor/monitor_icmap`date +.%Y.%m.%d`.log"
+
 # Workflow for Job Reporting clean up: perform delayed action on jobreport files (compress)
 [compress]
 active=1

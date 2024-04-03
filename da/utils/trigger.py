@@ -12,13 +12,12 @@
 import argparse
 import logging
 import sys
-import csv
 import time
 import math
 
-def dict_to_lml(csvdict: dict, xmlfile: str):
+def to_lml(items: dict, xmlfile: str):
   """
-  This function receives the dictionary created by 'csv_to_dict' and outputs 
+  This function receives the list created by 'read_map' and outputs 
   an XML file 'xmlfile' containing the information.
   """
   log = logging.getLogger('logger')
@@ -33,95 +32,40 @@ def dict_to_lml(csvdict: dict, xmlfile: str):
 
     # Creating first list of objects
     file.write(f"{2*' '}<objects>\n" )
-    # Looping over the roles
-    for role,entries in csvdict.items():
-      digits = int(math.log10(len(entries)))+1
-      i = 0
-      # Looping over the entries in each role
-      for entry in entries:
-        i += 1
-        file.write(f'{4*" "}<object id=\"{role[0].upper() if role[0] != "p" else "Q"}{i:0{digits}d}\" name=\"{entry["id"]+(("_"+entry["kind"]) if "kind" in entry else "")}\" type=\"{role}map\"/>\n')
+
+    digits = int(math.log10(len(items)))+1
+    i = 0
+    # Looping over the entries in each role
+    for item in items:
+      i += 1
+      file.write(f'{4*" "}<object id=\"ts{i:0{digits}d}\" name=\"{item["__id"]}\" type=\"{item["__type"]}\"/>\n')
     file.write(f"{2*' '}</objects>\n")
 
     # Writing detailed information for each object
     file.write(f"{2*' '}<information>\n")
     # Looping over the roles
-    for role,entries in csvdict.items():
-      digits = int(math.log10(len(entries)))+1
-      i = 0
-      # Looping over the entries in each role
-      for entry in entries:
-        i += 1
-        # The objects are unique for each username/role
-        file.write(f'{4*" "}<info oid=\"{role[0].upper() if role[0] != "p" else "Q"}{i:0{digits}d}\" type=\"short\">\n')
-        # Looping over the keys and values and entries
-        for key,value in entry.items():
-          # Replacing double quotes with single quotes to avoid problems importing the values
-          file.write(f"{6*' '}<data key=\"{key}\" value=\"{value}\"/>\n")
-          # file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"'+str(key)+'\"',value.replace('"', "'") if isinstance(value, str) else value))
-        # if ts:
-        #   file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"ts\"',ts))
+    i = 0
+    # Looping over the entries in each role
+    for item in items:
+      i += 1
+      # The objects are unique for each username/role
+      file.write(f'{4*" "}<info oid=\"ts{i:0{digits}d}\" type=\"short\">\n')
+      # Looping over the keys and values and entries
+      for key,value in item.items():
+        if key.startswith('__'): continue
+        # Replacing double quotes with single quotes to avoid problems importing the values
+        file.write(f"{6*' '}<data key=\"{key}\" value=\"{value}\"/>\n")
+        # file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"'+str(key)+'\"',value.replace('"', "'") if isinstance(value, str) else value))
+      # if ts:
+      #   file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"ts\"',ts))
 
-        file.write(f"{4*' '}</info>\n")
+      file.write(f"{4*' '}</info>\n")
 
     file.write(f"{2*' '}</information>\n" )
     file.write("</lml:lgui>\n" )
 
   return
 
-def csv_to_dict(csvfile: str) -> dict:
-  """
-  This function opens and reads a CSV file containing, in this order:
-
-    username, mentored projects, administered projects (PA), leadered projects (PI), joined projects (User), Support (true or false)
-  
-  Lines starting with '#' and empty lines are skipped. It returns a dictionary in the form:
-
-  'mentor': [list of dicts with mentors (each containing the mentored projects)],
-  'pa': [list of dicts with PAs (each containing the administered projects)],
-  'pi': [list of dicts with PIs (each containing the leadered projects)],
-  'user': [list of dicts with Users (each containing the joined projects)],
-  'support': [list of dicts with supporters]
-
-  """
-  log = logging.getLogger('logger')
-
-  log.info(f"Reading CSV data from {csvfile}...")
-
-  ts = int(time.time())
-  csvdict = {}
-
-  with open(csvfile) as file:
-    data = csv.reader(filter(lambda row: (row[0]!='#' and row.strip()), file), quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL,skipinitialspace=True)
-
-    for row in data:
-      username = row[0]
-      for role,indices in {'mentor':[1],'pipa': [2,3],'user':[4]}.items():
-        for index in indices:
-          projects = row[index].strip()
-          if not projects: continue
-          csvdict.setdefault(role, []).append( dict(
-                                                    id=username,
-                                                    projects=projects,
-                                                    ts=ts,
-                                                    wsaccount=username
-                                                    )
-                                              )
-          if index == 2:
-            csvdict[role][-1]['kind'] = 'A'
-          elif index == 3:
-            csvdict[role][-1]['kind'] = 'L'
-      if row[5].strip()=="true":
-        csvdict.setdefault('support', []).append( dict(
-                                                        id=username,
-                                                        ts=ts,
-                                                        wsaccount=username
-                                                      )
-                                                )
-
-  log.debug(f"Dictionary from the CSV:\n{csvdict}")
-
-  return csvdict
 
 class CustomFormatter(logging.Formatter):
   """
@@ -211,8 +155,7 @@ def main():
   """
   
   # Parse arguments
-  parser = argparse.ArgumentParser(description="LLview's account map conversion tool (CSV to XML)")
-  parser.add_argument("--csv",     required=True, help="Input CSV to be converted")
+  parser = argparse.ArgumentParser(description="LLview's trigger XML creation")
   parser.add_argument("--xml",     required=True, help="Output XML")
   parser.add_argument("--loglevel",default=False, help="Select log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR' (more to less verbose)")
 
@@ -222,11 +165,16 @@ def main():
   log_init(args.loglevel)
   log = logging.getLogger('logger')
 
-  # Saving information from csv into a dict
-  csvdict = csv_to_dict(args.csv)
-
   # Writing XML file
-  dict_to_lml(csvdict,args.xml)
+  log.info("Creating trigger XML")
+  items = [
+            {
+              "__id": "ts",
+              "__type": "trigger",
+              "ts": int(time.time())
+            }
+          ]
+  to_lml(items,args.xml)
 
   log.info("Done")
 

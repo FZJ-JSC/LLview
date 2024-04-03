@@ -281,6 +281,20 @@
       - { name: time_aggr_res,   group: "DBstat",  sort: "N", title: "TimeRes", desc: "Time resolution if table is using time_aggr, otherwise -1"      }
 
 - dataset:
+    name: template_DBgraph
+    set:           template
+    filepath:      '$outputdir/LLtemplates/DBgraph.handlebars'
+    stat_database: jobreport_json_stat
+    stat_table:    datasetstat_templates
+    format:        'template'
+    columns:
+      - { name: db,              group: "DBgraph",  sort: "S", title: "Database",  desc: "Database name"      }
+      - { name: ntabs,           group: "DBgraph",  sort: "N", title: "#tables", desc: "Number of tables in this database"      }
+      - { name: nlinks,          group: "DBgraph",  sort: "N", title: "#links", desc: "Number of links between tables in this database"      } 
+      - { name: LMLattr,         group: "DBgraph",  sort: "S", title: "LML import", desc: "List of attributes used by import from LML files"      } 
+      - { name: ts,              group: "DBgraph",  sort: "D", title: "Last Update", desc: "Date of last update on db graph"   }
+
+- dataset:
     name: template_steptimings
     set:           template
     filepath:      '$outputdir/LLtemplates/steptimings.handlebars'

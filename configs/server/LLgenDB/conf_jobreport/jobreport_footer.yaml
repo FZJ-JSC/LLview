@@ -48,6 +48,12 @@
        %include "./footers/jobreport_footer_DBstat.yaml"
 
 - footer:
+    name:          "DBgraph"
+    filepath:      "$outputdir/ll/footer_DBgraph.json"
+    footerset:
+       %include "./footers/jobreport_footer_DBgraph.yaml"
+
+- footer:
     name:          "steptimings"
     filepath:      "$outputdir/ll/footer_steptimings.json"
     footerset:

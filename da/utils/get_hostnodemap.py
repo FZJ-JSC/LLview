@@ -14,11 +14,12 @@ import logging
 import sys
 import csv
 import time
+import re
 import math
 
-def dict_to_lml(csvdict: dict, xmlfile: str):
+def to_lml(nodelist: dict, xmlfile: str):
   """
-  This function receives the dictionary created by 'csv_to_dict' and outputs 
+  This function receives the list created by 'read_map' and outputs 
   an XML file 'xmlfile' containing the information.
   """
   log = logging.getLogger('logger')
@@ -33,95 +34,107 @@ def dict_to_lml(csvdict: dict, xmlfile: str):
 
     # Creating first list of objects
     file.write(f"{2*' '}<objects>\n" )
-    # Looping over the roles
-    for role,entries in csvdict.items():
-      digits = int(math.log10(len(entries)))+1
-      i = 0
-      # Looping over the entries in each role
-      for entry in entries:
-        i += 1
-        file.write(f'{4*" "}<object id=\"{role[0].upper() if role[0] != "p" else "Q"}{i:0{digits}d}\" name=\"{entry["id"]+(("_"+entry["kind"]) if "kind" in entry else "")}\" type=\"{role}map\"/>\n')
+
+    digits = int(math.log10(len(nodelist)))+1
+    i = 0
+    # Looping over the entries in each role
+    for node in nodelist:
+      i += 1
+      file.write(f'{4*" "}<object id=\"ic{i:0{digits}d}\" name=\"{node["id"]}\" type=\"icmap\"/>\n')
     file.write(f"{2*' '}</objects>\n")
 
     # Writing detailed information for each object
     file.write(f"{2*' '}<information>\n")
     # Looping over the roles
-    for role,entries in csvdict.items():
-      digits = int(math.log10(len(entries)))+1
-      i = 0
-      # Looping over the entries in each role
-      for entry in entries:
-        i += 1
-        # The objects are unique for each username/role
-        file.write(f'{4*" "}<info oid=\"{role[0].upper() if role[0] != "p" else "Q"}{i:0{digits}d}\" type=\"short\">\n')
-        # Looping over the keys and values and entries
-        for key,value in entry.items():
-          # Replacing double quotes with single quotes to avoid problems importing the values
-          file.write(f"{6*' '}<data key=\"{key}\" value=\"{value}\"/>\n")
-          # file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"'+str(key)+'\"',value.replace('"', "'") if isinstance(value, str) else value))
-        # if ts:
-        #   file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"ts\"',ts))
+    i = 0
+    # Looping over the entries in each role
+    for node in nodelist:
+      i += 1
+      # The objects are unique for each username/role
+      file.write(f'{4*" "}<info oid=\"ic{i:0{digits}d}\" type=\"short\">\n')
+      # Looping over the keys and values and entries
+      for key,value in node.items():
+        # Replacing double quotes with single quotes to avoid problems importing the values
+        file.write(f"{6*' '}<data key=\"{key}\" value=\"{value}\"/>\n")
+        # file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"'+str(key)+'\"',value.replace('"', "'") if isinstance(value, str) else value))
+      # if ts:
+      #   file.write(" <data key={:24s} value=\"{}\"/>\n".format('\"ts\"',ts))
 
-        file.write(f"{4*' '}</info>\n")
+      file.write(f"{4*' '}</info>\n")
 
     file.write(f"{2*' '}</information>\n" )
     file.write("</lml:lgui>\n" )
 
   return
 
-def csv_to_dict(csvfile: str) -> dict:
+def read_map(filemap: str) -> dict:
   """
-  This function opens and reads a CSV file containing, in this order:
+  This function opens a mapping file in the form:
 
-    username, mentored projects, administered projects (PA), leadered projects (PI), joined projects (User), Support (true or false)
-  
-  Lines starting with '#' and empty lines are skipped. It returns a dictionary in the form:
+    nodelist_range[:str]  cell[:int]
 
-  'mentor': [list of dicts with mentors (each containing the mentored projects)],
-  'pa': [list of dicts with PAs (each containing the administered projects)],
-  'pi': [list of dicts with PIs (each containing the leadered projects)],
-  'user': [list of dicts with Users (each containing the joined projects)],
-  'support': [list of dicts with supporters]
+    For example:
+
+    nd[0001-0005,0015-0020]  1
+    nd[0006-0015]  2
+    ...
+
+  Lines starting with '#' and empty lines are skipped. It returns a list of dicts in the form:
+
+  [{id="nd0001",nr=1,ts="1683125366"},{id="nd0002",nr=1,ts="1683125366"},... ]
 
   """
   log = logging.getLogger('logger')
 
-  log.info(f"Reading CSV data from {csvfile}...")
+  log.info(f"Reading map from {filemap}...")
 
   ts = int(time.time())
-  csvdict = {}
+  nodelist = []
 
-  with open(csvfile) as file:
-    data = csv.reader(filter(lambda row: (row[0]!='#' and row.strip()), file), quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL,skipinitialspace=True)
+  with open(filemap) as file:
+    data = csv.reader(filter(lambda row: (row[0]!='#' and row.strip()), file), quotechar='"', delimiter=' ', quoting=csv.QUOTE_ALL,skipinitialspace=True)
 
     for row in data:
-      username = row[0]
-      for role,indices in {'mentor':[1],'pipa': [2,3],'user':[4]}.items():
-        for index in indices:
-          projects = row[index].strip()
-          if not projects: continue
-          csvdict.setdefault(role, []).append( dict(
-                                                    id=username,
-                                                    projects=projects,
-                                                    ts=ts,
-                                                    wsaccount=username
-                                                    )
-                                              )
-          if index == 2:
-            csvdict[role][-1]['kind'] = 'A'
-          elif index == 3:
-            csvdict[role][-1]['kind'] = 'L'
-      if row[5].strip()=="true":
-        csvdict.setdefault('support', []).append( dict(
-                                                        id=username,
-                                                        ts=ts,
-                                                        wsaccount=username
-                                                      )
-                                                )
+      for node in expand_NodeList(row[0]):
+        nodelist.append(dict(
+                              id=node,
+                              nr=row[1],
+                              ts=ts
+                            ))
 
-  log.debug(f"Dictionary from the CSV:\n{csvdict}")
+  log.debug(f"List of node map:\n{nodelist}")
+  return nodelist
 
-  return csvdict
+
+def expand_NodeList(nodelist: str) -> list:
+  """
+  Split node list by commas only between groups of nodes, not within groups
+  Returns all complete node names separated by a single space
+  Regex notes:
+    [^\[]+ - matches anything (at lest one character) but the '[' literal
+    (?:\[[\d,-]*\])? - matches zero or one (optional) node groupings like '[1,3,5-8,10]'
+    General Documentation https://docs.python.org/3/library/re.html#regular-expression-syntax
+  """
+  expandedlist = []
+  for nodelist in re.findall('([^\[]+(?:\[[\d,-]*\])?),?',nodelist):
+    match = re.findall( "(.+?)\[(.*?)\]|(.+)", nodelist)[0]
+    if match[2] == nodelist:
+      # single node
+      expandedlist.append(f"{nodelist}")
+      continue
+    # multiple nodes in node list as in "node[a,b,m-n,x-y]"
+    for node in match[1].split(','):
+      # splitting eventual consecutive nodes with '-'
+      list = node.split('-',1)
+      if len(list)==1:
+        # single node
+        expandedlist.append(f"{match[0]}{list[0]}")
+      else:
+        # multi-node separated by '-'
+        for i in range(int(list[0]),int(list[1])+1):
+          expandedlist.append(f"{match[0]}{i:0{len(list[0])}}")
+  return expandedlist
+
 
 class CustomFormatter(logging.Formatter):
   """
@@ -211,8 +224,8 @@ def main():
   """
   
   # Parse arguments
-  parser = argparse.ArgumentParser(description="LLview's account map conversion tool (CSV to XML)")
-  parser.add_argument("--csv",     required=True, help="Input CSV to be converted")
+  parser = argparse.ArgumentParser(description="LLview's interconnect XML map creation")
+  parser.add_argument("--map",     required=True, help="Input map")
   parser.add_argument("--xml",     required=True, help="Output XML")
   parser.add_argument("--loglevel",default=False, help="Select log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR' (more to less verbose)")
 
@@ -223,10 +236,10 @@ def main():
   log = logging.getLogger('logger')
 
   # Saving information from csv into a dict
-  csvdict = csv_to_dict(args.csv)
+  nodelist = read_map(args.map)
 
   # Writing XML file
-  dict_to_lml(csvdict,args.xml)
+  to_lml(nodelist,args.xml)
 
   log.info("Done")
 

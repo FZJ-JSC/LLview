@@ -314,14 +314,14 @@ sub check_printf {
   my $numfmts = scalar @fmts;
   my $numdata = scalar @{$dataref};
   if($numfmts != $numdata) {
-    printf(STDERR "ERROR: data convert: numfmt=%d numdata=%d (%s) [%s] vs.[%s]\n",$numfmts,$numdata,$file,$myformat,join(",",@{$dataref}));
+    printf(STDERR "ERROR: data convert: #fmts=%d numdata=%d (%s) fmt=[%s] vs. data=[%s]\n",$numfmts,$numdata,$file,$myformat,join(",",@{$dataref}));
     return(0);
   }
   for(my $c=0;$c<=$#fmts;$c++) {
     my $fmt=$fmts[$c];$fmt=~s/[-\d.]+//gs;
     if($fmt=~/%[dfe]/) {
       if($dataref->[$c]!~/^[\d\.\+\-e]+$/) {
-        printf(STDERR "ERROR data convert: fmt#=%d (%s) [%s] vs.[%s]\n",$numfmts,$file,$fmt,$dataref->[$c]);
+        printf(STDERR "ERROR data convert: #fmts=%d fmt#=%d (%s) fmt=[%s] vs. data=[%s]\n",$numfmts,$c+1,$file,$fmt,$dataref->[$c]);
         printf(STDERR "ERROR data convert: %s\n",Dumper($dataref));
       }
     }

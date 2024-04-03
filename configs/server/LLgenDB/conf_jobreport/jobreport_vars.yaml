@@ -168,6 +168,15 @@
   }
 
 - {
+    name: VAR_DB,
+    type: 'hash_values',       
+    database: DBstat,
+    table: LMLDBgraph,
+    columns:  'db',
+    sql: "SELECT distinct db FROM LMLDBgraph"
+  }
+
+- {
     name: VAR_WFstep,
     type: 'hash_values',       
     database: steptimings,

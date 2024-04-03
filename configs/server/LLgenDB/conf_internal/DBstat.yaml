@@ -30,7 +30,24 @@ DBstat:
           - { name: tabpath,   type: name_t,             LML_from: tabpath,         LML_default: 'unknown' }
           - { name: nrows,     type: cnt_t,              LML_from: nrows,           LML_default: -1 }
           - { name: time_aggr_res, type: cnt_t,          LML_from: time_aggr_res,   LML_default: -1 }
-          
+
+    - table:
+        name: LMLDBgraph
+        options:
+          update:
+            LML: dbgraph
+            mode: replace
+          update_trigger:
+          archive:
+            limit: max(ts)-21d
+        columns: 
+          - { name: ts,        type: ts_t,               LML_from: ts,              LML_default: -1, LML_minlastinsert: mintsinserted        }
+          - { name: db,        type: name_t,             LML_from: db,              LML_default: 'unknown' }
+          - { name: ntabs,     type: cnt_t,              LML_from: ntabs,           LML_default: 0 }
+          - { name: nlinks,    type: cnt_t,              LML_from: nlinks,          LML_default: 0 }
+          - { name: LMLattr,   type: llongstr_t,         LML_from: LMLattr,           LML_default: "-" }
+          - { name: graph,     type: extralongstr_t,     LML_from: graph,           LML_default: "-" }
+
     - table:
         name: LMLDBstatcurrent
         options:

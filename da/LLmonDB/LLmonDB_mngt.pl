@@ -184,7 +184,7 @@ if($operation=~/checkDB/i) {
   printf("    [init DB file in %7.5ss]\n",time()-$starttime);
 
   $starttime=time();
-  $DB->get_graphsDB($opt_outfile);
+  $DB->print_graphsDB($opt_outfile);
   printf("    [graphs DB file in %7.5ss]\n",time()-$starttime);
 
   $starttime=time();

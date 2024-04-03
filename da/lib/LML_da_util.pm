@@ -68,7 +68,8 @@ sub substitute_recursive {
 }
 
 sub substitute {
-  my($strref,$hashref)=@_;    my($found,$c,@varlist1,@varlist2,$var);
+  my($strref,$hashref)=@_;
+  my($found,$c,@varlist1,@varlist2,$var);
   my($SUBSTITUTE_NOTFOUND);
   $c=0;
   $found=0;

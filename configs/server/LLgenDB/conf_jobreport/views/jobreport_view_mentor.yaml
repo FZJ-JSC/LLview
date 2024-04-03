@@ -15,8 +15,6 @@
 - view:
     name:          "mentor"
     filepath:      "$outputdir/ll/mentor.json"
-    # title:         "<img src='img/llview_logo.png' alt='LLview logo' style='height: 40px'> Job-reports on <strong>$systemname</strong> - Mentor view"
-    image:         "img/$systemname.jpg"
     logo:          "img/llview_logo_white.svg"
     home:          "login.php"
     info:          "data/_info/info.json"
@@ -107,6 +105,6 @@
            name: "Help"
            section: "help"
            icon: "question"
-           href: "https://apps.fz-juelich.de/jsc/llview/docu/"
+           href: "https://llview.fz-juelich.de/docu/"
 
                  
