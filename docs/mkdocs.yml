@@ -77,21 +77,21 @@ theme:
     - media: "(prefers-color-scheme)"
       toggle:
         icon: material/lightbulb-auto
-        name: Switch to dark mode
+        name: Click to switch to light mode
 
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default 
       toggle:
         icon: material/lightbulb
-        name: Switch to system preference  
+        name: Click to switch to dark mode
 
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       toggle:
         icon: material/lightbulb-outline
-        name: Switch to light mode
+        name: Click to switch to system preference mode
   custom_dir: llview/
 
 extra_css:
