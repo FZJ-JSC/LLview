@@ -23,7 +23,7 @@
     # Link when clicking on image
     home:          "login.php"
     # Field to use to search on other pages (e.g. History) - needs mapjobid_to_day
-    search_field:  "jobid"
+    search_field:  "JobID"
     # System selection on header (display name: 'subfolder')
     # systems: 
     #   SYSTEM1: 'system1'
@@ -174,41 +174,41 @@
              - table
            data:
              default_columns: [ workflow ]
+      #  - page:
+      #       name: "Active jobs"
+      #       section: "running_jobs"
+      #       template: "/data/LLtemplates/joblist"
+      #       icon: "play"
+      #       context: "data/support/running.json"
+      #       default: true
+      #       footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+      #       ref: [ table ]
+      #       data:
+      #         default_columns: [ 'JobID', 'General Info', 'Mentor', 'Scheduler', 'Core Usage', 'Load/Memory', 'GPU', 'Status', 'Score', 'Reports' ]
+      #  - page:
+      #       name: "History"
+      #       section: "history_three_weeks"
+      #       template: "/data/LLtemplates/joblist_history"
+      #       icon: "calendar"
+      #       context: "data/support/today.json"
+      #       default: false
+      #       footer_graph_config: "/data/ll/footer_CPU_GPU.json"
+      #       ref: [ table ]
+      #       scripts: [ "joblist_history.js" ]
+      #       functions: [ "init_dates" ]
+      #       data:
+      #         default_columns: [ 'JobID', 'General Info', 'Mentor', 'Scheduler', 'Core Usage', 'Load/Memory', 'GPU', 'Status', 'Score', 'Reports' ]
        - page:
-            name: "Active jobs"
-            section: "running_jobs"
-            template: "/data/LLtemplates/joblist"
+            name: "Jobs"
+            section: "jobs"
+            template: "/data/LLtemplates/datatable"
             icon: "play"
-            context: "data/support/running.json"
+            context: "data/support/all.csv"
             default: true
             footer_graph_config: "/data/ll/footer_CPU_GPU.json"
-            ref: [ table ]
+            ref: [ datatable ]
             data:
-              default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
-       - page:
-            name: "History"
-            section: "history_three_weeks"
-            template: "/data/LLtemplates/joblist_history"
-            icon: "calendar"
-            context: "data/support/today.json"
-            default: false
-            footer_graph_config: "/data/ll/footer_CPU_GPU.json"
-            ref: [ table ]
-            scripts: [ "joblist_history.js" ]
-            functions: [ "init_dates" ]
-            data:
-              default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
-    #    - page:
-    #         name: "All jobs"
-    #         section: "all_jobs"
-    #         template: "/data/LLtemplates/datatable"
-    #         icon: "play"
-    #         context: "data/support/all.json"
-    #         default: false
-    #         # footer_graph_config: "/data/ll/footer_CPU_GPU.json"
-    #         ref: [ datatable ]
-    #         data:
-    #           default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
+              default_columns: [ 'JobID', 'General Info', 'Mentor', 'Scheduler', 'Core Usage', 'Load/Memory', 'GPU', 'Status', 'Score', 'Reports' ]
        - page:
            name: "Projects&Roles"
            section: "roles"

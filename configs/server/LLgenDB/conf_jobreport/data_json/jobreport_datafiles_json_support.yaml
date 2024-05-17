@@ -11,7 +11,8 @@
     selecttimevar:   lastts
     selecttimerange: TS_NOW-120,TS_NOW+1
     stat_table: datasetstat_support
-    order: "jobid DESC"
+    order:      "jobid DESC"
+    format:     'json'
     %include "./jobreport_datafiles_json_common_joblist.yaml"
 
 - dataset:
@@ -23,7 +24,8 @@
     selecttimevar:   lastts
     selecttimerange: TS_STARTOFTODAY,TS_NOW-120
     stat_table:  datasetstat_support
-    order: "jobid DESC"
+    order:       "jobid DESC"
+    format:      'json'
     %include "./jobreport_datafiles_json_common_joblist.yaml"
 
 # This entry is used to test fast data tables
@@ -33,11 +35,27 @@
     filepath:   '$outputdir/support/all.json.gz'
     sql_where:  'owner!="unknown"'
     table_cache: alljobs
-    max_entries: 500
+    max_entries: 5000
     selecttimevar:   lastts
     selecttimerange: TS_STARTOFTODAY-(21*24*3600),TS_NOW+1
     stat_table:  datasetstat_support
-    order: "jobid DESC"
+    order:       "jobid DESC"
+    format:     'json'
+    %include "./jobreport_datafiles_json_common_joblist.yaml"
+
+- dataset:
+    name:       support_all_csv
+    set:        csv_support
+    filepath:   '$outputdir/support/all.csv.gz'
+    sql_where:  'owner!="unknown"'
+    column_ts:   'ts'
+    # max_entries: 5000
+    csv_delimiter: ';'
+    renew:       'always'
+    order:       "jobid DESC"
+    sqldebug:    'yes'
+    format:      'csv'
+    stat_table:  datasetstat_support
     %include "./jobreport_datafiles_json_common_joblist.yaml"
 
 - dataset:
@@ -49,8 +67,9 @@
     table_cache: alljobs
     selecttimevar:   lastts
     selecttimerange: TS_STARTOFTODAY-($D*24*3600),TS_STARTOFTODAY-(($D-1)*24*3600)
-    stat_table:      datasetstat_support
-    order: "jobid DESC"
+    stat_table:  datasetstat_support
+    order:       "jobid DESC"
+    format:      'json'
     %include "./jobreport_datafiles_json_common_joblist.yaml"
 
 - dataset:

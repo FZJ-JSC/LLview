@@ -78,7 +78,7 @@
             # functions: [ "select_date" ]
             ref: [ table ]
             data:
-              default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
+              default_columns: [ 'JobID', 'General Info', 'Mentor', 'Scheduler', 'Core Usage', 'Load/Memory', 'GPU', 'Status', 'Score', 'Reports' ]
        - page:
             name: "Jobs ended today"
             section: "jobs_ended_today"
@@ -89,7 +89,7 @@
             footer_graph_config: "/data/ll/footer_CPU_GPU.json"
             ref: [ table ]
             data:
-              default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
+              default_columns: [ 'JobID', 'General Info', 'Mentor', 'Scheduler', 'Core Usage', 'Load/Memory', 'GPU', 'Status', 'Score', 'Reports' ]
        - page:
             name: "Jobs < 3 weeks"
             section: "jobs_three_weeks"
@@ -100,7 +100,7 @@
             footer_graph_config: "/data/ll/footer_CPU_GPU.json"
             ref: [ table ]
             data:
-              default_columns: [ Info/Reports, Scheduler, Load/Memory, coreusage, Network, GPU, "Total I/O", Status, Score ]
+              default_columns: [ 'JobID', 'General Info', 'Mentor', 'Scheduler', 'Core Usage', 'Load/Memory', 'GPU', 'Status', 'Score', 'Reports' ]
        - page:
             name: "Help"
             section: "help"
