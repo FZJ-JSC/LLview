@@ -9,7 +9,6 @@
 #    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
 
 from matplotlib.patches import Rectangle                   # Rectangle shapes
-from matplotlib.cm import get_cmap
 from matplotlib.colors import colorConverter
 
 from AddPage import AddEmptyPage
