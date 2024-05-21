@@ -3,14 +3,14 @@
 ###############################
 - dataset:
     name: user_running_json
-    set:                 json_user
+    set:                json_user
     FORALL:             'P,U:VAR_project_user'
     filepath:           '$outputdir/projects/$P/$U/running.json.gz'
     column_filemap:     'P:account,U:owner'
     format:             'json'
     sql_where:          'owner!="unknown"'
-    table_cache:         alljobs
-    selecttimevar:       lastts
+    table_cache:        alljobs
+    selecttimevar:      lastts
     selecttimerange:    TS_NOW-120,TS_NOW+1
     checksumvar:        lastts
     create_empty_files: yes

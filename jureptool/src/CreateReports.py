@@ -13,7 +13,7 @@ from matplotlib.dates import DateFormatter                 # Library to format d
 from matplotlib.ticker import MaxNLocator, FuncFormatter #,LogLocator, ScalarFormatter, LogFormatterSciNotation
 from matplotlib.collections import LineCollection
 from matplotlib.colors import Normalize, LogNorm
-from matplotlib.cm import get_cmap
+from matplotlib import colormaps
 from copy import copy
 import numpy as np
 import pandas as pd
@@ -213,7 +213,7 @@ def CreateFullReport(pdf,data,config,page_num,report,time_range):
       ps = page.axes[top,0].scatter(x_time,y_time,marker='o',s=1,c=y_time,cmap=report['cmap'][graph],norm=norm,zorder=4)
 
       # GETTING COLOR FOR AVERAGE VALUE TO USE IN THE LEGEND
-      cmap = get_cmap(report['cmap'][graph])
+      cmap = colormaps[report['cmap'][graph]]
       rgba = cmap(norm(avg_value))
       # Copying legend handles to change their color without changing the plots
       p1c = copy(p1)

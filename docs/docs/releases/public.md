@@ -15,7 +15,7 @@
 - Added `icmap` action, configuration and documentation
 - Added generation of DBgraphs (from production) to automatically create dependency graphs (shown as mermaid graphs on the "Dependency Graphs" of Support View)
 - Added trigger script and step to `dbupdate` action to use on DBs that need triggering
-- Added options to dump options as JSON or YAML using envvars (LLMONDB_DUMP_CONFIG_TO_JSON and LLMONDB_DUMP_CONFIG_TO_YAML)
+- Added options to dump options as JSON or YAML using envvars (`LLMONDB_DUMP_CONFIG_TO_JSON` and `LLMONDB_DUMP_CONFIG_TO_YAML`)
 - Added `CODE_OF_CONDUCT.md`
 - JURI: Added CorePattern fonts and style
 - JURI: Added `.htpasswd` and OIDC examples and general improvements on `.htaccess`

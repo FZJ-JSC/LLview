@@ -28,8 +28,9 @@
     stat_database: jobreport_json_stat
     stat_table:    datasetstat_templates
     format:        'datatable'
+    ag-grid-theme: 'balham' #quartz, balham, material, alpine (with -dark or -auto-dark suffix too)
     columns:
-      %include "./jobreport_datafiles_table_templates_joblist_columns.yaml"
+      %include "./jobreport_datafiles_datatable_templates_joblist_columns.yaml"
 
 - dataset:
     name: template_joblist_history

@@ -6,7 +6,7 @@
 # Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
 #
 # Contributors:
-#    Wolfgang Frings (Forschungszentrum Juelich GmbH) 
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
 
 package LML_jobreport;
 
@@ -38,123 +38,69 @@ sub process_dataset_datatable {
   # scan columns
   my $columns = $dataset->{columns};
   my ( $data, $data_thead, $data_tfilter ) = ( "", "", "" );
+
+  my $theme = exists($dataset->{'ag-grid-theme'}) ? "ag-theme-".$dataset->{'ag-grid-theme'} : "ag-theme-balham";
+  my $grid .= "<div id=\"myGrid\" style=\"height: 100%;\" class=\"$theme\"></div>\n";
+  
   # my (%groups);
-  foreach my $colref ( @{$columns} ) {
-    my $name = $colref->{name};
+  my $coldefs .= "<script>\n";
+  $coldefs .= "  view.columnDefs = [ \n";
+  foreach my $colref ( @{$columns} ) { # Each entry (column or column group) of the list
+    # Starting column or column group
+    $coldefs .= "    {\n";
 
-    # check attributes
-    my $csort = "N";
-    $csort = $colref->{sort} if ( exists( $colref->{sort} ) );
-    my $ctype = "num" if ( $csort eq "N" );
-    $ctype = "date" if ( $csort eq "D" );
-    $ctype = "string" if ( $csort eq "S" );
-    my $cgroup = "";
-    if ( exists( $colref->{group} ) ) {
-      $colref->{group} =~ s/\s/_/gs;
-      $cgroup = "group_" . $colref->{group};
-      # $groups{ $colref->{group} }++;
+    while ((my $key, my $ele) = each %{$colref}) {
+      if ($key eq 'children') {
+        # If the key is 'children',
+        # this should be a column group, 
+        # so we have to loop over the columns
+        $coldefs .= "      $key: [\n";
+        foreach my $subele ( @{$ele} ) {
+          # Starting child column
+          $coldefs .= "        {\n";
+          while ((my $subkey, my $value) = each %{$subele}) {
+            if (($value =~/\(.*\)\s=>/) || ($subkey=~'filterParams') || ($subkey=~'floatingFilterComponent')) {
+              # If element contains a JS function, i.e. is of the form '(...) =>', write it out without quotes
+              $coldefs .= "          $subkey: $value,\n";
+            } else {
+              $coldefs .= "          $subkey: \"$value\",\n";
+            }
+            if ($subkey eq "cellDataType" &&  $value eq "number") {
+              # For columns with number cells, 
+              # automatically add the filter, filterParams and floatingFilterComponent
+              $coldefs .= "          filter: \"agNumberColumnFilter\",\n";
+              $coldefs .= "          filterParams: numberFilterParams,\n";
+              $coldefs .= "          floatingFilterComponent: NumberFloatingFilterComponent,\n";
+            }
+          }
+          $coldefs .= "        },\n";
+          # Ending child column
+        }
+        $coldefs .= "      ],\n";
+      } else {
+        if (($ele =~/\(.*\)\s=>/) || ($key=~'filterParams') || ($key=~'floatingFilterComponent')) {
+          # If element contains a JS function, i.e. is of the form '(...) =>', write it out without quotes
+          $coldefs .= "      $key: $ele,\n";
+        } else {
+          $coldefs .= "      $key: \"$ele\",\n";
+        }
+        if ($key eq "cellDataType" &&  $ele eq "number") {
+          # For columns with number cells, 
+          # automatically add the filter, filterParams and floatingFilterComponent
+          $coldefs .= "        filter: \"agNumberColumnFilter\",\n";
+          $coldefs .= "        filterParams: numberFilterParams,\n";
+          $coldefs .= "        floatingFilterComponent: NumberFloatingFilterComponent,\n";
+        }
+      }
     }
-    my $ctitle = $name;
-    $ctitle = $colref->{title} if ( exists( $colref->{title} ) );
-    my $cdesc = $name;
-    $cdesc = $colref->{desc} if ( exists( $colref->{desc} ) );
-    my $cformat = "text-right";
-    $cformat = $colref->{format} if ( exists( $colref->{format} ) );
-    my $cellcolor = "";
-    $cellcolor = "{{cell_color " . $colref->{cell_color} . "}}; " if ( exists( $colref->{cell_color} ) );
-    my $bg_color_map = "";
-    $bg_color_map = "{{cell_color " . $colref->{bg_color_map} . "}}; " if ( exists( $colref->{bg_color_map} ) );
-    my $fg_color = "";
-    $fg_color = "color: {{{" . $colref->{fg_color} . "}}}; " if ( exists( $colref->{fg_color} ) );
-    my $style = "";
-    $style = $colref->{style} . "; " if ( exists( $colref->{style} ) );
-    # my $cdataformat = "";
-    # $cdataformat = $colref->{data_format} . " " if ( exists( $colref->{data_format} ) );
-    # my $cdatapre = "";
-    # $cdatapre = $colref->{data_pre} . " " if ( exists( $colref->{data_pre} ) );
-    # my $cdatapost = "";
-    # $cdatapost = " " . $colref->{data_post} if ( exists( $colref->{data_post} ) );
-    my $crender = $colref->{render} if ( exists( $colref->{render} ) );
-    my $ccreatedCell = $colref->{createdCell} if ( exists( $colref->{createdCell} ) );
-    my $corderable = "true";
-    $corderable = $colref->{orderable} if ( exists( $colref->{orderable} ) );
-
-    my $noheader = 0;
-    $noheader = $colref->{noheader} if ( exists( $colref->{noheader} ) );
-
-    # print "TMPDEB: column: $name $csort $cgroup\n";
-
-    $data_thead .= "              ";
-    if ( !$noheader ) {
-      # If HEADER is to be added
-      # Header row:
-      $data_thead .= "<th class=\"$cgroup\" title=\"$cdesc\">";
-      $data_thead .= "$ctitle";
-      $data_thead .= "<span class=\"fa\" aria-hidden=\"true\"></span></th>\n";
-      # Filter row:
-      $data_tfilter .="            <th class=\"filters\"><input type=\"text\" placeholder=\"$ctitle\"/></th>\n";            
-    } else {
-      # If noheader is on, i.e., nothing should be added on the header
-      # Header row:
-      $data_thead .= "<th></th>\n";
-      # Filter row:
-      $data_tfilter .= "            <th></th>\n";
-      $ctitle = "";
-    }
-
-    # body
-    # my $styles = ${style} . ${cellcolor} . ${bg_color_map} . ${fg_color};
-    # $styles = ( ${styles} ) ? "style=\"${styles}\"" : "";
-    # $data_tbody .="              <td ${styles} class=\"${cformat}\">{{{$cdataformat$cdatapre$name$cdatapost}}}</td>\n";
-    $column_definitions .= "\{
-          name: \"$ctitle\", 
-          title: \"$ctitle\",
-          data: \"$name\",
-          type: \"$ctype\",
-          className: \"$cformat $cgroup\",
-          orderable: $corderable,\n";
-    $column_definitions .= "          createdCell: $ccreatedCell,\n" if ($ccreatedCell);
-    $column_definitions .= "          render: $crender,\n" if ($crender);
-    $column_definitions .= "      \}, ";
+    # Ending column or column group
+    $coldefs .= "    },\n";
   }
+  $coldefs .= "  ]\n";
+  $coldefs .= "</script>\n";
 
-  # check general attributes
-  # my @defgroups;
-  # if ( exists( $dataset->{default_groups} ) ) {
-  #     @defgroups = ( split( /\s*,\s*/, $dataset->{default_groups} ) );
-  # }
-  # else {
-  #     @defgroups = keys(%groups);
-  # }
-  # if (@defgroups) {
-  #   my ( $gr, @g );
-  #   for $gr (@defgroups) {
-  #       push( @g, "\"$gr\"" );
-  #   }
-  #   $column_definitions = "var column_definitions = [" . ( join( ",", @g ) ) . "];\n";
-  # }
-  # $column_definitions = "var column_definitions = [" . $column_definitions . "];\n";
-
-  my $pre_table = "";
-  if ( exists( $dataset->{pretable} ) ) {
-    $pre_table = $dataset->{pretable};
-  }
-
-  # build html code
-  # $data .= "<script>\n";
-  # $data .= $column_definitions;
-  # $data .= "</script>\n";
-  $data .= $pre_table;
-  $data .= "<table class=\"table table-striped table-hover table-bordered table-sm\">\n";
-  $data .= "    <thead>\n";
-  $data .= "        <tr>\n";
-  $data .= $data_thead;
-  $data .= "        </tr>\n";
-  $data .= "        <tr class=\"filter\">\n";
-  $data .= $data_tfilter;
-  $data .= "       </tr>\n";
-  $data .= "    </thead>\n";
-  $data .= "</table>\n";
+  $data .= $grid;
+  $data .= $coldefs;
 
   # print HTML code
   my $fh = IO::File->new();
