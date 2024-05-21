@@ -1,5 +1,40 @@
 # LLview Public Releases
 
+### 2.3.0-base (May 21, 2024)
+
+Faster tables! Using now ag-grid to virtualise the tables, now many more jobs can be shown on the tables. It also provides a "Quick Filter" (or Global Search) that is applied over all columns at once.
+
+<h4> Added </h4>
+
+- Support for datatables/grids
+- CSV files can be generated 
+- New template and Perl script to create grid column definitions
+- Added `dc-wai` queue on jureptool system config
+- JURI: Added grid (faster tables) support using [ag-grid-community](https://github.com/ag-grid/ag-grid) library 
+- JURI: Helper functions for grid
+- JURI: Grid filters (including custom number filter, which accepts greater '>#', lesser '<#' and InRange '#-#'; and 'clear filter' per column)
+- JURI: Quick filter (on header bar)
+- JURI: Now data can be loaded from csv (usually much smaller than json)
+
+<h4> Changed </h4>
+
+- Removed old 'render' field from column definitions (not used)
+- Default Support view now has a single 'Jobs' page with running and history jobs using grid
+- JURI: Adapted to grid:
+    - Buttons on infoline (column groups show/hide, entries, clear filter, download csv)
+    - Presentation mode
+    - Refresh button
+    - Link from jobs on workflows
+
+<h4> Fixed </h4>
+
+- Improved README and Contributing pages
+- Fixed text of Light/Dark mode on documentation page
+- Fixed get_cmap deprecation in new matplotlib version
+- JURI: Small issues on helpers
+- JURI: Fixed color on 'clear filter' link
+
+
 ### 2.2.4-base (April 3, 2024)
 
 <h4> Added </h4>
